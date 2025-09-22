@@ -585,4 +585,33 @@ object #55
     return $true;
   endverb
 
+verb "pick_one" (this none this) owner: #36 flags: "rxd"
+    ":pick_one(LIST elements[, ANY default]) => ANY element";
+    "  randomly picks one element";
+    {elements, ?default = ""} = args;
+    return `elements[$mu:random_between(1, $)] ! ANY => default';
+  endverb
+
+verb "pop" (this none this) owner: #36 flags: "rxd"
+    {elements} = args;
+    return {elements[$], elements[1..$ - 1]};
+endverb
+
+verb "dequeue" (this none this) owner: #36 flags: "rxd"
+    ":dequeue(LIST elements) => {first element, remaining}";
+    "  dequeues an element from a stack";
+    {elements} = args;
+    return {elements[1], elements[2..$]};
+endverb
+
+verb "map_prepend" (this none this) owner: #36 flags: "rxd"
+    ":map_prepend(LIST elements, STR prepend) => LIST";
+    "  prepends string to each element of list.";
+    {elements, prepend} = args;
+    for i in [1..length(elements)]
+      elements[i] = tostr(prepend, elements[i]);
+    endfor
+    return elements;
+endverb
+
 endobject
