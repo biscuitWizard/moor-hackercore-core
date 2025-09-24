@@ -1,18 +1,15 @@
-object #103
+object Generic Message Dispatch Object
   name: "Generic Message Dispatch Object"
   parent: #1
-  location: #-1
   owner: #98
   readable: true
-  override "key" = 0;
 
-  override "aliases" = {"Generic Message Dispatch Object"};
+  property messages_in (owner: #98, flags: "r") = {};
+  property messages_out (owner: #98, flags: "r") = {};
 
-  property "messages_in" (owner: #98, flags: "r") = {};
+  override aliases = {"Generic Message Dispatch Object"};
 
-  property "messages_out" (owner: #98, flags: "r") = {};
-
-  verb "parse_send_args" (this none this) owner: #98 flags: "rxd"
+  verb parse_send_args (this none this) owner: #98 flags: "rxd"
     "Usage:  :parse_send_args(msg, @posargs, @keywordargs)";
     "";
     "Transform a given message's arguments (mostly given positionally) into the correct form for MCP.  The cord type has an ordered list of argument keywords for all valid messages; these are matched with the arguments provided to produce an alist.  If more arguments are provided than keywords are available, then the remaining arguments should be {keyword, value} pairs.  This allows the passing of optional arguments and such.";
@@ -39,7 +36,7 @@ object #103
     return {@$list_utils:make_alist({keywords, rest[1..lkeywords]}), @rest[lkeywords + 1..$]};
   endverb
 
-  verb "parse_receive_args" (this none this) owner: #98 flags: "rxd"
+  verb parse_receive_args (this none this) owner: #98 flags: "rxd"
     "Usage:  :parse_receive_args(msg, alist)";
     "";
     "Transform a messages arguments from an alist into a mostly-positional list.  The cord type has an ordered list of argument keywords for all valid messages; these are used to construct an ordered list of the items from the alist that correspond to those keywords.  If there are items in the alist that do not match a known keyword, they will be appended to the positional list with keywords attached.";
@@ -77,5 +74,4 @@ object #103
       return E_PERM;
     endif
   endverb
-
 endobject

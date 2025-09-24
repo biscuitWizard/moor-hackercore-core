@@ -1,22 +1,20 @@
-object #121
+object dns-com-vmoo-client
   name: "dns-com-vmoo-client"
   parent: #104
-  location: #-1
   owner: #98
   readable: true
-  override "key" = 0;
 
-  override "aliases" = {"dns-com-vmoo-client"};
+  property client_info (owner: #98, flags: "") = {};
+  property client_stats (owner: #98, flags: "rc") = {};
 
-  override "messages_in" = {{"screensize", {"cols", "rows"}}, {"info", {"name", "text-version", "internal-version"}}};
+  override aliases = {"dns-com-vmoo-client"};
+  override messages_in = {
+    {"screensize", {"cols", "rows"}},
+    {"info", {"name", "text-version", "internal-version"}}
+  };
+  override messages_out = {{"disconnect", {"reason"}}};
 
-  override "messages_out" = {{"disconnect", {"reason"}}};
-
-  property "client_info" (owner: #98, flags: "") = {};
-
-  property "client_stats" (owner: #98, flags: "rc") = {};
-
-  verb "handle_info" (this none this) owner: #98 flags: "rxd"
+  verb handle_info (this none this) owner: #98 flags: "rxd"
     if (caller != this)
       return E_PERM;
     endif
@@ -29,7 +27,7 @@ object #121
     endif
   endverb
 
-  verb "handle_screensize" (this none this) owner: #98 flags: "rxd"
+  verb handle_screensize (this none this) owner: #98 flags: "rxd"
     {session, linelen, @args} = args;
     if (caller != this)
       return E_PERM;
@@ -37,7 +35,7 @@ object #121
     (ll = toint(linelen)) > 0 && this:adjust_linelen(who = session.connection, who.linelen > 0 ? ll | -1 * ll);
   endverb
 
-  verb "send_disconnect" (this none this) owner: #98 flags: "rxd"
+  verb send_disconnect (this none this) owner: #98 flags: "rxd"
     {who, @args} = args;
     if ($perm_utils:controls(caller_perms(), who))
       if (valid(session = $mcp:session_for(who)) && session:handles_package(this))
@@ -48,7 +46,7 @@ object #121
     endif
   endverb
 
-  verb "get_client_info" (this none this) owner: #98 flags: "rxd"
+  verb get_client_info (this none this) owner: #98 flags: "rxd"
     if (!$perm_utils:controls(caller_perms(), this))
       return E_PERM;
     else
@@ -67,7 +65,7 @@ object #121
     endif
   endverb
 
-  verb "adjust_linelen" (this none this) owner: #2 flags: "rxd"
+  verb adjust_linelen (this none this) owner: #2 flags: "rxd"
     {who, linelen} = args;
     if (caller != this)
       return E_PERM;
@@ -75,7 +73,7 @@ object #121
     who.linelen = linelen;
   endverb
 
-  verb "prune_client_info" (this none this) owner: #98 flags: "rxd"
+  verb prune_client_info (this none this) owner: #98 flags: "rxd"
     {clients, users} = this.client_stats;
     for x in (this.client_info)
       if (is_player(x[2]) == 0)
@@ -90,5 +88,4 @@ object #121
     endfor
     this.client_stats = {clients, users};
   endverb
-
 endobject

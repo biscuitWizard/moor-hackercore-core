@@ -1,40 +1,51 @@
-object #76
+object Programmer Options
   name: "Programmer Options"
   parent: #68
-  location: #-1
   owner: #36
   readable: true
-  override "key" = 0;
 
-  override "aliases" = {"Programmer Options"};
-
-  override "description" = {"Option package for $prog commands.  See `help @prog-options'."};
-
-  override "names" = {"list_all_parens", "list_no_numbers", "eval_time", "copy_expert", "verb_args", "verb_perms", "@prop_flags", "list_show_permissions", "rmverb_mail_backup", "//_comments"};
-
-  override "_namelist" = "!list_all_parens!list_no_numbers!list_show_permissions!eval_time!copy_expert!list_numbers!verb_args!@prop_flags!rmverb_mail_backup!//_comments!verb_perms!";
-
-  override "extras" = {"list_numbers"};
-
-  override "namewidth" = 25;
-
-  property "show_eval_time" (owner: #36, flags: "rc") = {"eval does not show ticks/seconds consumed.", "eval shows ticks/seconds consumed."};
-
-  property "show_list_all_parens" (owner: #36, flags: "rc") = {"@list shows only necessary parentheses by default", "@list shows all parentheses by default"};
-
-  property "show_list_no_numbers" (owner: #36, flags: "rc") = {"@list gives line numbers by default", "@list omits line numbers by default"};
-
-  property "show_copy_expert" (owner: #36, flags: "rc") = {"@copy prints warning message.", "@copy omits warning message."};
-
+  property "show_//_comments" (owner: #36, flags: "rc") = {
+    "Comments shown in editors will be MOO-style.",
+    "Comments shown in editors will begin with //"
+  };
+  property show_copy_expert (owner: #36, flags: "rc") = {"@copy prints warning message.", "@copy omits warning message."};
+  property show_eval_time (owner: #36, flags: "rc") = {
+    "eval does not show ticks/seconds consumed.",
+    "eval shows ticks/seconds consumed."
+  };
+  property show_list_all_parens (owner: #36, flags: "rc") = {
+    "@list shows only necessary parentheses by default",
+    "@list shows all parentheses by default"
+  };
+  property show_list_no_numbers (owner: #36, flags: "rc") = {"@list gives line numbers by default", "@list omits line numbers by default"};
+  property show_list_show_permissions (owner: #36, flags: "rc") = {
+    "@list does not display permissions in header",
+    "@list displays permissions in header"
+  };
+  property show_rmverb_mail_backup (owner: #36, flags: "rc") = {
+    "@rmverb does not email you a backup",
+    "@rmverb emails you a backup before deleting the verb"
+  };
   property "type_@prop_flags" (owner: #36, flags: "rc") = {2};
 
-  property "show_list_show_permissions" (owner: #36, flags: "rc") = {"@list does not display permissions in header", "@list displays permissions in header"};
+  override _namelist = "!list_all_parens!list_no_numbers!list_show_permissions!eval_time!copy_expert!list_numbers!verb_args!@prop_flags!rmverb_mail_backup!//_comments!verb_perms!";
+  override aliases = {"Programmer Options"};
+  override description = {"Option package for $prog commands.  See `help @prog-options'."};
+  override extras = {"list_numbers"};
+  override names = {
+    "list_all_parens",
+    "list_no_numbers",
+    "eval_time",
+    "copy_expert",
+    "verb_args",
+    "verb_perms",
+    "@prop_flags",
+    "list_show_permissions",
+    "rmverb_mail_backup",
+    "//_comments"
+  };
 
-  property "show_rmverb_mail_backup" (owner: #36, flags: "rc") = {"@rmverb does not email you a backup", "@rmverb emails you a backup before deleting the verb"};
-
-  property "show_//_comments" (owner: #36, flags: "rc") = {"Comments shown in editors will be MOO-style.", "Comments shown in editors will begin with //"};
-
-  verb "actual" (this none this) owner: #36 flags: "rxd"
+  verb actual (this none this) owner: #36 flags: "rxd"
     if (i = args[1] in {"list_numbers"})
       return {{{"list_no_numbers"}[i], !args[2]}};
     else
@@ -42,7 +53,7 @@ object #76
     endif
   endverb
 
-  verb "show" (this none this) owner: #36 flags: "rxd"
+  verb show (this none this) owner: #36 flags: "rxd"
     if (o = (name = args[2]) in {"list_numbers"})
       args[2] = {"list_no_numbers"}[o];
       return {@pass(@args), tostr("(", name, " is a synonym for -", args[2], ")")};
@@ -51,7 +62,7 @@ object #76
     endif
   endverb
 
-  verb "show_verb_args" (this none this) owner: #36 flags: "rxd"
+  verb show_verb_args (this none this) owner: #36 flags: "rxd"
     if (value = this:get(@args))
       return {value, {tostr("Default args for @verb:  ", $string_utils:from_list(value, " "))}};
     else
@@ -59,7 +70,7 @@ object #76
     endif
   endverb
 
-  verb "check_verb_args" (this none this) owner: #36 flags: "rxd"
+  verb check_verb_args (this none this) owner: #36 flags: "rxd"
     value = args[1];
     if (typeof(value) != LIST)
       return "List expected";
@@ -79,7 +90,7 @@ object #76
     endif
   endverb
 
-  verb "parse_verb_args" (this none this) owner: #36 flags: "rxd"
+  verb parse_verb_args (this none this) owner: #36 flags: "rxd"
     {oname, raw, data} = args;
     if (typeof(raw) == STR)
       raw = $string_utils:explode(raw, " ");
@@ -123,7 +134,7 @@ object #76
     return {oname, raw};
   endverb
 
-  verb "check_verb_perms" (this none this) owner: #2 flags: "rxd"
+  verb check_verb_perms (this none this) owner: #2 flags: "rxd"
     value = args[1];
     if (typeof(value) != STR)
       return "Must be a string composed of the characters `RWXD'.";
@@ -135,7 +146,7 @@ object #76
     endif
   endverb
 
-  verb "show_verb_perms" (this none this) owner: #2 flags: "rxd"
+  verb show_verb_perms (this none this) owner: #2 flags: "rxd"
     if (value = this:get(@args))
       return {value, {tostr("Default permissions for @verb:  ", value)}};
     else
@@ -143,7 +154,7 @@ object #76
     endif
   endverb
 
-  verb "parse_verb_perms" (this none this) owner: #2 flags: "rxd"
+  verb parse_verb_perms (this none this) owner: #2 flags: "rxd"
     {oname, raw, data} = args;
     if (typeof(raw) == STR)
       raw = {raw};
@@ -159,5 +170,4 @@ object #76
     endif
     return {oname, value[1] == "RD" ? 0 | value[1]};
   endverb
-
 endobject

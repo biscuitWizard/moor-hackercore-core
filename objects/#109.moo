@@ -1,18 +1,21 @@
-object #109
+object MCP Package Registry
   name: "MCP Package Registry"
   parent: #1
-  location: #-1
   owner: #98
   readable: true
-  override "key" = 0;
 
-  override "aliases" = {"MCP Package Registry"};
+  property package_names (owner: #98, flags: "r") = {
+    "mcp-negotiate",
+    "mcp-cord",
+    "dns-org-mud-moo-simpleedit",
+    "dns-com-vmoo-client",
+    "dns-com-awns-status"
+  };
+  property packages (owner: #98, flags: "r") = {#105, #106, #113, #121, #123};
 
-  property "package_names" (owner: #98, flags: "r") = {"mcp-negotiate", "mcp-cord", "dns-org-mud-moo-simpleedit", "dns-com-vmoo-client", "dns-com-awns-status"};
+  override aliases = {"MCP Package Registry"};
 
-  property "packages" (owner: #98, flags: "r") = {#105, #106, #113, #121, #123};
-
-  verb "add_package" (this none this) owner: #98 flags: "rxd"
+  verb add_package (this none this) owner: #98 flags: "rxd"
     {name, package} = args;
     if (caller == this || $perm_utils:controls(caller_perms(), this))
       if (name in this.package_names)
@@ -26,7 +29,7 @@ object #109
     endif
   endverb
 
-  verb "remove_package" (this none this) owner: #98 flags: "rxd"
+  verb remove_package (this none this) owner: #98 flags: "rxd"
     {name} = args;
     if (caller == this || $perm_utils:controls(caller_perms(), this))
       if (idx = name in this.package_names)
@@ -38,7 +41,7 @@ object #109
     endif
   endverb
 
-  verb "match_package" (this none this) owner: #98 flags: "rxd"
+  verb match_package (this none this) owner: #98 flags: "rxd"
     {name} = args;
     if (idx = name in this.package_names)
       return this.packages[idx];
@@ -47,7 +50,7 @@ object #109
     endif
   endverb
 
-  verb "package_name" (this none this) owner: #98 flags: "rxd"
+  verb package_name (this none this) owner: #98 flags: "rxd"
     {package} = args;
     if (idx = package in this.packages)
       return this.package_names[idx];
@@ -56,7 +59,7 @@ object #109
     endif
   endverb
 
-  verb "packages" (this none this) owner: #98 flags: "rxd"
+  verb packages (this none this) owner: #98 flags: "rxd"
     return $list_utils:make_alist({this.package_names, this.packages});
   endverb
 
@@ -96,5 +99,4 @@ object #109
       endtry
     endif
   endverb
-
 endobject

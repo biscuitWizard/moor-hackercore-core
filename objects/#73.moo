@@ -1,13 +1,13 @@
-object #73
+object Programmer Feature
   name: "Programmer Feature"
   parent: #74
   location: #83
   owner: #36
   readable: true
 
-  override "aliases" = {"Programmer", "Feature", "Programmer Feature"};
+  override aliases = {"Programmer", "Feature", "Programmer Feature"};
 
-  verb "@list*#" (any any any) owner: #2 flags: "rdx"
+  verb "@list*#" (any any any) owner: #2 flags: "rxd"
     "@list <obj>:<verb> [<dobj> <prep> <iobj>] [with[out] paren|num] [all] [ranges]";
     set_task_perms(player);
     bynumber = verb == "@list#";
@@ -151,7 +151,7 @@ object #73
     endif
   endverb
 
-  verb "@chmod*#" (any any any) owner: #2 flags: "rdx"
+  verb "@chmod*#" (any any any) owner: #2 flags: "rxd"
     set_task_perms(player);
     bynumber = verb == "@chmod#";
     if (length(args) != 2)
@@ -253,7 +253,7 @@ object #73
     $command_utils:object_match_failed(object, what);
   endverb
 
-  verb "@rmprop*erty" (any any any) owner: #2 flags: "rdx"
+  verb "@rmprop*erty" (any any any) owner: #2 flags: "rxd"
     set_task_perms(player);
     if (length(args) != 1 || !(spec = $code_utils:parse_propref(args[1])))
       player:notify(tostr("Usage:  ", verb, " <object>.<property>"));
@@ -276,7 +276,7 @@ object #73
     endtry
   endverb
 
-  verb "@rmverb*#" (any none none) owner: #2 flags: "rdx"
+  verb "@rmverb*#" (any none none) owner: #2 flags: "rxd"
     set_task_perms(player);
     if (!(args && (spec = $code_utils:parse_verbref(args[1]))))
       player:notify(tostr("Usage:  ", verb, " <object>:<verb>"));
@@ -322,7 +322,7 @@ object #73
           player:notify(tostr("Verb ", object, ":", info[3], " (", loc, ") {", $string_utils:from_list(vargs, " "), "} removed."));
           $broadcast:staff_alerts(player:name(), " has removed verb ", object, ":", info[3], ".");
           if ("on_event_" in info[3] == 1)
-            event_type = info[3][10..$];
+            event_type = (info[3])[10..$];
             $event.subscribers[event_type] = setremove(`$event.subscribers[event_type] ! ANY => {}', object);
             if (!`$event.subscribers[event_type] ! ANY => {}')
               `$event.subscribers = mapdelete($event.subscribers, event_type) ! ANY';
@@ -341,7 +341,7 @@ object #73
     endif
   endverb
 
-  verb "@args*#" (any any any) owner: #2 flags: "rdx"
+  verb "@args*#" (any any any) owner: #2 flags: "rxd"
     set_task_perms(player);
     if (!player.programmer)
       player:notify("You need to be a programmer to do this.");
@@ -373,7 +373,7 @@ object #73
         elseif (pas[2])
           player:notify(tostr("\"", pas[2][1], "\" unexpected."));
         else
-          info[2] = info[2][1..index(info[2] + "/", "/") - 1];
+          info[2] = (info[2])[1..index(info[2] + "/", "/") - 1];
           info = {@newargs, @info[length(newargs) + 1..$]};
           try
             result = set_verb_args(object, name, info);
@@ -392,7 +392,7 @@ object #73
     endif
   endverb
 
-  verb "@copy @copy-x @copy-move" (any at any) owner: #2 flags: "rdx"
+  verb "@copy @copy-x @copy-move" (any at any) owner: #2 flags: "rxd"
     "Usage:  @copy source:verbname to target[:verbname]";
     "  the target verbname, if not given, defaults to that of the source.  If the target verb doesn't already exist, a new verb is installed with the same args, names, code, and permission flags as the source.  Otherwise, the existing target's verb code is overwritten and no other changes are made.";
     "This the poor man's version of multiple inheritance... the main problem is that someone may update the verb you're copying and you'd never know.";
@@ -439,7 +439,7 @@ object #73
         player:notify("Won't be able to delete old verb.  Treating this as regular @copy.");
       endif
     endif
-    to_firstname = strsub(to[2][1..index(to[2] + " ", " ") - 1], "*", "") || "*";
+    to_firstname = strsub((to[2])[1..index(to[2] + " ", " ") - 1], "*", "") || "*";
     if (!(hv = $object_utils:has_verb(to[1], to_firstname)) || hv[1] != to[1])
       if (!(info = `verb_info(@from) ! ANY') || !(vargs = `verb_args(@from) ! ANY'))
         player:notify(tostr("Retrieving ", from[1], ":", from[2], " --> ", info && vargs));
@@ -483,7 +483,7 @@ object #73
     endif
   endverb
 
-  verb "@dump" (any any any) owner: #2 flags: "rdx"
+  verb "@dump" (any any any) owner: #2 flags: "rxd"
     "@dump something [with [id=...] [noprops] [noverbs] [create]]";
     "This spills out all properties and verbs on an object, calling suspend at appropriate intervals.";
     "   id=#nnn -- specifies an idnumber to use in place of the object's actual id (for porting to another MOO)";
@@ -532,7 +532,7 @@ object #73
     player:notify("\"***finished***");
   endverb
 
-  verb "@clearp*roperty @clprop*erty" (any none none) owner: #2 flags: "rdx"
+  verb "@clearp*roperty @clprop*erty" (any none none) owner: #2 flags: "rxd"
     "@clearproperty <obj>.<prop>";
     "Set the value of <obj>.<prop> to `clear', making it appear to be the same as the property on its parent.";
     set_task_perms(player);
@@ -555,7 +555,7 @@ object #73
     endtry
   endverb
 
-  verb "@verb" (any any any) owner: #2 flags: "rdx"
+  verb "@verb" (any any any) owner: #2 flags: "rxd"
     set_task_perms(player);
     if (!player.programmer)
       player:notify("You need to be a programmer to do this.");
@@ -617,8 +617,8 @@ object #73
       player:notify(e[2]);
     endtry
   endverb
-  
-  verb "@verbs @verbs/*" (any any any) owner: #2 flags: "rdx"
+
+  verb "@verbs @verbs/*" (any any any) owner: #2 flags: "rxd"
     if (!argstr)
       return this:ooc_tell("Syntax is @verbs <obj>.");
     endif
@@ -642,11 +642,11 @@ object #73
     return this:verbs_view(object);
   endverb
 
-  verb "verbs_all" (this none this) owner: #2 flags: "rxd"
+  verb verbs_all (this none this) owner: #2 flags: "rxd"
     return this:verbs_view(args[1], $ou:all_verbs(args[1]));
   endverb
 
-  verb "verbs_view" (this none this) owner: #2 flags: "rxd"
+  verb verbs_view (this none this) owner: #2 flags: "rxd"
     ":verbs_view(OBJ object[, LIST properties]) => NONE";
     "  Prints out a list of all verbs for player";
     set_task_perms(player);
@@ -669,8 +669,8 @@ object #73
         continue;
       endtry
       defined = $ou:defines_verb(object, verb_name) ? " " | $ansi:brgreen(">");
-      sys_level = $ansi:($perm_utils:can_write_verb(player, object, verb_name) ? "brgreen" | "brred")(owner:name());
-      idx_col = $ansi:(idx % 2 ? "GreyCharcoal" | "GreyWheat")($su:left(idx, 4));
+      sys_level = $ansi:(($perm_utils:can_write_verb(player, object, verb_name) ? "brgreen" | "brred"))(owner:name());
+      idx_col = $ansi:((idx % 2 ? "GreyCharcoal" | "GreyWheat"))($su:left(idx, 4));
       lines = {@lines, tostr(" ", idx_col, $su:left(tostr(defined, $ansi:yellow(verb_name)), -51), $su:left(sys_level, 11), $su:from_list(verb_args(object, verb_name), " "))};
       idx = idx + 1;
     endfor
@@ -678,7 +678,7 @@ object #73
     player:tell($ansi:brgreen(">"), " => Defined on Parent");
   endverb
 
-  verb "@prog*ram @program#" (any any any) owner: #2 flags: "rdx"
+  verb "@prog*ram @program#" (any any any) owner: #2 flags: "rxd"
     "This version of @program deals with multiple verbs having the same name.";
     "... @program <object>:<verbname> <dobj> <prep> <iobj>  picks the right one.";
     "...";

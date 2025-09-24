@@ -1,18 +1,15 @@
-object #107
+object MCP 2.1 Parser
   name: "MCP 2.1 Parser"
   parent: #1
-  location: #-1
   owner: #98
   readable: true
-  override "key" = 0;
 
-  override "aliases" = {"MCP 2.1 Parser"};
+  property next_datakey (owner: #98, flags: "r") = 10202;
+  property unquoted_string (owner: #2, flags: "r") = "^[]a-zA-Z0-9-%~`!@#$^&()=+{}[|';?/><.,]+$";
 
-  property "next_datakey" (owner: #98, flags: "r") = 10202;
+  override aliases = {"MCP 2.1 Parser"};
 
-  property "unquoted_string" (owner: #2, flags: "r") = "^[]a-zA-Z0-9-%~`!@#$^&()=+{}[|';?/><.,]+$";
-
-  verb "parse_mcp_alist" (this none this) owner: #98 flags: "rxd"
+  verb parse_mcp_alist (this none this) owner: #98 flags: "rxd"
     "take args and return a list in the format:";
     "{true if contains multiline, { { keyword-name, data, multiline }, ... }";
     alist = {};
@@ -38,14 +35,14 @@ object #107
     return {contains_multiline, alist};
   endverb
 
-  verb "parse_mcp" (this none this) owner: #98 flags: "rxd"
+  verb parse_mcp (this none this) owner: #98 flags: "rxd"
     "parse_mcp(@args) =>";
     "relies on argstr being a version of @args unwordified";
     "{request-name, contains-multiline, authentication-key, data-tag, { { keyword-name, data }, ... } }";
     if (length(args) < 1)
       raise(E_INVARG, "not enough arguments");
     endif
-    request_name = args[1][4..$];
+    request_name = (args[1])[4..$];
     if (!request_name)
       raise(E_INVARG, "no request name");
     endif
@@ -79,14 +76,14 @@ object #107
     endif
   endverb
 
-  verb "parse_mcp_continuation" (this none this) owner: #98 flags: "rxd"
+  verb parse_mcp_continuation (this none this) owner: #98 flags: "rxd"
     {data_tag, keyword, @rest} = args;
     value = argstr[index(argstr, keyword) + length(keyword) + 1..$];
     keyword = keyword[1..$ - 1];
     return {"*", data_tag, keyword, value};
   endverb
 
-  verb "parse" (this none this) owner: #98 flags: "rxd"
+  verb parse (this none this) owner: #98 flags: "rxd"
     "parse(@args) => parsed MCP message ready for dispatch or 0";
     "                if there was nothing to dispatch for this message";
     "                (as in multiline continuations, dispatch";
@@ -113,7 +110,7 @@ object #107
     return 0;
   endverb
 
-  verb "unparse" (this none this) owner: #98 flags: "rxd"
+  verb unparse (this none this) owner: #98 flags: "rxd"
     {request, authkey, alist} = args;
     keyvals = "";
     need_data_tag = 0;
@@ -156,10 +153,9 @@ object #107
     return message;
   endverb
 
-  verb "next_datakey" (this none this) owner: #98 flags: "rxd"
+  verb next_datakey (this none this) owner: #98 flags: "rxd"
     datakey = tostr(random(), this.next_datakey);
     this.next_datakey = this.next_datakey + 1;
     return datakey;
   endverb
-
 endobject

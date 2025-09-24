@@ -1,46 +1,30 @@
-object #45
+object Generic Mail Recipient
   name: "Generic Mail Recipient"
   parent: #1
-  location: #-1
   owner: #36
   readable: true
-  override "aliases" = {"Generic Mail Recipient"};
 
-  override "description" = "This can either be a mailing list or a mail folder, depending on what mood you're in...";
+  property email_validated (owner: #36, flags: "") = 1;
+  property expire_period (owner: #36, flags: "r") = 2592000;
+  property guests_can_send_here (owner: #36, flags: "rc") = 0;
+  property last_msg_date (owner: #36, flags: "r") = 0;
+  property last_used_time (owner: #36, flags: "r") = 0;
+  property mail_notify (owner: #36, flags: "r") = {};
+  property messages (owner: #36, flags: "") = {};
+  property messages_kept (owner: #36, flags: "r") = {};
+  property moderated (owner: #36, flags: "rc") = {};
+  property moderator_forward (owner: #36, flags: "rc") = "%n (%#) can't send to moderated list %t (%[#t]) directly.";
+  property moderator_notify (owner: #36, flags: "rc") = {};
+  property readers (owner: #36, flags: "rc") = {};
+  property registered_email (owner: #36, flags: "") = "";
+  property rmm_own_msgs (owner: #36, flags: "rc") = 1;
+  property validation_password (owner: #36, flags: "") = "";
+  property writers (owner: #36, flags: "rc") = {};
 
-  property "moderator_notify" (owner: #36, flags: "rc") = {};
+  override aliases = {"Generic Mail Recipient"};
+  override description = "This can either be a mailing list or a mail folder, depending on what mood you're in...";
 
-  property "last_msg_date" (owner: #36, flags: "r") = 0;
-
-  property "moderated" (owner: #36, flags: "rc") = {};
-
-  property "moderator_forward" (owner: #36, flags: "rc") = "%n (%#) can't send to moderated list %t (%[#t]) directly.";
-
-  property "writers" (owner: #36, flags: "rc") = {};
-
-  property "readers" (owner: #36, flags: "rc") = {};
-
-  property "mail_notify" (owner: #36, flags: "r") = {};
-
-  property "expire_period" (owner: #36, flags: "r") = 2592000;
-
-  property "last_used_time" (owner: #36, flags: "r") = 0;
-
-  property "messages" (owner: #36, flags: "") = {};
-
-  property "rmm_own_msgs" (owner: #36, flags: "rc") = 1;
-
-  property "guests_can_send_here" (owner: #36, flags: "rc") = 0;
-
-  property "messages_kept" (owner: #36, flags: "r") = {};
-
-  property "registered_email" (owner: #36, flags: "") = "";
-
-  property "email_validated" (owner: #36, flags: "") = 1;
-
-  property "validation_password" (owner: #36, flags: "") = "";
-
-  verb "set_aliases" (this none this) owner: #36 flags: "rxd"
+  verb set_aliases (this none this) owner: #36 flags: "rxd"
     "For changing mailing list aliases, we check to make sure that none of the aliases match existing mailing list aliases.  Aliases containing spaces are not used in addresses and so are not subject to this restriction ($mail_agent:match will not match on them, however, so they only match if used in the immediate room, e.g., with match_object() or somesuch).";
     "  => E_PERM   if you don't own this";
     {newaliases} = args;
@@ -67,7 +51,7 @@ object #45
     endif
   endverb
 
-  verb "look_self" (this none this) owner: #36 flags: "rxd"
+  verb look_self (this none this) owner: #36 flags: "rxd"
     "Returns full name and mail aliases for this list, read and write status by the player, and a short description. Calling :look_self(1) will omit the description.";
     {?brief = 0} = args;
     namelist = "*" + ((names = this:mail_names()) ? $string_utils:from_list(names, ", *") | tostr(this));
@@ -119,11 +103,11 @@ object #45
     return $perm_utils:controls(who = args[1], this) || `who in this.writers ! E_TYPE';
   endverb
 
-  verb "is_readable_by" (this none this) owner: #36 flags: "rxd"
+  verb is_readable_by (this none this) owner: #36 flags: "rxd"
     return typeof(this.readers) != LIST || ((who = args[1]) in this.readers || (this:is_writable_by(who) || $mail_agent:sends_to(1, this, who)));
   endverb
 
-  verb "is_usable_by" (this none this) owner: #36 flags: "rxd"
+  verb is_usable_by (this none this) owner: #36 flags: "rxd"
     who = args[1];
     if (this.moderated)
       return `who in this.moderated ! E_TYPE' || (this:is_writable_by(who) || who.wizard);
@@ -132,7 +116,7 @@ object #45
     endif
   endverb
 
-  verb "mail_notify" (this none this) owner: #36 flags: "rxd"
+  verb mail_notify (this none this) owner: #36 flags: "rxd"
     if (args && !this:is_usable_by(args[1]) && !args[1].wizard)
       return this:moderator_notify(@args);
     else
@@ -140,7 +124,7 @@ object #45
     endif
   endverb
 
-  verb "mail_forward" (this none this) owner: #36 flags: "rxd"
+  verb mail_forward (this none this) owner: #36 flags: "rxd"
     if (args && !this:is_usable_by(args[1]) && !args[1].wizard)
       return this:moderator_forward(@args);
     elseif (typeof(mf = this.(verb)) == STR)
@@ -150,7 +134,7 @@ object #45
     endif
   endverb
 
-  verb "moderator_forward" (this none this) owner: #36 flags: "rxd"
+  verb moderator_forward (this none this) owner: #36 flags: "rxd"
     if (typeof(mf = this.(verb)) == STR)
       return $string_utils:pronoun_sub(mf, args ? args[1] | $player);
     else
@@ -158,7 +142,7 @@ object #45
     endif
   endverb
 
-  verb "add_forward" (this none this) owner: #36 flags: "rxd"
+  verb add_forward (this none this) owner: #36 flags: "rxd"
     ":add_forward(recip[,recip...]) adds new recipients to this list.  Returns a string error message or a list of results (recip => success, E_PERM => not allowed, E_INVARG => not a valid recipient, string => other kind of failure)";
     if (caller == $mail_editor)
       perms = player;
@@ -187,7 +171,7 @@ object #45
     return result;
   endverb
 
-  verb "delete_forward" (this none this) owner: #36 flags: "rxd"
+  verb delete_forward (this none this) owner: #36 flags: "rxd"
     ":delete_forward(recip[,recip...]) removes recipients to this list.  Returns a list of results (E_PERM => not allowed, E_INVARG => not on list)";
     if (caller == $mail_editor)
       perms = player;
@@ -218,7 +202,7 @@ object #45
     return result;
   endverb
 
-  verb "add_notify" (this none this) owner: #36 flags: "rxd"
+  verb add_notify (this none this) owner: #36 flags: "rxd"
     ":add_notify(recip[,recip...]) adds new notifiees to this list.  Returns a list of results (recip => success, E_PERM => not allowed, E_INVARG => not a valid recipient)";
     if (caller == $mail_editor)
       perms = player;
@@ -240,7 +224,7 @@ object #45
     return result;
   endverb
 
-  verb "delete_notify" (this none this) owner: #36 flags: "rxd"
+  verb delete_notify (this none this) owner: #36 flags: "rxd"
     ":delete_notify(recip[,recip...]) removes notifiees from this list.  Returns a list of results (E_PERM => not allowed, E_INVARG => not on list)";
     if (caller == $mail_editor)
       perms = player;
@@ -266,7 +250,7 @@ object #45
     return result;
   endverb
 
-  verb "receive_message" (this none this) owner: #36 flags: "rxd"
+  verb receive_message (this none this) owner: #36 flags: "rxd"
     if (!this:ok_write(caller, caller_perms()))
       return E_PERM;
     else
@@ -277,12 +261,12 @@ object #45
     endif
   endverb
 
-  verb "ok" (this none this) owner: #36 flags: "rxd"
+  verb ok (this none this) owner: #36 flags: "rxd"
     ":ok(caller,callerperms) => true iff caller can do read operations";
     return args[1] in {this, $mail_agent} || (args[2].wizard || this:is_readable_by(args[2]));
   endverb
 
-  verb "ok_write" (this none this) owner: #36 flags: "rxd"
+  verb ok_write (this none this) owner: #36 flags: "rxd"
     ":ok_write(caller,callerperms) => true iff caller can do write operations";
     return args[1] in {this, $mail_agent} || (args[2].wizard || this:is_writable_by(args[2]));
   endverb
@@ -314,7 +298,7 @@ object #45
     return this:ok(caller, caller_perms()) ? $mail_agent:(verb)(@args) | E_PERM;
   endverb
 
-  verb "length_date_gt" (this none this) owner: #36 flags: "rxd"
+  verb length_date_gt (this none this) owner: #36 flags: "rxd"
     ":length_date_le(date) => number of messages in folder dated > date";
     "";
     if (this:ok(caller, caller_perms()))
@@ -325,7 +309,7 @@ object #45
     endif
   endverb
 
-  verb "rm_message_seq" (this none this) owner: #36 flags: "rxd"
+  verb rm_message_seq (this none this) owner: #36 flags: "rxd"
     ":rm_message_seq(msg_seq) removes the given sequence of from folder";
     "               => string giving msg numbers removed";
     "See the corresponding routine on $mail_agent.";
@@ -356,7 +340,7 @@ object #45
     return this:ok_write(caller, caller_perms()) ? $mail_agent:(verb)(@args) | E_PERM;
   endverb
 
-  verb "own_messages_filter" (this none this) owner: #36 flags: "rxd"
+  verb own_messages_filter (this none this) owner: #36 flags: "rxd"
     ":own_messages_filter(who,msg_seq) => subsequence of msg_seq consisting of those messages that <who> is actually allowed to remove (on the assumption that <who> is not one of the allowed writers of this folder.";
     if (!this.rmm_own_msgs)
       return E_PERM;
@@ -367,7 +351,7 @@ object #45
     endif
   endverb
 
-  verb "messages" (this none this) owner: #36 flags: "rxd"
+  verb messages (this none this) owner: #36 flags: "rxd"
     "NOTE:  this routine is obsolete, use :messages_in_seq()";
     ":messages(num) => returns the message numbered num.";
     ":messages()    => returns the entire list of messages (can be SLOW).";
@@ -382,7 +366,7 @@ object #45
     endif
   endverb
 
-  verb "date_sort" (this none this) owner: #36 flags: "rxd"
+  verb date_sort (this none this) owner: #36 flags: "rxd"
     if (!this:ok_write(caller, caller_perms()))
       return E_PERM;
     endif
@@ -406,26 +390,26 @@ object #45
     endif
   endverb
 
-  verb "_fix_last_msg_date" (this none this) owner: #36 flags: "rxd"
+  verb _fix_last_msg_date (this none this) owner: #36 flags: "rxd"
     mlen = this:length_all_msgs();
     this.last_msg_date = mlen && this:messages_in_seq(mlen)[2][1];
   endverb
 
-  verb "moderator_notify" (this none this) owner: #36 flags: "rxd"
+  verb moderator_notify (this none this) owner: #36 flags: "rxd"
     return this.(verb);
   endverb
 
-  verb "msg_summary_line" (this none this) owner: #36 flags: "rxd"
+  verb msg_summary_line (this none this) owner: #36 flags: "rxd"
     return $mail_agent:msg_summary_line(@args);
   endverb
 
-  verb "__check" (this none this) owner: #36 flags: "rxd"
+  verb __check (this none this) owner: #36 flags: "rxd"
     for m in (this.messages)
       $mail_agent:__convert_new(@m[2]);
     endfor
   endverb
 
-  verb "__fix" (this none this) owner: #2 flags: "rxd"
+  verb __fix (this none this) owner: #2 flags: "rxd"
     if (!this:ok_write(caller, caller_perms()))
       return E_PERM;
     endif
@@ -439,7 +423,7 @@ object #45
     return 1;
   endverb
 
-  verb "initialize" (this none this) owner: #2 flags: "rxd"
+  verb initialize (this none this) owner: #2 flags: "rxd"
     if (caller == this || $perm_utils:controls(caller_perms(), this))
       this.mail_forward = {};
       return pass(@args);
@@ -450,7 +434,7 @@ object #45
     return "*" + this.aliases[1];
   endverb
 
-  verb "mail_names" (this none this) owner: #36 flags: "rxd"
+  verb mail_names (this none this) owner: #36 flags: "rxd"
     names = {};
     for a in (this.aliases)
       if (!index(a, " "))
@@ -460,7 +444,7 @@ object #45
     return names;
   endverb
 
-  verb "expire_old_messages" (this none this) owner: #2 flags: "rxd"
+  verb expire_old_messages (this none this) owner: #2 flags: "rxd"
     if (this:ok_write(caller, caller_perms()))
       if ($network.active)
         "Passed security check...";
@@ -489,7 +473,7 @@ object #45
     endif
   endverb
 
-  verb "moveto" (this none this) owner: #36 flags: "rxd"
+  verb moveto (this none this) owner: #36 flags: "rxd"
     if (this:is_writable_by(caller_perms()) || this:is_writable_by(caller))
       pass(@args);
     else
@@ -497,7 +481,7 @@ object #45
     endif
   endverb
 
-  verb "msg_full_text" (this none this) owner: #36 flags: "rxd"
+  verb msg_full_text (this none this) owner: #36 flags: "rxd"
     ":msg_full_text(@msg) => list of strings.";
     "msg is a mail message (in the usual transmission format).";
     "display_seq_full calls this to obtain the actual list of strings to display.";
@@ -597,7 +581,7 @@ object #45
     endif
   endverb
 
-  verb "set_name" (this none this) owner: #36 flags: "rxd"
+  verb set_name (this none this) owner: #36 flags: "rxd"
     {name} = args;
     if (caller != this && !$perm_utils:controls(caller_perms(), this))
       return E_PERM;
@@ -616,12 +600,12 @@ object #45
     return pass(name);
   endverb
 
-  verb "ok_annotate" (this none this) owner: #2 flags: "rxd"
+  verb ok_annotate (this none this) owner: #2 flags: "rxd"
     ":ok_annotate(caller,callerperms) => true iff caller can do annotations";
     return args[1] in {this, $mail_agent} || (args[2].wizard || this:is_annotatable_by(args[2]));
   endverb
 
-  verb "annotate_message_seq" (this none this) owner: #2 flags: "rxd"
+  verb annotate_message_seq (this none this) owner: #2 flags: "rxd"
     "annotate_message_seq(note, \"append\"|\"prepend\", message_seq) ;";
     "";
     "Prepend or append (default is prepend) note (a list of strings) to each message in message_seq";
@@ -642,5 +626,4 @@ object #45
     return 1;
     "Copied from annotatetest (#87053):annotate_message_seq [verb author Puff (#1449)] at Mon Feb 14 14:04:56 2005 PST";
   endverb
-
 endobject

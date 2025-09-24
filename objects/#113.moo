@@ -1,28 +1,81 @@
-object #113
+object dns-org-mud-moo-simpleedit
   name: "dns-org-mud-moo-simpleedit"
   parent: #104
-  location: #-1
   owner: #98
   readable: true
-  override "key" = 0;
 
-  override "aliases" = {"dns-org-mud-moo-simpleedit"};
+  property foo (owner: #98, flags: "rc") = 1;
+  property v_filter_in (owner: #98, flags: "rc") = {dns-org-mud-moo-simpleedit, "verbcode_external_to_internal"};
+  property v_filter_out (owner: #98, flags: "rc") = {dns-org-mud-moo-simpleedit, "verbcode_internal_to_external"};
 
-  override "description" = {"A very simple local editing protocol.", "", "S->C #$#dns-org-mud-moo-simpleedit-content (reference, name, type, content*)", "", "Reference is the tag used when sending back to the server.", "User may be allowed to edit it (i.e., save this same text into a", "different property), with possibility of disastrous results.", "", "Name is a human-readable name for the info, suitable for window title,", "buffer name, etc.", "", "Type is one of the following (for version 1.0):", " * string", " * string-list", " * moo-code", "", "Content is the content interpreted according to the type", "info given.  It's multiline (hence the *).", "", "clients that don't provide special support for moo-code editing can", "treat moo-code identically to string-list.", "", "C->S #$#dns-org-mud-moo-simpleedit-set (reference, content*, type)", "", "reference, content, and type are as above.  This is the message sent by the client to set when the user 'saves' the value.  Note this does not necessarily save the value.  Errors such as lack of permission to set the given reference or moo-code compliation errors may prevent it.  It is expected that the server will tell the user this (in the in-band text stream).  ", "", "Clients will probably want to provide a way to just send without closing the window, buffer, etc for this reason.", "", "", "JHCore implementation notes", "", "JHCore currently understands several different kinds of (local) editing sessions:", "handled by $verb_editor:", "   * verb editing", "handled by $note_editor:", "   * list of strings editing for notes and properties", "handled by both $note_editor and $list_editor(?):", "   * value editing for properties", "handled by $mail_editor:", "   * sending a mail message", "", "@edit uses a semi-complicated system to determine (a) what the user is trying to edit and (b) how to edit it.   ", "", "So it looks like the critical things to modify are $generic_editor:invoke_local_editor, $note_editor:local_editing_info, $verb_editor:local_editing_info, and $mail_editor:local_editing_info.  ", "", "The current return path for locally edited stuff (in the core) appears to be:", "  @program", "  @set-note-text", "  @set-note-value", "  @@sendmail", "", ".v_filter_in / .v_filter_out are hooks called when receiving/sending verb code.  JHCore supports a '// comment' syntax in verbs and conversion is made from '// blah' to '\"blah\";' by using the verbs :verbcode_external_to_internal / :verbcode_internal_to_external.", "", ".v_filter_in / .v_filter_out are both 2 element lists containing an object id and a verb.  the JHCore configuration is:", "", "    this.v_filter_in = { this, \"verbcode_external_to_internal\" }", "    this.v_filter_out = { this, \"verbcode_internal_to_external\" }", "", "Non JHCore installations might choose to set .v_filter_in / .v_filter_out to false (0, \"\" or {}) which leaves code lines unfiltered.", "", ""};
+  override aliases = {"dns-org-mud-moo-simpleedit"};
+  override description = {
+    "A very simple local editing protocol.",
+    "",
+    "S->C #$#dns-org-mud-moo-simpleedit-content (reference, name, type, content*)",
+    "",
+    "Reference is the tag used when sending back to the server.",
+    "User may be allowed to edit it (i.e., save this same text into a",
+    "different property), with possibility of disastrous results.",
+    "",
+    "Name is a human-readable name for the info, suitable for window title,",
+    "buffer name, etc.",
+    "",
+    "Type is one of the following (for version 1.0):",
+    " * string",
+    " * string-list",
+    " * moo-code",
+    "",
+    "Content is the content interpreted according to the type",
+    "info given.  It's multiline (hence the *).",
+    "",
+    "clients that don't provide special support for moo-code editing can",
+    "treat moo-code identically to string-list.",
+    "",
+    "C->S #$#dns-org-mud-moo-simpleedit-set (reference, content*, type)",
+    "",
+    "reference, content, and type are as above.  This is the message sent by the client to set when the user 'saves' the value.  Note this does not necessarily save the value.  Errors such as lack of permission to set the given reference or moo-code compliation errors may prevent it.  It is expected that the server will tell the user this (in the in-band text stream).  ",
+    "",
+    "Clients will probably want to provide a way to just send without closing the window, buffer, etc for this reason.",
+    "",
+    "",
+    "JHCore implementation notes",
+    "",
+    "JHCore currently understands several different kinds of (local) editing sessions:",
+    "handled by $verb_editor:",
+    "   * verb editing",
+    "handled by $note_editor:",
+    "   * list of strings editing for notes and properties",
+    "handled by both $note_editor and $list_editor(?):",
+    "   * value editing for properties",
+    "handled by $mail_editor:",
+    "   * sending a mail message",
+    "",
+    "@edit uses a semi-complicated system to determine (a) what the user is trying to edit and (b) how to edit it.   ",
+    "",
+    "So it looks like the critical things to modify are $generic_editor:invoke_local_editor, $note_editor:local_editing_info, $verb_editor:local_editing_info, and $mail_editor:local_editing_info.  ",
+    "",
+    "The current return path for locally edited stuff (in the core) appears to be:",
+    "  @program",
+    "  @set-note-text",
+    "  @set-note-value",
+    "  @@sendmail",
+    "",
+    ".v_filter_in / .v_filter_out are hooks called when receiving/sending verb code.  JHCore supports a '// comment' syntax in verbs and conversion is made from '// blah' to '\"blah\";' by using the verbs :verbcode_external_to_internal / :verbcode_internal_to_external.",
+    "",
+    ".v_filter_in / .v_filter_out are both 2 element lists containing an object id and a verb.  the JHCore configuration is:",
+    "",
+    "    this.v_filter_in = { this, \"verbcode_external_to_internal\" }",
+    "    this.v_filter_out = { this, \"verbcode_internal_to_external\" }",
+    "",
+    "Non JHCore installations might choose to set .v_filter_in / .v_filter_out to false (0, \"\" or {}) which leaves code lines unfiltered.",
+    "",
+    ""
+  };
+  override messages_in = {{"set", {"reference", "type", "content"}}};
+  override messages_out = {{"content", {"reference", "name", "type", "content"}}};
 
-  override "messages_in" = {{"set", {"reference", "type", "content"}}};
-
-  override "messages_out" = {{"content", {"reference", "name", "type", "content"}}};
-
-  override "version_range" = {"1.0", "1.0"};
-
-  property "foo" (owner: #98, flags: "rc") = 1;
-
-  property "v_filter_in" (owner: #98, flags: "rc") = {#113, "verbcode_external_to_internal"};
-
-  property "v_filter_out" (owner: #98, flags: "rc") = {#113, "verbcode_internal_to_external"};
-
-  verb "send_content" (this none this) owner: #2 flags: "rxd"
+  verb send_content (this none this) owner: #2 flags: "rxd"
     "Usage:  :send_content()";
     "";
     if ($perm_utils:controls(caller_perms(), args[1]))
@@ -32,7 +85,7 @@ object #113
     endif
   endverb
 
-  verb "handle_set" (this none this) owner: #2 flags: "rxd"
+  verb handle_set (this none this) owner: #2 flags: "rxd"
     "Usage:  :handle_set(session, reference, type, content)";
     "";
     {session, reference, type, content} = args;
@@ -55,7 +108,7 @@ object #113
     endtry
   endverb
 
-  verb "edit_set_program" (this none this) owner: #2 flags: "rxd"
+  verb edit_set_program (this none this) owner: #2 flags: "rxd"
     {reference, lines} = args;
     set_task_perms(caller_perms());
     args = $string_utils:words(reference);
@@ -111,7 +164,7 @@ object #113
       endif
     else
       named = {};
-      loc = typeof(verbname) == NUM ? verbname | 0;
+      loc = typeof(verbname) == INT ? verbname | 0;
     endif
     if (!punt)
       try
@@ -136,7 +189,7 @@ object #113
     else
       "filter the verb?";
       if (this.v_filter_in)
-        lines = this.v_filter_in[1]:(this.v_filter_in[2])(lines);
+        lines = this.v_filter_in[1]:((this.v_filter_in[2]))(lines);
       endif
       if (0 && named)
         "Disabled: We want to see all of the code in the verb and not in the title.";
@@ -162,7 +215,7 @@ object #113
     endif
   endverb
 
-  verb "edit_sendmail" (this none this) owner: #2 flags: "rxd"
+  verb edit_sendmail (this none this) owner: #2 flags: "rxd"
     "See $player:@@sendmail";
     set_task_perms(caller_perms());
     {reference, msg} = args;
@@ -214,7 +267,7 @@ object #113
     return {};
   endverb
 
-  verb "edit_set_note_value" (this none this) owner: #2 flags: "rxd"
+  verb edit_set_note_value (this none this) owner: #2 flags: "rxd"
     set_task_perms(caller_perms());
     {reference, type, content} = args;
     "reference format == [str|val]:#xx[.pname]";
@@ -270,7 +323,7 @@ object #113
     endif
   endverb
 
-  verb "verbcode_external_to_internal" (this none this) owner: #98 flags: "rxd"
+  verb verbcode_external_to_internal (this none this) owner: #98 flags: "rxd"
     "Charter: given a block of verb code lines from the user, transform it into code ready to be passed to set_verb_code().  In particular, reverse any transformation made by :verbcode_internal_to_external.";
     "This version transforms `// foo' comments to `\"foo\";' comments.";
     lines = args[1];
@@ -292,7 +345,7 @@ object #113
     return newlines;
   endverb
 
-  verb "verbcode_internal_to_external" (this none this) owner: #98 flags: "rxd"
+  verb verbcode_internal_to_external (this none this) owner: #98 flags: "rxd"
     "Charter: given a block of verb code from the verb_code() primitive, transform it into its external representation to be presented to the user.";
     "This version transforms `\"foo\";' comments to `// foo' comments.";
     lines = args[1];
@@ -315,5 +368,4 @@ object #113
     endfor
     return newlines;
   endverb
-
 endobject
