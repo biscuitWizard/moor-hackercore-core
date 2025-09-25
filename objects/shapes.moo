@@ -203,7 +203,7 @@ object #75
     return name;
   endverb
 
-  verb "@par*ents" (any none none) owner: #36 flags: "rd"
+  verb "@par*ents" (any none none) owner: #2 flags: "rxd"
     "'@parents <thing>' - List <thing> and its ancestors, all the way back to the Root Class (#1).";
     if (!dobjstr)
       player:notify(tostr("Usage:  ", verb, " <object>"));
@@ -212,7 +212,7 @@ object #75
     set_task_perms(player);
     o = player:match(dobjstr);
     if (!$command_utils:object_match_failed(o, dobjstr))
-      object_parents = $string_utils:names_of_indented($list_utils:remove_duplicates({o, @parents(o), @$object_utils:ancestors(o)}));
+      object_parents = $string_utils:names_of_indented($list_utils:remove_duplicates({o, parent(o), @$object_utils:ancestors(o)}));
       for x in (object_parents)
         player:tell(x);
       endfor
