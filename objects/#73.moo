@@ -9,7 +9,6 @@ object #73
 
   verb "@list*#" (any any any) owner: #2 flags: "rxd"
     "@list <obj>:<verb> [<dobj> <prep> <iobj>] [with[out] paren|num] [all] [ranges]";
-    set_task_perms(player);
     bynumber = verb == "@list#";
     pflag = player:prog_option("list_all_parens");
     nflag = !player:prog_option("list_no_numbers");

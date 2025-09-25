@@ -1,2 +1,3 @@
 # never allow there to be a game db in here
 db/
+keys/
