@@ -1,12 +1,12 @@
-object dns-org-mud-moo-simpleedit
+object #113
   name: "dns-org-mud-moo-simpleedit"
   parent: #104
   owner: #98
   readable: true
 
   property foo (owner: #98, flags: "rc") = 1;
-  property v_filter_in (owner: #98, flags: "rc") = {dns-org-mud-moo-simpleedit, "verbcode_external_to_internal"};
-  property v_filter_out (owner: #98, flags: "rc") = {dns-org-mud-moo-simpleedit, "verbcode_internal_to_external"};
+  property v_filter_in (owner: #98, flags: "rc") = {#113, "verbcode_external_to_internal"};
+  property v_filter_out (owner: #98, flags: "rc") = {#113, "verbcode_internal_to_external"};
 
   override aliases = {"dns-org-mud-moo-simpleedit"};
   override description = {

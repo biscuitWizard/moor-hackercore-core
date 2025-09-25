@@ -1,4 +1,4 @@
-object Limbo
+object #15
   name: "Limbo"
   parent: #1
   owner: #2

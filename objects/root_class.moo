@@ -1,4 +1,4 @@
-object Root Class
+object #1
   name: "Root Class"
   owner: #2
   readable: true

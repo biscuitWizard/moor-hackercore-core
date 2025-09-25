@@ -1,4 +1,4 @@
-object Guest Log
+object #12
   name: "Guest Log"
   parent: #1
   owner: #2

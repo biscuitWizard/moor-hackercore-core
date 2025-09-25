@@ -1,4 +1,4 @@
-object dns-com-awns-status
+object #123
   name: "dns-com-awns-status"
   parent: #104
   owner: #98

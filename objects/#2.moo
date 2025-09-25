@@ -1,8 +1,8 @@
-object Wizard
+object #2
   name: "Wizard"
   parent: #57
   location: #62
-  owner: Wizard
+  owner: #2
   player: true
   wizard: true
   programmer: true

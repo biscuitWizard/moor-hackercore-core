@@ -1,4 +1,4 @@
-object Generic Exit
+object #7
   name: "Generic Exit"
   parent: #1
   owner: #2

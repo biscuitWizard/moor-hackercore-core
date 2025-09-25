@@ -1,4 +1,4 @@
-object Generic Builder
+object #4
   name: "Generic Builder"
   parent: #6
   owner: #2

@@ -1,4 +1,4 @@
-object Generic Programmer
+object #58
   name: "Generic Programmer"
   parent: #4
   owner: #2

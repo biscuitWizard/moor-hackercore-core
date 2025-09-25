@@ -1,4 +1,4 @@
-object Singleton Warehouse
+object #84
   name: "Singleton Warehouse"
   parent: #8
   location: #62

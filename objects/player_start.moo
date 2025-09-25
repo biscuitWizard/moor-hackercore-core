@@ -1,4 +1,4 @@
-object The First Room
+object #62
   name: "The First Room"
   parent: #3
   owner: #36

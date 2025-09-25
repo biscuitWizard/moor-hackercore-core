@@ -1,4 +1,4 @@
-object Generic Container
+object #8
   name: "Generic Container"
   parent: #5
   owner: #2

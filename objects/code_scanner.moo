@@ -1,4 +1,4 @@
-object Slither's Code Scanner
+object #95
   name: "Slither's Code Scanner"
   parent: #78
   owner: #2

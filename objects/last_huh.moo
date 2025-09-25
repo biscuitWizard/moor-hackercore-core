@@ -1,4 +1,4 @@
-object Player Last_huh Verbs
+object #11
   name: "Player Last_huh Verbs"
   parent: #1
   owner: #2

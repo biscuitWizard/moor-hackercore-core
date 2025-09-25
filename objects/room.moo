@@ -1,4 +1,4 @@
-object Generic Room
+object #3
   name: "Generic Room"
   parent: #1
   owner: #2

@@ -1,4 +1,4 @@
-object Generic Gendered Object
+object #94
   name: "Generic Gendered Object"
   parent: #1
   owner: #2

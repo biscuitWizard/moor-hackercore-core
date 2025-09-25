@@ -1,4 +1,4 @@
-object Generic Garbage
+object #49
   name: "Generic Garbage"
   parent: #1
   owner: #36

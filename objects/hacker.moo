@@ -1,7 +1,7 @@
-object Hacker
+object #36
   name: "Hacker"
   parent: #58
-  owner: Hacker
+  owner: #36
   player: true
   programmer: true
   readable: true

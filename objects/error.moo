@@ -1,4 +1,4 @@
-object Error Generator
+object #69
   name: "Error Generator"
   parent: #1
   owner: #36

@@ -1,4 +1,4 @@
-object Mr. Spell
+object #32
   name: "Mr. Spell"
   parent: #1
   owner: #36

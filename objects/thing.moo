@@ -1,4 +1,4 @@
-object Generic Thing
+object #5
   name: "Generic Thing"
   parent: #1
   owner: #2

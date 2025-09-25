@@ -1,4 +1,4 @@
-object Wizard Utilities
+object #24
   name: "Wizard Utilities"
   parent: #78
   owner: #2

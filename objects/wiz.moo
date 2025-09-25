@@ -1,4 +1,4 @@
-object Generic Wizard
+object #57
   name: "Generic Wizard"
   parent: #58
   owner: #2

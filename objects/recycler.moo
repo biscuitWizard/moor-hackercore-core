@@ -1,4 +1,4 @@
-object Recycling Center
+object #47
   name: "Recycling Center"
   parent: #5
   owner: #36

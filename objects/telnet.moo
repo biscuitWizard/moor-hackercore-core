@@ -1,4 +1,4 @@
-object Telnet Handler
+object #64
   name: "Telnet Handler"
   parent: #1
   owner: #2

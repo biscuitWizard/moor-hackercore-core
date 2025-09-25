@@ -1,4 +1,4 @@
-object Display Options
+object #67
   name: "Display Options"
   parent: #68
   owner: #36

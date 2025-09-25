@@ -1,4 +1,4 @@
-object ANSI Color System
+object #25
   name: "ANSI Color System"
   parent: #78
   owner: #12

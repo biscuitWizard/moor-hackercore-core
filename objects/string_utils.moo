@@ -1,4 +1,4 @@
-object String Utilities
+object #20
   name: "String Utilities"
   parent: #78
   owner: #2

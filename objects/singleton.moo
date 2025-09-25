@@ -1,4 +1,4 @@
-object Generic Singleton Objects
+object #17
   name: "Generic Singleton Objects"
   parent: #1
   owner: #2

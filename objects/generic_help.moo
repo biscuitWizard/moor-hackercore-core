@@ -1,4 +1,4 @@
-object Generic Help Database
+object #30
   name: "Generic Help Database"
   parent: #1
   owner: #36

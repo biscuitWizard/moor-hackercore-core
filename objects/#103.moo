@@ -1,4 +1,4 @@
-object Generic Message Dispatch Object
+object #103
   name: "Generic Message Dispatch Object"
   parent: #1
   owner: #98

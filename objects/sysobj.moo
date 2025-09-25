@@ -1,4 +1,4 @@
-object The System Object
+object #0
   name: "The System Object"
   owner: #2
   readable: true
@@ -138,7 +138,7 @@ object The System Object
       {"ToastCore", "2.7.1", 1713940026},
       {"a 2018 LambdaCore", "2.6.0", 1576791887}
     },
-    "last_restart_time" -> 1758754200,
+    "last_restart_time" -> 1758800578,
     "name" -> "LambdaMOO-ToastStunt",
     "shutdown_time" -> 0
   ];
@@ -151,7 +151,7 @@ object The System Object
   property str_proto (owner: #2, flags: "r") = #119;
   property string_utils (owner: #2, flags: "r") = #20;
   property su (owner: #2, flags: "r") = #20;
-  property sysobj (owner: #2, flags: "r") = The System Object;
+  property sysobj (owner: #2, flags: "r") = #0;
   property telnet (owner: #2, flags: "r") = #64;
   property thing (owner: #2, flags: "r") = #5;
   property time_utils (owner: #2, flags: "r") = #43;

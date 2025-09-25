@@ -1,4 +1,4 @@
-object Generic Large-Capacity Mail Recipient
+object #14
   name: "Generic Large-Capacity Mail Recipient"
   parent: #45
   owner: #36

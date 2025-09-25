@@ -1,4 +1,4 @@
-object Generic Player
+object #6
   name: "Generic Player"
   parent: #94
   owner: #2

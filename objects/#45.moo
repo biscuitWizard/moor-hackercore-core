@@ -1,4 +1,4 @@
-object Generic Mail Recipient
+object #45
   name: "Generic Mail Recipient"
   parent: #1
   owner: #36

@@ -1,4 +1,4 @@
-object Login Commands
+object #10
   name: "Login Commands"
   parent: #1
   owner: #2
@@ -11,8 +11,15 @@ object Login Commands
   property connection_limit_msg (owner: #36, flags: "r") = "*** The MOO is too busy! The current lag is %l; there are %n connected.  WAIT FIVE MINUTES BEFORE TRYING AGAIN.";
   property create_enabled (owner: #2, flags: "rc") = 1;
   property current_lag (owner: #2, flags: "r") = 0;
-  property current_numcommands (owner: #2, flags: "rc") = [#-5 -> 2];
-  property downtimes (owner: #2, flags: "rc") = {{1758754200, 0}, {1758753626, 0}, {1756637231, 0}, {1755930061, 0}};
+  property current_numcommands (owner: #2, flags: "rc") = [#-7 -> 2];
+  property downtimes (owner: #2, flags: "rc") = {
+    {1758800578, 0},
+    {1758754960, 0},
+    {1758754200, 0},
+    {1758753626, 0},
+    {1756637231, 0},
+    {1755930061, 0}
+  };
   property graylist (owner: #2, flags: "") = {{}, {}};
   property help_message (owner: #2, flags: "rc") = {"Sorry, but there's no help here yet.  Type `?' for a list of commands."};
   property ignored (owner: #2, flags: "rc") = {};

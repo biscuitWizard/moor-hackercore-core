@@ -1,4 +1,4 @@
-object mcp-negotiate
+object #105
   name: "mcp-negotiate"
   parent: #104
   owner: #98

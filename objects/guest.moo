@@ -1,4 +1,4 @@
-object Generic Guest
+object #31
   name: "Generic Guest"
   parent: #6
   owner: #36

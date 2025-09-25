@@ -1,4 +1,4 @@
-object Verb Help DB
+object #18
   name: "Verb Help DB"
   parent: #1
   owner: #36

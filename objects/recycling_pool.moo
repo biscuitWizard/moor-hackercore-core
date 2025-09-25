@@ -1,4 +1,4 @@
-object Generic Recycling Pool
+object #48
   name: "Generic Recycling Pool"
   parent: #1
   owner: #36

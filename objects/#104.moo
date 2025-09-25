@@ -1,4 +1,4 @@
-object Generic MCP Package
+object #104
   name: "Generic MCP Package"
   parent: #103
   owner: #98

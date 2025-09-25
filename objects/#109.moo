@@ -1,4 +1,4 @@
-object MCP Package Registry
+object #109
   name: "MCP Package Registry"
   parent: #1
   owner: #98
