@@ -407,13 +407,13 @@ object #56
     cmd_object = callers()[1][1];
     player:tell(cmd_object);
     if ((switch = $su:explode(verbstr, "/")[$]) && switch != verbstr)
-      if (!$ou:has_callable_verb(this, tostr(cmd_prefix, "_", switch)))
+      if (!$ou:has_callable_verb(cmd_object, tostr(cmd_prefix, "_", switch)))
         switches = {};
         for v in ($ou:all_verbs(cmd_object))
           if (!$su:starts_with(v, tostr(cmd_prefix, "_")))
             continue;
           endif
-          switches = {@switches, v[length(cmd_prefix) + 1..$]};
+          switches = {@switches, v[length(cmd_prefix) + 2..$]};
         endfor
         player:notify(tostr("Unable to match switch '", switch, "', available switches are: ", $su:english_list(switches)));
         return $true;
