@@ -7,7 +7,7 @@ Note that these don't need to specifically be the lambda core versions of these 
 
 ## objects
 * root object (discuss specifics below)
-* player / avatar
+* player class
 * room
 * room detail - stationary "object" (probably anon) which can be looked at and otherwise interacted with in a room
 * area
@@ -17,38 +17,32 @@ Note that these don't need to specifically be the lambda core versions of these 
 * note
 * book - multi-page readable/writable with table of contents, locking, page tearing
 * letter
+* Avatar - likely descendant of player class, aka puppet, simulated player - controllable by others
 * consumable (generic food  / drink)?
 * clothing - wearable items
 * furniture - sittable/usable room objects
 * door - lockable passages between rooms
 * breakable detail - destructible room features
-* hacker - specialized player class or NPC type
+* Non-wizard code owner: $hacker (#36)
 * npc - non-player character base class
-* composed - compound/multi-part objects
 
 ## Systems
 * [x] Simple stable heart for periodically running tasks from progs or wizards as desired
 * [x] Precise scheduler (as far as moo can get anyway) with cron syntax
 * [x?] An optional recycler / objid allocation pool object
 * [x] Spellchecker (telnet folks) - "Mr. Spell" with dictionary and validation
-* [x] Channels - multi-user chat with history, moderation, filters
-* [x] MOO mail - distribution center with mailing lists and folders
+* [ ] Channels - multi-user chat with history, moderation, filters
+* [?] long-term / asynchronous messages - was moomail in lambdacore
 * Room / personal replay (think moor does something for this?)
   * Should be configurable whether this persists when disconnected, in case user / future cores don't want
-* [x] Code change alerts - recording and viewing code changes with digest generation
-  * should be reviewable later, preferably change metadata logged in a db or something
-* [x] Quota system - object ownership limits and space management
+* [ ] code / version management: in progress with VCS feature and worker
 * [x] Wizard utilities - enhanced server builtins for ownership, permissions
 * Help system: help databases for sets of commands; .help_msg or :help_msg for matched objects
 * [x] Generic editor system - inline text editing for various objects
 * [x] Area management - grouped rooms with navigation and utilities
 * [x] Module system - extensible room and object behaviors
 * [x] Core integrity checking - database comparison and hash verification
-* [x] Home Assistant bridge - IoT integration for smart home control
-* [x] HTTP/WebSocket server - web interface and API support
-* [x] Gopher server - retro text-based information system
-* [x] BitTorrent tracker - file sharing coordination
-* [x] SQL/SQLite integration - database persistence and queries
+* [ ] SQL/SQLite integration - database persistence and queries
 * [x] MCP (MOO Client Protocol) - enhanced client communication
 * [x] Octree spatial indexing - efficient 3D object organization
 * [x] Social system - emotes and interaction commands
@@ -56,33 +50,17 @@ Note that these don't need to specifically be the lambda core versions of these 
 ## Utility Libraries
 * [x] String utilities - text manipulation and formatting
 * [x] List utilities - list operations and transformations
-* [x] Map utilities - associative array operations
+* [x] Map utilities - k/v operations
 * [x] Web utilities - HTTP/web development helpers
 * [x] Mapping utilities - coordinate and spatial functions
-* [x] Geometry utilities - shapes and geometric calculations
-* [x] Torrent utilities - BitTorrent protocol helpers
 * [x] PC (player character) utilities - character management
 * [x] Menu utilities - interactive menu systems
 * [x] Telnet utilities - telnet protocol handling
 * [x] WebSocket utilities - should be made into parse and construct builtins
 
 ## Specialized Features
-* [x] Exporter system - data export and migration tools
-* [x] Documentation helper - automated help generation
-* [x] Login customization - authentication and welcome systems
-* [x] News system - announcements and updates
-* [x] Miniflux terminal - RSS/feed reader integration
-* [x] Teamtalk bridge - voice chat integration
-* [x] Password verification - secure authentication
-* [x] Instance tracking - object lifecycle management
-* [x] Site database - configuration and settings storage
-* [x] Registration system - new user account creation
-* [x] Data waif - structured data containers
-* [x] Random number generation - FRAND cryptographic randomness
-* [x] Loop utilities - advanced iteration constructs
 * [x] Trace system - debugging and execution tracking
 * [x] Options framework - user preference management
-* [x] Housekeeper - automated maintenance and cleanup
 * [x] Synchronizer - cross-server data synchronization
 
 
