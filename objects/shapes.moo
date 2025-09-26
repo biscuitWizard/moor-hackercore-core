@@ -390,4 +390,17 @@ object #75
       endif
     endif
   endverb
+
+  verb "@edit" (any any any) owner: #2 flags: "rxd"
+    if (!(verbref = $code_utils:parse_verbref(argstr)))
+      return player:notify("Syntax: @edit obj:verb");
+    elseif ($command_utils:object_match_failed(target = player:match(verbref[1]), verbref[1]))
+      return;
+    endif
+    code = verb_code(target, verbref[2]);
+    editor = {tostr("#$# edit name: ", target, ":", verbref[2], " upload: @program ", target, ":", verbref[2])};
+    editor = {@editor, @code};
+    editor = {@editor, "", ".", ""};
+    player:tell_lines(editor);
+  endverb
 endobject

@@ -75,7 +75,7 @@ object #9
   verb update (this none this) owner: #2 flags: "rxd"
     {object} = args;
     obj_name = this:get_object_name(object);
-    worker_request("vms", {"update_object", obj_name, dump_object(object)});
+    worker_request("vcs", {"update_object", obj_name, dump_object(object)});
   endverb
 
   verb rename_object (this none this) owner: #2 flags: "rxd"
