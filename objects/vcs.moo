@@ -66,7 +66,7 @@ object #9
     while (remaining_objects)
       {obj_spec, remaining_objects} = $lu:dequeue(remaining_objects);
       obj_id = toobj(obj_spec["oid"]);
-      obj_dump = worker_request("vcs", {"get_objects", obj_spec["filename"]})[1];
+      obj_dump = worker_request("vcs", {"get_objects", obj_spec["filename"]});
       load_object(obj_dump, ["target_object" -> obj_id]);
       commit();
     endwhile
