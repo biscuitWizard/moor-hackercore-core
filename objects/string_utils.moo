@@ -339,7 +339,7 @@ object #20
     "u" -> "up",
     "w" -> "west"
   ];
-  property tab (owner: #2, flags: "rc") = "	";
+  property tab (owner: #2, flags: "rc") = "\t";
   property use_article_a (owner: #36, flags: "r") = {"unit", "unix", "one", "once", "utility"};
   property use_article_an (owner: #36, flags: "r") = {};
   property vowels (owner: #2, flags: "r") = {"a", "o", "u", "i", "e"};
