@@ -10,7 +10,8 @@ object #56
   property NONE (owner: #12, flags: "r") = -1;
   property NO_ABORT (owner: #12, flags: "r") = 100;
   property YES (owner: #12, flags: "r") = 1;
-  property feature_task (owner: #36, flags: "") = {12, "@list", {"#9:update"}, "#9:update", #-3, "#9:update", "", #-1, ""};
+  property feature_task (owner: #36, flags: "") = {57, "@program", {"#56:do_huh"}, "#56:do_huh", #-3, "#56:do_huh", "", #-1, ""};
+  property idun_msg (owner: #36, flags: "r") = "I don't understand that.";
 
   override aliases = {"Command Utilities"};
   override description = {
@@ -345,9 +346,6 @@ object #56
   verb do_huh (this none this) owner: #36 flags: "rx"
     ":do_huh(verb,args)  what :huh should do by default.";
     {verb, args} = args;
-    this.feature_task = {task_id(), verb, args, argstr, dobj, dobjstr, prepstr, iobj, iobjstr};
-    set_task_perms(cp = caller_perms());
-    notify = $perm_utils:controls(cp, player) ? "notify" | "tell";
     testbit = player:my_huh(verb, args);
     if (testbit)
       "... the player found something funky to do ...";
@@ -357,9 +355,9 @@ object #56
       "... player's second round found something to do ...";
     elseif (dobj == $ambiguous_match)
       if (iobj == $ambiguous_match)
-        player:(notify)(tostr("I don't understand that (\"", dobjstr, "\" and \"", iobjstr, "\" refer to multiple items 'help multiples')."));
+        player:notify(tostr("I don't understand that (\"", dobjstr, "\" and \"", iobjstr, "\" refer to multiple items 'help multiples')."));
       else
-        player:(notify)(tostr("I don't understand that (\"", dobjstr, "\" refers to multiple items 'help multiples')."));
+        player:notify(tostr("I don't understand that (\"", dobjstr, "\" refers to multiple items 'help multiples')."));
       endif
     elseif (iobj == $ambiguous_match)
       player:(notify)(tostr("I don't understand that (\"", iobjstr, "\" refers to multiple items 'help multiples')."));
@@ -370,7 +368,7 @@ object #56
     elseif (valid(iobj = iobj || player:match(iobjstr)) && iobj:my_huh(verb, args))
       "... iobj found something to do ...";
     else
-      player:(notify)($ru.idun_msg);
+      player:notify($cu.idun_msg);
       player:my_explain_syntax(caller, verb, args) || (caller:here_explain_syntax(caller, verb, args) || this:explain_syntax(caller, verb, args));
     endif
   endverb
@@ -407,6 +405,7 @@ object #56
   verb switched_command (this none this) owner: #36 flags: "rxd"
     {verbstr, cmd_prefix, ?default_verb = ""} = args;
     cmd_object = callers()[1][1];
+    player:tell(cmd_object);
     if ((switch = $su:explode(verbstr, "/")[$]) && switch != verbstr)
       if (!$ou:has_callable_verb(this, tostr(cmd_prefix, "_", switch)))
         switches = {};

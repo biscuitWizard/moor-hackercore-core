@@ -264,9 +264,12 @@ object #73
       return;
     endif
     try
+      cached_value = object.(pname);
       result = delete_property(object, pname);
-      player:rp_info_increment("PROPS-REMOVED");
-      $broadcast:staff_alerts(player:name(), " removed ", pname, " from ", $su:nn(object), ".");
+      if (object == $sysobj && typeof(cached_value) == OBJ)
+        "We may have just removed a corify property so just in case update the vms";
+        $vcs:rename_object(cached_value, tostr(cached_value));
+      endif
       player:notify("Property removed.");
     except (E_PROPNF)
       player:notify("That object does not define that property.");
@@ -608,8 +611,9 @@ object #73
       return;
     endif
     try
-      x = add_verb(object, {#12, perms, name}, verbargs);
+      x = add_verb(object, {player, perms, name}, verbargs);
       player:notify(tostr("Verb added (", x > 0 ? x | length($object_utils:accessible_verbs(object)), ")."));
+      $vcs:update(object);
     except (E_INVARG)
       player:notify(tostr(rest ? tostr("\"", perms, "\" is not a valid set of permissions.") | tostr("\"", verbargs[2], "\" is not a valid preposition (?)")));
     except e (ANY)
@@ -773,12 +777,103 @@ object #73
           `$diff_utils:diff_display("oldcode", old_code, "newcode", lines[2]) ! ANY';
           player:notify("0 errors.");
           player:notify("Verb programmed.");
+          $vcs:update(object);
           $code_scanner:display_issues($code_scanner:scan_for_issues(object, verbname));
         endif
       except error (ANY)
         player:notify(error[2]);
         player:notify("Verb not programmed.");
       endtry
+    endif
+  endverb
+
+  verb "@rename*#" (any at any) owner: #2 flags: "rxd"
+    bynumber = verb == "@rename#";
+    if (spec = $code_utils:parse_verbref(dobjstr))
+      object = player:match(spec[1]);
+      if (!$command_utils:object_match_failed(object, spec[1]))
+        vname = spec[2];
+        if (bynumber)
+          vname = $code_utils:toint(vname);
+          if (vname == E_TYPE)
+            return player:notify("Verb number expected.");
+          elseif (vname < 1 || `vname > length(verbs(object)) ! E_PERM => 0')
+            return player:notify("Verb number out of range.");
+          endif
+        endif
+        try
+          info = verb_info(object, vname);
+          try
+            result = set_verb_info(object, vname, listset(info, iobjstr, 3));
+            player:notify("Verb name changed.");
+            $vcs:update(object);
+          except e (ANY)
+            player:notify(e[2]);
+          endtry
+        except (E_VERBNF)
+          player:notify("That object does not define that verb.");
+        except e (ANY)
+          player:notify(e[2]);
+        endtry
+      endif
+    elseif (bynumber)
+      player:notify("@rename# can only be used with verbs.");
+    elseif (pspec = $code_utils:parse_propref(dobjstr))
+      object = this:match(pspec[1]);
+      if (!$command_utils:object_match_failed(object, pspec[1]))
+        pname = pspec[2];
+        if (!$perm_utils:can_write_property(player, object, pname))
+          return player:notify("You don't have permission to edit ", object, ".", pname, ".");
+        endif
+        try
+          info = property_info(object, pname);
+          try
+            result = set_property_info(object, pname, {@info, iobjstr});
+            player:notify("Property name changed.");
+          except e (ANY)
+            player:notify(e[2]);
+          endtry
+        except (E_PROPNF)
+          player:notify("That object does not define that property.");
+        except e (ANY)
+          player:notify(e[2]);
+        endtry
+      endif
+    else
+      object = this:match(dobjstr);
+      if (!$command_utils:object_match_failed(object, dobjstr))
+        old_name = object.name;
+        old_aliases = object.aliases;
+        if (!$perm_utils:controls(player, object))
+          return player:notify("You don't have that object checked out; check it out first!");
+        elseif (e = $building_utils:set_names(object, iobjstr))
+          if (strcmp(object.name, old_name) == 0)
+            name_message = tostr("Name of ", object, " (", old_name, ") is unchanged");
+          else
+            name_message = tostr("Name of ", object, " changed to \"", object.name, "\"");
+          endif
+          aliases = $string_utils:from_value(object.aliases, 1);
+          if (object.aliases == old_aliases)
+            alias_message = tostr(".  Aliases are unchanged (", aliases, ").");
+          else
+            alias_message = tostr(", with aliases ", aliases, ".");
+          endif
+          player:notify(name_message + alias_message);
+        elseif (e == E_INVARG)
+          player:notify("That particular name change not allowed (see help @rename).");
+          if (object == player)
+            player:notify($player_db:why_bad_name(player, iobjstr));
+          endif
+        elseif (e == E_NACC)
+          player:notify("Oops.  You can't update that name right now; try again in a few minutes.");
+        elseif (e == E_ARGS)
+          player:notify(tostr("Sorry, name too long.  Maximum number of characters in a name:  ", $login.max_player_name));
+        elseif (e == 0)
+          player:notify("Name and aliases remain unchanged.");
+        else
+          player:notify(tostr(e));
+        endif
+      endif
     endif
   endverb
 endobject

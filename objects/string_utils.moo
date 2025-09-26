@@ -1393,8 +1393,10 @@ object #20
     parts = {};
     while (subject)
       if ((i = index(subject, breakit)) > 1)
+        player:notify("adding part: ", subject[1..i - 1]);
         parts = {@parts, subject[1..i - 1]};
       endif
+      player:notify("updated subject: ", subject[i + length(breakit)..$]);
       subject = subject[i + length(breakit)..$];
     endwhile
     return parts;

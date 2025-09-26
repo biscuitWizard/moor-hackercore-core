@@ -13,20 +13,30 @@ object #9
     "Version Management System Feature"
   };
 
-  verb "@vms @vms/*" (any any any) owner: #2 flags: "rxd"
-    if ($cu:switched_command(verb, "vms"))
+  verb "@vcs" (any any any) owner: #2 flags: "rxd"
+    if ($cu:switched_command(verb, "vcs"))
       return;
     endif
-    repo = worker_request("vms", {"repository_status"})[1];
+    repo = worker_request("vms", {"status"})[1];
     output = {};
-    output = {@output, tostr($su:left("Game ", 15), ":  ", `repo["game"] ! E_RANGE => $server["core_history"][1] + " (Local)"')};
+    output = {@output, tostr($su:left($ansi:brwhite("Game "), 15), ":  ", `repo["game"] ! ANY => tostr($server["core_history"][1][1], " (Local)")')};
     output = {@output, tostr($su:right("Upstream ", 15), ":  ", repo["upstream"])};
     output = {@output, ""};
-    output = {@output, tostr($su:left("Last Change ", 15), ":  ", "")};
-    output = {@output, tostr($su:right("On ", 15), ":  ", "")};
-    output = {@output, tostr($su:right("Id ", 15), ":  ", "")};
+    output = {@output, tostr($su:left($ansi:brwhite("Last Change "), 15), ":  ", repo["last_commit_message"])};
+    output = {@output, tostr($su:right("On ", 15), ":  ", repo["last_commit_datetime"])};
+    output = {@output, tostr($su:right("Id ", 15), ":  ", repo["last_commit_id"])};
     output = {@output, ""};
     if (maphaskey(repo, "changes"))
+      output = {@output, tostr($su:left($ansi:brwhite("Changes "), 15), ":")};
+      for change in (repo["changes"])
+        tag = change[1];
+        if (tag == "Modified")
+          tag = $ansi:yellow(tag);
+        elseif (tag == "Renamed")
+          tag = $ansi:cyan(tag);
+        endif
+        output = {@output, tostr("  [", $su:right(tag, 10), "] ", change[2])};
+      endfor
     else
       output = {@output, "There are currently no changes."};
     endif
@@ -64,6 +74,22 @@ object #9
 
   verb update (this none this) owner: #2 flags: "rxd"
     {object} = args;
+    obj_name = this:get_object_name(object);
+    worker_request("vms", {"update_object", obj_name, dump_object(object)});
+  endverb
+
+  verb rename_object (this none this) owner: #2 flags: "rxd"
+    ":rename_object(OBJ object, STR new_name) => NONE";
+    "  Renames an object in VCS to a new name";
+    {object, new_name} = args;
+    worker_request("vms", {this:get_object_name(object), new_name});
+  endverb
+
+  verb get_object_name (this none this) owner: #36 flags: "rxd"
+    ":get_object_name(OBJ object) => STR";
+    "  all objects in VCS get saved by a unique name";
+    "  This defaults to the value in $sysobj; but if not defined it's just the obj id";
+    {object} = args;
     obj_name = "";
     for prop in (properties($sysobj))
       value = $sysobj.(prop);
@@ -71,9 +97,10 @@ object #9
         obj_name = prop;
       endif
     endfor
-    if (!obj_name)
-      obj_name = tostr(object);
-    endif
-    worker_request("vms", {"update_object", obj_name, dump_object(object)});
+    return obj_name || tostr(object);
+  endverb
+
+  verb vcs_commit (this none this) owner: #2 flags: "rxd"
+    player:tell(toliteral(args));
   endverb
 endobject
