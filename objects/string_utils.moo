@@ -522,7 +522,9 @@ object #20
 
   verb "columnize columnise" (this none this) owner: #36 flags: "rxd"
     "columnize (items, n [, width]) - Turn a one-column list of items into an n-column list. 'width' is the last character position that may be occupied; it defaults to a standard screen width. Example: To tell the player a list of numbers in three columns, do 'player:tell_lines ($string_utils:columnize ({1, 2, 3, 4, 5, 6, 7}, 3));'.";
-    {items, n, ?width = 79} = args;
+    items = args[1];
+    n = args[2];
+    width = {@args, 79}[3];
     height = (length(items) + n - 1) / n;
     items = {@items, @$list_utils:make(height * n - length(items), "")};
     colwidths = {};
@@ -535,7 +537,7 @@ object #20
       for col in [1..n - 1]
         line = tostr(this:left(line, colwidths[col]), " ", items[row + col * height]);
       endfor
-      result = listappend(result, line[1..min($, width)]);
+      result = listappend(result, $ansi:cutoff(line, 1, min($ansi:length(line), width)));
     endfor
     return result;
   endverb
