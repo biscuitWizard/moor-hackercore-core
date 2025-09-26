@@ -13,11 +13,11 @@ object #9
     "Version Management System Feature"
   };
 
-  verb "@vcs" (any any any) owner: #2 flags: "rxd"
+  verb "@vcs @vcs/*" (any any any) owner: #2 flags: "rxd"
     if ($cu:switched_command(verb, "vcs"))
       return;
     endif
-    repo = worker_request("vms", {"status"})[1];
+    repo = worker_request("vcs", {"status"})[1];
     output = {};
     output = {@output, tostr($su:left($ansi:brwhite("Game "), 15), ":  ", `repo["game"] ! ANY => tostr($server["core_history"][1][1], " (Local)")')};
     output = {@output, tostr($su:right("Upstream ", 15), ":  ", repo["upstream"])};
@@ -101,6 +101,6 @@ object #9
   endverb
 
   verb vcs_commit (this none this) owner: #2 flags: "rxd"
-    player:tell(toliteral(args));
+    return player:tell_lines(worker_request("vcs", {"commit", argstr}));
   endverb
 endobject
