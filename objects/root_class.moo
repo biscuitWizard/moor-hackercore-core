@@ -9,6 +9,10 @@ object #1
   property instance_id (owner: #2, flags: "r") = "#1:1758753626.650987";
   property key (owner: #2, flags: "c") = 0;
 
+  verb aliases (this none this) owner: #36 flags: "rxd"
+    return this.aliases;
+  endverb
+
   verb instance_id (this none this) owner: #2 flags: "rxd"
     if (!this.instance_id)
       this.instance_id = $ou:generate_instance_id(this);
