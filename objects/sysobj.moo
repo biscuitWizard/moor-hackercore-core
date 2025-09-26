@@ -157,7 +157,7 @@ object #0
   property time_utils (owner: #2, flags: "r") = #43;
   property trig_utils (owner: #2, flags: "r") = #26;
   property true (owner: #2, flags: "r") = 1;
-  property vms (owner: #2, flags: "r") = #9;
+  property vcs (owner: #2, flags: "r") = #9;
   property wiz (owner: #2, flags: "r") = #57;
   property wiz_utils (owner: #2, flags: "r") = #24;
   property you (owner: #36, flags: "r") = #35;
