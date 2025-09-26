@@ -44,7 +44,7 @@ object #9
   endverb
 
   verb _clone (this none this) owner: #2 flags: "rxd"
-    remaining_objects = all_objects = worker_request("vms", {"list_objects"});
+    remaining_objects = all_objects = worker_request("vcs", {"list_objects"});
     all_obj_ids = {};
     for obj_spec in (all_objects)
       all_obj_ids = setadd(all_obj_ids, toobj(obj_spec["oid"]));
@@ -66,7 +66,7 @@ object #9
     while (remaining_objects)
       {obj_spec, remaining_objects} = $lu:dequeue(remaining_objects);
       obj_id = toobj(obj_spec["oid"]);
-      obj_dump = worker_request("vms", {"get_objects", obj_spec["filename"]})[1];
+      obj_dump = worker_request("vcs", {"get_objects", obj_spec["filename"]})[1];
       load_object(obj_dump, ["target_object" -> obj_id]);
       commit();
     endwhile
@@ -110,10 +110,22 @@ object #9
   verb vcs_log (this none this) owner: #2 flags: "rxd"
     "@vcs/log";
     "  Shows a log of commit messages";
-    player:tell($ansi:white("Recent Commits:"));
+    player:tell($ansi:white("Recent Changes:"));
     commits = worker_request("vcs", {"get_commits"});
     for commit in (commits)
       player:tell($ansi:cyan("  ["), commit["id"], $ansi:cyan("]"), " ", commit["message"]);
     endfor
+  endverb
+
+  verb vcs_reset (this none this) owner: #2 flags: "rxd"
+    ":@vcs/reset";
+    changes = worker_request("vcs", {"status"})[1]["changes"];
+    if (!changes)
+      return player:tell("No changes to discard; nothing to do.");
+    elseif (!argstr || argstr != "confirm")
+      return player:tell("@vcs/reset will !WIPE! everything back to the last change. To continue type @vcs/reset confirm.");
+    endif
+    player:tell_lines(worker_request("vcs", {"reset"}));
+    this:_clone();
   endverb
 endobject
