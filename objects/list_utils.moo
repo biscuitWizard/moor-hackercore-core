@@ -659,4 +659,111 @@ object #55
     endfor
     return elements;
   endverb
+  verb "get_mapvalues" (this none this) owner: #2 flags: "rxd"
+"Given a list of maps, this will return the values of <key> in every element of the list";
+{lst, key} = args;
+values = {};
+for x in (lst)
+  if (typeof(x) == MAP && key in x:keys())
+    values = {@values, x[key]};
+  endif
+endfor
+return values;
+  endverb
+  verb "join" (this none this) owner: #36 flags: "rxd"
+{_list, ?sep = " ", ?omit_empty = false} = args;
+res = "";
+for i in (_list)
+  yin();
+  i = tostr(i);
+  if (omit_empty && !i)
+    continue;
+  endif
+  res = res + (res ? sep + i | i);
+endfor
+return res;
+  endverb
+  verb "as_list" (this none this) owner: #36 flags: "rxd"
+"$list_utils:as_list(variable)";
+"If the variable is not already a list, make it into one, otherwise return the original value.";
+v = args[1];
+if (typeof(v) == LIST)
+  return v;
+endif
+return {v};
+  endverb
+  verb "weighted_random" (this none this) owner: #36 flags: "rxd"
+"Last modified 11/02/22 3:54 p.m. by Sinistral@ChatMUD (#2)";
+":weighted_random( {INT weight, ANY result}, {INT weight2, ANY result2}, ... ) => ANY chosen result, based on weights.";
+choices = args;
+cumulative_weights = {};
+sum = 0;
+for choice in (choices)
+  wt = choice[1];
+  sum = sum + wt;
+  cumulative_weights = {@cumulative_weights, sum};
+endfor
+n = random(sum) - 1;
+idx = this:find_insert(cumulative_weights, n);
+return choices[idx][2];
+  endverb
+  verb "tuple_to_map" (this none this) owner: #36 flags: "rxd"
+"$list_utils:tuple_to_map(list[, recurse])";
+"Takes a list with values of the form {key, value}, and returns a map.";
+"Optionally recursing into subtuples, as long as they are a list with 2 items.";
+{tlist, recurse} = args;
+if (typeof(tlist) != LIST)
+  raise(E_INVARG, "Argument must be a list.");
+endif
+res = [];
+for i in (tlist)
+  {key, value} = i;
+  if (recurse && value && typeof(value) == LIST && typeof(value[1]) == LIST && value[1]:len() == 2)
+    "We're supposed to recurse, the key is a list and it's first item is also a list with 2 items";
+    value = $list_utils:(verb)(value, recurse);
+  endif
+  res[key] = value;
+endfor
+return res;
+  endverb
+  verb "check_type" (this none this) owner: #36 flags: "rxd"
+"check_type(list, type)";
+"Make sure all elements of <list> are of a given <type>.";
+"<type> can be either one of LIST, STR, OBJ, NUM, ERR, or a list of same.";
+"return true if all elements check, otherwise 0.";
+typelist = typeof(args[2]) == LIST ? args[2] | {args[2]};
+for element in (args[1])
+  if (!(typeof(element) in typelist))
+    return 0;
+  endif
+endfor
+return 1;
+  endverb
+
+  verb "choose_n" (this none this) owner: #36 flags: "rxd"
+"$list_utils:choose_n(LIST, INT count)";
+"Given a list and a (n)umber, choose n items from that list if there are that many, otherwise randomly permute and return";
+"Makes sure not to return the same item more than once.";
+{l, n, ?no_dupes = 1} = args;
+typeof(l) == LIST || raise(E_TYPE, "First argument must be a list");
+typeof(n) == INT || raise(E_TYPE, "Second arg must be an int");
+if (length(l) >= n)
+  results = {};
+  indexes = {};
+  while (length(results) < n)
+    i = random(length(l));
+    if (i in indexes)
+      continue;
+    endif
+    indexes = {@indexes, i};
+    r = l[i];
+    results = {@results, r};
+    yin();
+  endwhile
+  return results;
+else
+  return this:randomly_permute(l);
+endif
+  endverb
+
 endobject

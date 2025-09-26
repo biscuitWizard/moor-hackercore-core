@@ -88,7 +88,7 @@ object #0
   property guest_log (owner: #2, flags: "r") = #12;
   property hacker (owner: #2, flags: "r") = #36;
   property help (owner: #2, flags: "r") = #97;
-  property int_proto (owner: #2, flags: "r") = #114;
+  property int_proto (owner: #2, flags: "r") = #116;
   property last_huh (owner: #2, flags: "r") = #11;
   property limbo (owner: #2, flags: "r") = #15;
   property list_proto (owner: #2, flags: "r") = #115;
@@ -126,7 +126,7 @@ object #0
   property player_class (owner: #2, flags: "r") = #6;
   property player_start (owner: #2, flags: "r") = #62;
   property prog (owner: #2, flags: "r") = #58;
-  property proto (owner: #2, flags: "r") = #120;
+  property proto (owner: #2, flags: "r") = #114;
   property recycler (owner: #2, flags: "r") = #47;
   property recycling_pool (owner: #2, flags: "r") = #48;
   property room (owner: #2, flags: "r") = #3;
