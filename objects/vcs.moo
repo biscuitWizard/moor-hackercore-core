@@ -74,6 +74,9 @@ object #9
 
   verb update (this none this) owner: #2 flags: "rxd"
     {object} = args;
+    "we commit before operation because if this is called after setting";
+    "verb code, dump_object won't capture it";
+    commit();
     obj_name = this:get_object_name(object);
     worker_request("vcs", {"update_object", obj_name, dump_object(object)});
   endverb
