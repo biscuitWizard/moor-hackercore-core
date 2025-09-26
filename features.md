@@ -41,7 +41,6 @@ Note that these don't need to specifically be the lambda core versions of these 
 * [x] Generic editor system - inline text editing for various objects
 * [x] Area management - grouped rooms with navigation and utilities
 * [x] Module system - extensible room and object behaviors
-* [x] Core integrity checking - database comparison and hash verification
 * [ ] SQL/SQLite integration - database persistence and queries
 * [x] MCP (MOO Client Protocol) - enhanced client communication
 * [x] Octree spatial indexing - efficient 3D object organization
