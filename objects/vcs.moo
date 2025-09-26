@@ -101,6 +101,19 @@ object #9
   endverb
 
   verb vcs_commit (this none this) owner: #2 flags: "rxd"
+    if (!argstr)
+      return player:notify("Syntax: @vcs/commit <msg>");
+    endif
     return player:tell_lines(worker_request("vcs", {"commit", argstr}));
+  endverb
+
+  verb vcs_log (this none this) owner: #2 flags: "rxd"
+    "@vcs/log";
+    "  Shows a log of commit messages";
+    player:tell($ansi:white("Recent Commits:"));
+    commits = worker_request("vcs", {"get_commits"});
+    for commit in (commits)
+      player:tell($ansi:cyan("  ["), commit["id"], $ansi:cyan("]"), " ", commit["message"]);
+    endfor
   endverb
 endobject
