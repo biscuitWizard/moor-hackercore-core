@@ -520,4 +520,30 @@ object #33
     endif
     return this:complement(this:_union(@$list_utils:map_arg(this, "complement", args)));
   endverb
+
+  verb levenshtein (this none this) owner: #2 flags: "rxd"
+    ":levenshtein(from, to) => Calculate the Levenshtein distance between 'from' and 'to', each of which must either be a list or a string.";
+    {from, to} = args;
+    m = length(from);
+    n = length(to);
+    d = $list_utils:make(m + 1, $list_utils:make(n + 1));
+    for i in [1..m + 1]
+      d[i][1] = i - 1;
+      yin();
+    endfor
+    for j in [1..n + 1]
+      d[1][j] = j - 1;
+    endfor
+    for i in [1..m]
+      for j in [1..n]
+        if (from[i] == to[j])
+          cost = 0;
+        else
+          cost = 1;
+        endif
+        d[i + 1][j + 1] = min(d[i][j + 1] + 1, d[i + 1][j] + 1, d[i][j] + cost);
+      endfor
+    endfor
+    return d[m + 1][n + 1];
+  endverb
 endobject
