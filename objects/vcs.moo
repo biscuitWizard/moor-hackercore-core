@@ -255,18 +255,13 @@ object #9
     "  This is destructive and will typically blitz an object";
     {object} = args;
     obj_data = this:get_object(object);
-    if (existing_object = $ou:resolve_coreref(object))
+    if (valid(existing_object = $ou:resolve_coreref(object)))
       "### STEP ONE: Delete any verbs or properties not on the object";
       "              This ensures a clean wipe for load object";
       for v, i in (obj_verbs = verbs(existing_object))
         obj_verbs[i] = verb_info(existing_object, v)[3];
       endfor
-      player:tell("Object Reconciliation:");
-      player:tell("  Current Obj (", $su:nn(existing_object), ") Verbs: ", toliteral(obj_verbs));
-      player:tell("  Clean Obj (", object, ") Verbs: ", toliteral(obj_data["verbs"]));
-      player:tell("    Verbs To Delete: ", toliteral($set_utils:diff(obj_verbs, obj_data["verbs"])));
       for invalid_verb in ($set_utils:diff(obj_verbs, obj_data["verbs"]))
-        player:tell("  ", $ansi:red("DANGER: "), " Deleting ", existing_object, ":", invalid_verb);
         delete_verb(existing_object, invalid_verb);
       endfor
       for invalid_prop in ($set_utils:diff(properties(existing_object), obj_data["properties"]))
@@ -275,10 +270,9 @@ object #9
       commit();
       "### STEP TWO: Load the new object onto the now clean recipient";
       load_object(obj_data["obj_def"], ["target_object" -> existing_object]);
-      commit();
       "now we can return normally";
       return existing_object;
     endif
-    return load_object(obj_data["obj_def"]);
+    load_object(obj_data["obj_def"]);
   endverb
 endobject
