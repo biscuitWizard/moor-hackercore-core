@@ -447,4 +447,20 @@ object #52
     endif
     return `$sysobj.(objref) ! E_PROPNF => $failed_match';
   endverb
+
+  verb is_generic (this none this) owner: #2 flags: "rxd"
+    ":is_generic(OBJ target) => BOOL if is generic";
+    "  tells if an object is generic";
+    {target} = args;
+    if (!valid(target))
+      return $false;
+    elseif (target.f)
+      return $true;
+    elseif (children(target))
+      return $true;
+    elseif ("generic" in target.name)
+      return $true;
+    endif
+    return $false;
+  endverb
 endobject

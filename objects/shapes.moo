@@ -495,4 +495,60 @@ object #75
     endif
     $command_utils:object_match_failed(object, dobjstr);
   endverb
+
+  verb "@features @feature/* @features/*" (any any any) owner: #2 flags: "rxd"
+    "Usage:  @features [<name>] for <player>";
+    "List the feature objects matching <name> used by <player>.";
+    if (!argstr)
+      player:tell("Generating list of Features:");
+      player:tell($ansi:bryellow(" ", $su:left("OBJ", 8), " ", $su:left("Type", 10), " ", "Feature"));
+      player:tell("-", $su:space(8, "-"), "-", $su:space(10, "-"), "-", $su:space(57, "-"));
+      for feature in ($ou:descendants($feature))
+        if ($ou:is_generic(feature))
+          continue;
+        endif
+        type = $ansi:bryellow("PLAYER");
+        player:tell(" ", $su:left(feature, -8), " ", $su:left(type, -10), " ", feature:name());
+      endfor
+      return player:tell("  Type @feature/add <feature> to <thing> to add a feature to an object.");
+    elseif ((switch = $su:explode(verb, "/")[$]) && switch != verb)
+      if (switch in {"add"})
+        if (!$ou:isa(feature = player:match(dobjstr), $feature))
+          return player:tell("Unable to found a feature named '", dobjstr, "'.");
+        elseif (!$recycler:valid(target = player:match(iobjstr)))
+          return player:tell("Can't find anything named '", iobjstr, "' to add a feature to.");
+        elseif (feature in target.features)
+          return player:tell("Feature already exists in ", $su:nn(target), "'s features.");
+        endif
+        target:add_feature(feature);
+        return player:tell("Successfully added feature ", $su:nn(feature), " to ", $su:nn(target), ".");
+      elseif (switch in {"remove", "rem", "del", "delete"})
+        if (!$ou:isa(feature = this:match(dobjstr), $feature))
+          return player:tell("Unable to found a feature named '", dobjstr, "'.");
+        elseif (!$recycler:valid(target = this:match(iobjstr)))
+          return player:tell("Can't find anything named '", iobjstr, "' to remove a feature from.");
+        elseif (!(feature in target.features))
+          return player:tell("Feature is not present in target's feature list.");
+        endif
+        target:remove_feature(feature);
+        return player:tell("Successfully removed feature ", $su:nn(feature), " from ", $su:nn(target), ".");
+      else
+        player:tell_lines($help:retrieve("@features"));
+      endif
+      return;
+    elseif (!$recycler:valid(target = this:match(argstr)))
+      return player:tell($ru.idun_msg);
+    elseif ($ou:isa(target, $feature))
+      return player:tell("Features can't have features, choom.");
+    endif
+    player:tell("Displaying features currently enabled on ", $su:nn(target), ":");
+    if (!target.features)
+      return player:tell("  No features are currently enabled...");
+    endif
+    player:tell($ansi:bryellow(" ", $su:left("OBJ", 8), " ", "Feature"));
+    player:tell("-", $su:space(8, "-"), "-", $su:space(57, "-"));
+    for feature in (target.features)
+      player:tell(" ", $su:left(feature, -8), " ", feature:name());
+    endfor
+  endverb
 endobject
