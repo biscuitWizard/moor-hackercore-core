@@ -1759,4 +1759,30 @@ object #59
     endif
     return val;
   endverb
+
+  verb match_objid (this none this) owner: #2 flags: "rxd"
+    ":match_objid(string) => match result if string contains object ID pattern";
+    "Returns match() result for object ID patterns (both integer and UUID), or {} if no match";
+    "Uses pcre_match for reliable pattern matching";
+    s = args[1];
+    "Try UUID pattern first (more specific)";
+    pcre_result = pcre_match(s, "^(#[0-9A-Fa-f]{6}-[0-9A-Fa-f]{10}) *$");
+    if (pcre_result)
+      "Convert pcre_match result to match() format";
+      match_text = pcre_result[1]["0"]["match"];
+      match_start = pcre_result[1]["0"]["position"][1];
+      match_end = pcre_result[1]["0"]["position"][2];
+      return {match_start, match_end, {{0, -1}, {0, -1}, {0, -1}, {0, -1}, {0, -1}, {0, -1}, {0, -1}, {0, -1}, {0, -1}}, s};
+    endif
+    "Try integer pattern with pcre_match";
+    pcre_result = pcre_match(s, "^(#[-+]?[0-9]+) *$");
+    if (pcre_result)
+      "Convert pcre_match result to match() format";
+      match_text = pcre_result[1]["0"]["match"];
+      match_start = pcre_result[1]["0"]["position"][1];
+      match_end = pcre_result[1]["0"]["position"][2];
+      return {match_start, match_end, {{0, -1}, {0, -1}, {0, -1}, {0, -1}, {0, -1}, {0, -1}, {0, -1}, {0, -1}, {0, -1}}, s};
+    endif
+    return {};
+  endverb
 endobject
