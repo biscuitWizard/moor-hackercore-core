@@ -267,8 +267,10 @@ object #9
       for invalid_prop in ($set_utils:diff(properties(existing_object), obj_data["properties"]))
         delete_property(existing_object, invalid_prop);
       endfor
+      commit();
       "### STEP TWO: Load the new object onto the now clean recipient";
       load_object(obj_data["obj_def"], ["target_object" -> existing_object]);
+      commit();
       "now we can return normally";
       return existing_object;
     endif
