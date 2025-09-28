@@ -2820,4 +2820,38 @@ object #20
     endfor
     return dir;
   endverb
+
+  verb size_string (this none this) owner: #2 flags: "rxd"
+    "A better version of $building_utils:size_string() that is updated for 2018...";
+    "Returns a properly formatted size string, based on the JEDEC 100B.01 memory standard.";
+    {size, ?precision = 2, ?longform = 0} = args;
+    if (typeof(size) == INT)
+      size = tofloat(size);
+    endif
+    KB = 1024.0;
+    MB = KB * KB;
+    GB = KB * KB * KB;
+    TB = KB * KB * KB * KB;
+    if (size >= TB)
+      numstring = floatstr(size / TB, precision);
+      unitstring = longform ? $s("terabyte", size / TB) | "TB";
+    elseif (size >= GB)
+      numstring = floatstr(size / GB, precision);
+      unitstring = longform ? $s("gigabyte", size / GB) | "GB";
+    elseif (size >= MB)
+      numstring = floatstr(size / MB, precision);
+      unitstring = longform ? $s("megabyte", size / MB) | "MB";
+    elseif (size >= KB)
+      numstring = floatstr(size / KB, precision);
+      unitstring = longform ? $s("kilobyte", size / KB) | "KB";
+    else
+      numstring = floatstr(size, precision);
+      unitstring = longform ? $s("byte", size) | "B";
+    endif
+    if (numstring[$ - precision..$]:strip_chars("0") == ".")
+      "Truncate if we have an exact value.";
+      numstring = numstring[1..$ - precision - 1];
+    endif
+    return numstring + " " + unitstring;
+  endverb
 endobject
