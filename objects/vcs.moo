@@ -65,9 +65,7 @@ object #9
     "## STEP 3: Load new and existing objects in order";
     while (remaining_objects)
       {obj_spec, remaining_objects} = $lu:dequeue(remaining_objects);
-      obj_id = toobj(obj_spec["oid"]);
-      obj_dump = this:get_objects(obj_spec["filename"]);
-      load_object(obj_dump, ["target_object" -> obj_id]);
+      this:load_object(obj_spec["filename"]);
       commit();
     endwhile
   endverb
