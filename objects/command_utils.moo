@@ -139,7 +139,7 @@ object #56
     return pmf ? bombed | {bombed, @pset};
   endverb
 
-  verb read (this none this) owner: #36 flags: "rxd"
+  verb read (this none this) owner: #2 flags: "rxd"
     "common usage:";
     "$command_utils:read([ 'a line of input' ]) -- read a line of input from the player and return it";
     "Optional argument is a prompt portion to replace `a line of input' in the prompt.";
