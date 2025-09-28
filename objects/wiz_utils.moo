@@ -1305,4 +1305,12 @@ object #24
       return who.email_address;
     endif
   endverb
+
+  verb is_admin (this none this) owner: #2 flags: "rxd"
+    "Return if given object is an administrator";
+    "For now, just makes sure they're a player and .wizard";
+    {who} = args;
+    typeof(who) == OBJ || raise(E_INVARG, "First argument must be an object");
+    return is_player(who) && who.wizard;
+  endverb
 endobject
