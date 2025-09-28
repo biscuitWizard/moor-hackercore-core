@@ -31,7 +31,7 @@ object #95
     "max length before we start warning it's too long";
     MAX_LENGTH_WARNING = 40;
     "max nesting before we start warning";
-    MAX_NESTING_WARNING = 2;
+    MAX_NESTING_WARNING = 3;
     "what do the args of an internal variable look like?";
     internal_args = {"this", "none", "this"};
     warnings = {};
@@ -100,7 +100,7 @@ object #95
       warnings = {@warnings, {"There is a fork() in this code. Please do not do this unless you know what you are doing. Consider using something to schedule this verb to be run later instead.", 0}};
     endif
     if (max_nest > MAX_NESTING_WARNING)
-      warnings = {@warnings, {tostr("Max nesting of if/for/while's is ", max_nest, ". Try refactoring or extracting pieces to a new verb to get your max nesting to 2 or below."), 0}};
+      warnings = {@warnings, {tostr("Max nesting of if/for/while's is ", max_nest, ". Try refactoring or extracting pieces to a new verb to get your max nesting to ", max_nest, " or below."), 0}};
     endif
     length_of_verb = length(code);
     if (length_of_verb > MAX_LENGTH_WARNING)
