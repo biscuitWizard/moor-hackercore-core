@@ -551,4 +551,104 @@ object #43
       return tostr(daystr, divstr, monthstr, divstr, yearstr);
     endif
   endverb
+
+  verb relative_or_exact (this none this) owner: #2 flags: "rxd"
+    "$time_utils:relative_or_exact(time[, relative_period])";
+    "Either return a string like \"6 minutes ago\"";
+    "or \"08/05/18 8:29\", if the number of seconds since time is greater than relative_period.";
+    {time, ?relative_period = 60 * 60} = args;
+    if (typeof(time) == FLOAT)
+      "For the purposes of this, subsecond doesn't really matter, so convert floats down to ints.";
+      time = toint(time);
+    endif
+    now = time();
+    delta = now - time;
+    if (delta < 0)
+      "The time we were given is in the future.";
+      suffix = "from now";
+      "Our delta needs to be positive.";
+      delta = delta * -1;
+    elseif (delta == 0)
+      return "now";
+    else
+      suffix = "ago";
+    endif
+    if (delta <= relative_period)
+      return tostr(this:english_time(delta), " ", suffix);
+    else
+      return tostr(this:mmddyy(time), " ", this:ampm(time));
+    endif
+  endverb
+
+  verb year (this none this) owner: #2 flags: "rxd"
+    "$time_utils:year([INT unix timestamp]) - return the year from the given timestamp, or the current year if none provided";
+    {?time = time()} = args;
+    return toint(ctime(time):explode()[$ - 1]);
+  endverb
+
+  verb "RFC2616 http_date" (this none this) owner: #2 flags: "rxd"
+    "returns time according to RFC2616 used often in http headers";
+    {?time = time()} = args;
+    return this:time_sub("$d, $3 $n $Y $H:$M:$S GMT", time);
+  endverb
+
+  verb isoformat (this none this) owner: #2 flags: "rxd"
+    "return time in ISO 8601 format ";
+    {?time = time()} = args;
+    return this:time_sub("$Y-$1-$3T$H:$M:$SZ", time());
+  endverb
+
+  verb from_isoformat (this none this) owner: #2 flags: "rxd"
+    "Given a string such as returned by isoformat(), return the corresponding time-in-seconds-since-1970 time returned by time(), or E_DIV if the format is wrong in some essential way.";
+    iso = args[1];
+    year = toint(iso[1..4]);
+    month = toint(iso[6..7]);
+    day = toint(iso[9..10]);
+    hour = toint(iso[12..13]);
+    minute = toint(iso[15..16]);
+    second = toint(iso[18..$ - 1]);
+    day = {-1, 30, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334}[month] + day + year * 366;
+    return (((day - (day + 1038) / 1464 - (day + 672) / 1464 - (day + 306) / 1464 - (day + 109740) / 146400 - (day + 73140) / 146400 - (day + 36540) / 146400 - 719528) * 24 + hour) * 60 + minute) * 60 + second;
+  endverb
+
+  verb abbrev_duration (this none this) owner: #2 flags: "rxd"
+    ":abbrev_duration(number of seconds) => abbreviated form of :from_seconds";
+    ":from_seconds(86400) => \"a day\"";
+    ":abbrev_duration(86400) => \"1d\"";
+    ":from_seconds(7200)  => \"two hours\"";
+    ":abbrev_duration(7200) => \"2h\"";
+    minute = 60;
+    hour = 60 * minute;
+    day = 24 * hour;
+    secs = args[1];
+    typeof(secs) == FLOAT && (secs = toint(secs));
+    if (secs > day)
+      count = secs / day;
+      unit = "day";
+      article = "a";
+    elseif (secs > hour)
+      count = secs / hour;
+      unit = "hour";
+      article = "an";
+    elseif (secs >= minute)
+      count = secs / minute;
+      unit = "minute";
+      article = "a";
+    else
+      count = secs;
+      unit = "second";
+      article = "a";
+    endif
+    if (verb == "abbrev_duration")
+      unit = unit[1];
+      time = tostr(count) + tostr(unit);
+      return time;
+    endif
+    if (count == 1)
+      time = tostr(article, " ", unit);
+    else
+      time = tostr(count, " ", unit, "s");
+    endif
+    return time;
+  endverb
 endobject
