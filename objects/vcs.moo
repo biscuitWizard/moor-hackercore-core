@@ -163,14 +163,11 @@ object #9
         $recycler:nuke($ou:resolve_coreref(deleted_obj));
       endfor
       for added_obj in (commit["added_objects"])
-        obj_def = worker_request("vcs", {"get_objects", tostr(added_obj)});
-        load_object(obj_def);
+        this:load_object(tostr(added_obj));
       endfor
       for change in (commit["changes"])
         "these are all modified objects more or less";
-        obj_def = worker_request("vcs", {"get_objects", tostr(change["obj_id"])});
-        target_obj = $ou:resolve_coreref(change["obj_id"]);
-        load_object(obj_def, ["target_object" -> target_obj]);
+        this:load_object(tostr(change["obj_id"]));
         for deleted_prop in (change["deleted_props"])
           delete_property(target_obj, deleted_prop);
         endfor
