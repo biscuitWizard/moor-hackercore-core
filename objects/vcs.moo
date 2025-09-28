@@ -23,7 +23,7 @@ object #9
     output = {@output, tostr($su:right("Upstream ", 15), ":  ", repo["upstream"])};
     output = {@output, ""};
     output = {@output, tostr($su:left($ansi:brwhite("Last Change "), 15), ":  ", repo["last_commit_message"])};
-    output = {@output, tostr($su:right("On ", 15), ":  ", repo["last_commit_datetime"])};
+    output = {@output, tostr($su:right("On ", 15), ":  ", ctime(repo["last_commit_datetime"]))};
     output = {@output, tostr($su:right("Id ", 15), ":  ", repo["last_commit_id"])};
     output = {@output, ""};
     if (maphaskey(repo, "changes"))
