@@ -5,14 +5,16 @@ object #10
   readable: true
 
   property argon2 (owner: #2, flags: "rc") = ["iterations" -> 3, "memory" -> 4096, "threads" -> 1];
+  property argon_parameters (owner: #2, flags: "rc") = ["iterations" -> 4, "memory" -> 16384, "threads" -> 4];
   property blacklist (owner: #2, flags: "") = {{}, {}};
   property blank_command (owner: #2, flags: "r") = "welcome";
   property bogus_command (owner: #2, flags: "r") = "?";
   property connection_limit_msg (owner: #36, flags: "r") = "*** The MOO is too busy! The current lag is %l; there are %n connected.  WAIT FIVE MINUTES BEFORE TRYING AGAIN.";
   property create_enabled (owner: #2, flags: "rc") = 1;
   property current_lag (owner: #2, flags: "r") = 0;
-  property current_numcommands (owner: #2, flags: "rc") = [#-7 -> 2];
+  property current_numcommands (owner: #2, flags: "rc") = [#-4 -> 2];
   property downtimes (owner: #2, flags: "rc") = {
+    {1759022123, 0},
     {1758800578, 0},
     {1758754960, 0},
     {1758754200, 0},
@@ -35,6 +37,7 @@ object #10
   property newt_registration_string (owner: #2, flags: "rc") = "Your character is temporarily hosed.";
   property newted (owner: #2, flags: "") = {};
   property no_connect_message (owner: #2, flags: "rc") = 0;
+  property password_version (owner: #2, flags: "rc") = 2;
   property print_lag (owner: #2, flags: "rc") = 0;
   property redlist (owner: #2, flags: "") = {{}, {}};
   property registration_address (owner: #2, flags: "rc") = "";
@@ -797,5 +800,45 @@ object #10
       notify(player, "MSSP-REPLY-END");
       return 0;
     endif
+  endverb
+
+  verb encrypt_password (this none this) owner: #2 flags: "rxd"
+    "Given a password, salt, hash with configured parameters and return";
+    "Parems on $login.argon_parameters";
+    {password} = args;
+    salt = salt();
+    return call_function("argon2", password, salt, this.argon2["iterations"], this.argon2["memory"], this.argon2["threads"]);
+  endverb
+
+  verb verify_password (this none this) owner: #2 flags: "rxd"
+    "$login:verify_password(OBJ player, STR password) - verify a player's password, updating to latest version in the process";
+    "$login:verify_password(STR salted-hashed-password, STR password) - verify a raw password";
+    "Returns true if the password is valid for who.";
+    {who, password, ?no_update = 0} = args;
+    caller_perms().wizard || raise(E_PERM);
+    typeof(who) in {OBJ, STR} || raise(E_INVARG, "First argument must be a player obj with .password or a salted and hashed password string");
+    typeof(password) == STR || raise(E_INVARG, "Second argument must be a password string");
+    "Password version 1: BCrypt. (yes, really. just in case you still have your old user's passwords, they can log in and get them modernized)";
+    "Password version 2: argon2, see $login.argon_parameters for current values";
+    "If you change parems but not algorithm, increase $login.password_version";
+    "If you do change algorithm, update this verb and $login:encrypt_password";
+    if (!no_update)
+      if (who.password_version < this.password_version)
+        if (who.password_version == 1)
+          "BCrypt to latest.";
+          verifypw = crypt(password, (who.password)[1..29]) == who.password;
+        elseif (who.password_version >= 2)
+          verifypw = argon2_verify(who.password, password);
+        endif
+        if (verifypw)
+          "Correct password; update version";
+          who.password = this:encrypt_password(password);
+          who.password_version = this.password_Version;
+        endif
+        return verifypw;
+      endif
+    endif
+    curpass = typeof(who) == STR ? who | who.password;
+    return argon2_verify(curpass, password);
   endverb
 endobject

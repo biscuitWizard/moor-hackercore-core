@@ -25,6 +25,7 @@ object #6
   property page_echo_msg (owner: #2, flags: "rc") = "Your message has been sent.";
   property page_origin_msg (owner: #2, flags: "rc") = "You sense that %n is looking for you in %l.";
   property password (owner: #2, flags: "") = "impossible password to type";
+  property password_version (owner: #2, flags: "rc") = 0;
   property previous_connection (owner: #2, flags: "") = 0;
   property reading_input (owner: #2, flags: "") = 0;
   property size_quota (owner: #36, flags: "") = {};
@@ -437,7 +438,7 @@ object #6
         if (typeof(a) != STR)
           return E_INVARG;
         endif
-        if (!(index(a, " ") || index(a, "	")) && !($player_db:available(a, this) in {this, 1}))
+        if (!(index(a, " ") || index(a, "\t")) && !($player_db:available(a, this) in {this, 1}))
           aliases = setremove(aliases, a);
         endif
       endfor
@@ -449,7 +450,7 @@ object #6
         endif
       endfor
       for a in (aliases)
-        if (!(index(a, " ") || index(a, "	")))
+        if (!(index(a, " ") || index(a, "\t")))
           $player_db:insert(a, this);
         endif
       endfor
@@ -918,7 +919,7 @@ object #6
     elseif (length(args) != 2)
       player:notify(tostr("Usage:  ", verb, " <old-password> <new-password>"));
       return;
-    elseif (!argon2_verify(player.password, args[1]))
+    elseif (!$login:verify_password(player.password, args[1]))
       player:notify("That's not your old password.");
       return;
     elseif (is_clear_property(player, "password"))
@@ -930,7 +931,7 @@ object #6
     else
       new_password = args[2];
     endif
-    if (r = $password_verifier:reject_password(new_password, player))
+    if (r = `$password_verifier:reject_password(new_password, player) ! ANY => 0')
       player:notify(r);
       return;
     endif
