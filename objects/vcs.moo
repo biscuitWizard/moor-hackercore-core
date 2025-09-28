@@ -17,7 +17,7 @@ object #9
     if ($cu:switched_command(verb, "vcs"))
       return;
     endif
-    repo = worker_request("vcs", {"status"})[1];
+    repo = worker_request("vcs", {"status"});
     output = {};
     output = {@output, tostr($su:left($ansi:brwhite("Game "), 15), ":  ", `repo["game"] ! ANY => tostr($server["core_history"][1][1], " (Local)")')};
     output = {@output, tostr($su:right("Upstream ", 15), ":  ", repo["upstream"])};
@@ -107,7 +107,7 @@ object #9
     if (!argstr)
       return player:notify("Syntax: @vcs/commit <msg>");
     endif
-    return player:tell_lines(worker_request("vcs", {"commit", argstr}));
+    return player:tell(worker_request("vcs", {"commit", argstr}));
   endverb
 
   verb vcs_log (this none this) owner: #2 flags: "rxd"
@@ -130,5 +130,54 @@ object #9
     endif
     player:tell_lines(worker_request("vcs", {"reset"}));
     this:_clone();
+  endverb
+
+  verb vcs_pull (this none this) owner: #2 flags: "rxd"
+    confirmed = "confirm" == argstr;
+    "this will pull out our dry run";
+    pull_details = worker_request("vcs", {"pull", true});
+    if (!pull_details)
+      return player:tell("Nothing to do; we're caught up!");
+    endif
+    warnings = {};
+    for commit in (pull_details)
+      for deleted_obj in (commit["deleted_objects"])
+        if (c = children(deleted_obj))
+          warnings = setadd(warnings, tostr("  ", $ansi:bryellow("[WARNING] "), $su:nn(deleted_obj), " will be deleted; but it has ", length(c), " children which will be deleted as well."));
+        endif
+      endfor
+    endfor
+    if (warnings && !confirmed)
+      player:tell("Unable to automatically pull as some changes contain destructive operations:");
+      player:tell_lines(warnings);
+      player:tell("To pull anyways type: ", $ansi:brwhite("@vcs/pull confirm"), ".");
+      return;
+    endif
+    "do the actual pull";
+    pull_details = worker_request("vcs", {"pull", false});
+    results = {$ansi:brwhite($su:left("Pulled Changes", 15), " :")};
+    for commit in (pull_details)
+      results = {@results, tostr($ansi:cyan("  ["), commit["commit_id"], $ansi:cyan("] "), commit["commit_message"], " (By ", commit["commit_author"], ")")};
+      for deleted_obj in (commit["deleted_objects"])
+        $recycler:nuke(deleted_obj);
+      endfor
+      for added_obj in (commit["added_objects"])
+        obj_def = worker_request("vcs", {"get_objects", tostr(added_obj)});
+        load_object(obj_def);
+      endfor
+      for change in (commit["changes"])
+        "these are all modified objects more or less";
+        obj_def = worker_request("vcs", {"get_objects", tostr(change["obj_id"])});
+        target_object = typeof(change["obj_id"]) == STR ? $sysobj.((change["obj_id"])) | change["obj_id"];
+        load_object(obj_def, ["target_object" -> target_object]);
+        for deleted_prop in (change["deleted_props"])
+          delete_property(change["obj_id"], deleted_prop);
+        endfor
+        for deleted_verb in (change["deleted_verbs"])
+          delete_verb(change["obj_id"], deleted_verb);
+        endfor
+      endfor
+    endfor
+    player:tell_lines(results);
   endverb
 endobject
