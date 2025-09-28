@@ -162,4 +162,19 @@ object #27
     endfor
     return result;
   endverb
+
+  verb zip (this none this) owner: #2 flags: "rxd"
+    ":zip(LIST set1, LIST set2, LIST ..) => LIST of zipped contents";
+    "  combines two or more sets, only combining elements of each matching index";
+    if (!args)
+      return {};
+    endif
+    {set, @rest} = args;
+    for l in (rest)
+      for i in [1..length(l)]
+        set[i] = this:union(set[i], l[i]);
+      endfor
+    endfor
+    return set;
+  endverb
 endobject
