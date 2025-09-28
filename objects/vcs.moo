@@ -258,7 +258,11 @@ object #9
     if (existing_object = $ou:resolve_coreref(object))
       "### STEP ONE: Delete any verbs or properties not on the object";
       "              This ensures a clean wipe for load object";
-      for invalid_verb in ($set_utils:diff(verbs(existing_object), obj_data["verbs"]))
+      for v, i in (obj_verbs = verbs(existing_object))
+        obj_verbs[i] = verb_info(existing_object, v)[3];
+      endfor
+      for invalid_verb in ($set_utils:diff(obj_verbs, obj_data["verbs"]))
+        player:tell("Deleting ", invalid_verb);
         `delete_verb(existing_object, invalid_verb) ! E_VERBNF';
       endfor
       for invalid_prop in ($set_utils:diff(properties(existing_object), obj_data["properties"]))
