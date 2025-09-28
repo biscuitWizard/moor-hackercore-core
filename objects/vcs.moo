@@ -26,7 +26,7 @@ object #9
     output = {@output, tostr($su:right("On ", 15), ":  ", ctime(repo["last_commit_datetime"]))};
     output = {@output, tostr($su:right("Id ", 15), ":  ", repo["last_commit_id"])};
     output = {@output, ""};
-    if (maphaskey(repo, "changes"))
+    if (maphaskey(repo, "changes") && repo["changes"])
       output = {@output, tostr($su:left($ansi:brwhite("Changes "), 15), ":")};
       for change in (repo["changes"])
         tag = change[1];
