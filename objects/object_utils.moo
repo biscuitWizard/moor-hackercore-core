@@ -436,4 +436,15 @@ object #52
     endif
     return thing;
   endverb
+
+  verb resolve_coreref (this none this) owner: #2 flags: "rxd"
+    ":resolve_coreref(STR/OBJ objref) => OBJ";
+    "  Takes a value and converted it into the object number";
+    {objref} = args;
+    if (typeof(objref) == OBJ)
+      "nothing to do";
+      return objref;
+    endif
+    return `$sysobj.(objref) ! E_PROPNF => $failed_match';
+  endverb
 endobject
