@@ -214,7 +214,7 @@ object #56
     endwhile
   endverb
 
-  verb yes_or_no (this none this) owner: #36 flags: "rxd"
+  verb yes_or_no (this none this) owner: #2 flags: "rxd"
     ":yes-or-no([prompt]) -- prompts the player for a yes or no answer and returns a true value iff the player enters a line of input that is some prefix of \"yes\"";
     "";
     "Returns E_NONE if the player enters a blank line, E_INVARG, if the player enters something that isn't a prefix of \"yes\" or \"no\", and E_PERM if the current task is not a command task that has never called suspend().";

@@ -1341,10 +1341,10 @@ object #57
     loops = 0;
     player:tell("Testing parameters:");
     player:tell(" Maximum Hash Time: ", seconds, " seconds");
-    player:tell(" Maximum Memory Usage: ", $convert_utils:bytes_to_human(max_memory * 1024));
+    player:tell(" Maximum Memory Usage: ", $su:size_string(max_memory * 1024));
     player:tell(" Initial Iterations: ", iterations);
-    player:tell(" Initial Memory: ", $convert_utils:bytes_to_human(memory * 1024));
-    player:tell(" Memory Increased Each Loop: ", $convert_utils:bytes_to_human(memory_step * 1024));
+    player:tell(" Initial Memory: ", $su:size_string(memory * 1024));
+    player:tell(" Memory Increased Each Loop: ", $su:size_string(memory_step * 1024));
     player:tell("");
     if ($command_utils:yes_or_no("This may take a long time. If you're not using threaded Argon2, your MOO will be unresponsive until testing is complete. Continue?") != 1)
       return player:tell("Testing aborted.");
@@ -1360,7 +1360,7 @@ object #57
         start = ftime(1);
         argon2(password, salt, iterations, memory);
         time = ftime(1) - start;
-        if ($math_utils:precision(time, 2, 0) == seconds || (time >= seconds && time - seconds <= 0.05))
+        if ($math_utils:precision(time, 2) == seconds || (time >= seconds && time - seconds <= 0.05))
           "If the result is exact or within 0.05, the whole process is done.";
           skip_second_pass = 1;
           break;
@@ -1385,7 +1385,7 @@ object #57
           start = ftime(1);
           argon2(password, salt, iterations, memory);
           time = ftime(1) - start;
-          if ($math_utils:precision(time, 2, 0) == seconds || (time >= seconds && time - seconds <= 0.05))
+          if ($math_utils:precision(time, 2) == seconds || (time >= seconds && time - seconds <= 0.05))
             "Same as above. The process is done.";
             break;
           elseif (time > seconds)
@@ -1413,7 +1413,7 @@ object #57
       endif
     endwhile
     player:tell("DEBUG: [red]Finished in ", ftime(1) - debug_start, "[normal]");
-    player:tell("Testing complete. These Argon2 parameters resulted in a hash time of ", $math_utils:precision(time, 2, 0), " seconds:");
+    player:tell("Testing complete. These Argon2 parameters resulted in a hash time of ", $math_utils:precision(time, 2), " seconds:");
     player:tell("Memory: ", memory, " KiB");
     player:tell("Time (iterations): ", iterations);
     player:tell("");
