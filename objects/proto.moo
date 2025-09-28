@@ -9,6 +9,9 @@ object #114
 
   verb "*" (this none this) owner: #36 flags: "rxd"
     "Last ditch attempt to do something useful...";
+    if (verb == "initialize" || verb == "recycle")
+      return;
+    endif
     return args[1];
   endverb
 endobject
