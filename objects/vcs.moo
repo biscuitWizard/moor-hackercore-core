@@ -123,7 +123,7 @@ object #9
 
   verb vcs_reset (this none this) owner: #2 flags: "rxd"
     ":@vcs/reset";
-    changes = worker_request("vcs", {"status"})[1]["changes"];
+    changes = worker_request("vcs", {"status"})["changes"];
     if (!changes)
       return player:tell("No changes to discard; nothing to do.");
     elseif (!argstr || argstr != "confirm")
@@ -180,5 +180,14 @@ object #9
       endfor
     endfor
     player:tell_lines(results);
+  endverb
+
+  verb changes (this none this) owner: #2 flags: "rxd"
+    ":changes() => Returns a list of active changes in our source control";
+    result = worker_request("vcs", {"changes"});
+    if (typeof(result) == ERR)
+      raise(result, error_message(result));
+    endif
+    return result;
   endverb
 endobject
