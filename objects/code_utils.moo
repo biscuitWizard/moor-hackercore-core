@@ -68,7 +68,7 @@ object #59
     "as",
     "off"
   };
-  property _version (owner: #36, flags: "rc") = "2.7.0_20";
+  property _version (owner: #36, flags: "rc") = "0.9.0-alpha+";
   property builtin_props (owner: #2, flags: "r") = {
     "name",
     "r",
@@ -102,6 +102,8 @@ object #59
     E_FILE,
     E_EXEC,
     E_INTRPT
+  
+  
   
   };
   property error_names (owner: #36, flags: "rc") = {
@@ -852,25 +854,31 @@ object #59
     return setadd(dbs, $help);
   endverb
 
-  verb corify_object (this none this) owner: #2 flags: "rxd"
-    ":corify_object(object)  => string representing object";
+  verb "corify_object corified_as" (this none this) owner: #2 flags: "rxd"
+    ":corify_object corified_as(object)  => string representing object";
     "  usually just returns tostr(object), but in the case of objects that have";
     "  corresponding #0 properties, return the appropriate $-string.";
-    object = args[1];
+    "Also works with map namespaces, and local-only core objects on $local.";
+    "set the second argument to 1 if you want this verb to return 0 instead of returning the object number when there is no core property (e.g. if you want to check whether an object is corified or not).";
+    {object, ?exclude_failed = 0} = args;
     "Just in case #0 is !r on some idiot core.";
     for p in (`properties(#0) ! ANY => {}')
       "And if for some reason, some #0 prop is !r.";
       if (`#0.(p) ! ANY' == object)
         return "$" + p;
-      elseif (typeof(`#0.(p) ! ANY') == MAP)
-        for value, key in (#0.(p))
-          if (value == object)
-            return tostr("$", p, "[\"", key, "\"]");
-          endif
-        endfor
+      elseif (`typeof(namespace = #0.(p)) ! ANY' == MAP && (key_idx = object in mapvalues(namespace)))
+        return tostr("$", p, "[", mapkeys(namespace)[key_idx], "]");
       endif
     endfor
-    return tostr(object);
+    "Check for object references on $local";
+    "$local must be +r for this to work, as this verb doesn't run with wizard permissions.";
+    local = `$local ! ANY => #-1';
+    for p in (`properties(local) ! ANY => {}')
+      if (`local.(p) ! ANY' == object)
+        return tostr("$local.", p);
+      endif
+    endfor
+    return exclude_failed ? 0 | tostr(object);
   endverb
 
   verb inside_quotes (this none this) owner: #2 flags: "rxd"
@@ -1558,5 +1566,197 @@ object #59
       endif
     endfor
     return out;
+  endverb
+
+  verb "command_verbs callable_verbs" (this none this) owner: #2 flags: "rxd"
+    "$code_utils: command_verbs / callable_Verbs (object[, include-indexes])";
+    "Returns either only the verbs on an object considered as commands by the server when parsing,";
+    "or all that are callable by other verbs.";
+    "For a verb to be callable,it need only have the x bit,";
+    "while for a verb to be considered a command, it must have reachable args and may or may not also be callable by other verbs.";
+    "The include_indexes argument changes the returned list items to  {index, verbname-and-aliases} instead of just the verbnames as strings.";
+    {o, ?include_indexes = 0} = args;
+    set_task_perms(caller_perms());
+    if (!$recycler:valid(o))
+      raise(E_INVARG);
+    endif
+    verbcount = length($object_utils:accessible_verbs(o));
+    index = 1;
+    results = {};
+    while (index <= verbcount)
+      info = `verb_info(o, index) ! ANY';
+      if (typeof(info) == ERR)
+        index = index + 1;
+        continue;
+      endif
+      {vowner, vinfo, vname} = info;
+      vargs = verb_args(o, index);
+      if (verb == "command_verbs" && vargs == {"this", "none", "this"} == 0 && vargs == {"any", "none", "any"} == 0)
+        results = {@results, include_indexes ? {index, vname} | vname};
+      elseif (verb == "callable_verbs" && "x" in vinfo)
+        results = {@results, include_indexes ? {index, vname} | vname};
+      endif
+      index = index + 1;
+    endwhile
+    return results;
+  endverb
+
+  verb "locate_all_properties_by_name locate_all_verbs_by_name" (this none this) owner: #2 flags: "rxd"
+    "Locates verbs or properties that are named <search>.";
+    "Only_readable defines whether unreadable verbs should be skipped.";
+    "Author defines whether we should only search for verbs or properties by <author>.";
+    {search, ?player = 0, ?only_readable = 1, ?author = 0} = args;
+    results = partial_results = {};
+    if (verb == "locate_all_properties_by_name")
+      type = "prop";
+      info_func = "property_info";
+    else
+      type = "verb";
+      info_func = "verb_info";
+    endif
+    "TODO FIXME: this doesn't search any anons or UUID objects which may have verbs. Is this a problem? Will these *have* verbs? Find in 6 (months)";
+    for x in [#0..max_object()]
+      if (!valid(x) || (only_readable && !x.r))
+        continue x;
+      endif
+      for y in (type == "prop" ? properties(x) | verbs(x))
+        if (only_readable && (info = call_function(info_func, x, y))[1] != player && !index(info[2], "r"))
+          continue y;
+        endif
+        if (search in y:words())
+          results = {@results, {x, y}};
+        elseif (index(y, search))
+          partial_results = {@partial_results, {x, y}};
+        endif
+      endfor
+    endfor
+    return {results, partial_results};
+  endverb
+
+  verb comment_density (this none this) owner: #2 flags: "rxd"
+    "$code_utils:comment_density(object, verb-name-or-index[, include-full])";
+    "Given an object and a verb, return the comment density of that verb as a percent.";
+    "0% meaning you're a terrible programmer and should feel bad, 100% meaning your verb has *nothing but* comments.";
+    "Set the 3rd argument to 1 to instead return a map with keys: lines, comments, density";
+    "Without this argument, only returns density.";
+    set_task_perms(caller_perms());
+    {o, v, ?full = 0} = args;
+    lines = comments = 0;
+    density = 0.0;
+    try
+      code = verb_code(o, v);
+    except e (E_PERM)
+      "player:tell(\"Permission denied for \", toliteral({o,v}));";
+      "todo: report permission denied better.";
+      code = {};
+    endtry
+    lines = lines + length(code);
+    for line in (code)
+      line = line:trim();
+      if (line[1] == "\"" && line[$ - 1..$] == "\";")
+        comments = comments + 1;
+      endif
+    endfor
+    lines && (density = $math_utils:to_percent(comments, lines));
+    if (!full)
+      return density;
+    else
+      return ["density" -> density, "lines" -> lines, "comments" -> comments, "objects" -> 1];
+    endif
+  endverb
+
+  verb "object_comment_density objects_comment_density" (this none this) owner: #2 flags: "rxd"
+    "$code_utils:object_comment_density(obj[, full])";
+    "Given an object, return the comment density of all of it's defined verbs as a percentage.";
+    "$code_utils:objects_comment_density({objects...}[, full) -- same as above, accepts multiple objects.";
+    "Set full (the second argument) to a true value to instead return a map of keys:";
+    "lines, comments, density";
+    {objects, ?full = 0} = args;
+    set_task_perms(caller_perms());
+    typeof(objects) in {LIST, OBJ} || raise(E_INVARG, "First argument must be either an object or a list of objects");
+    lines = comments = density = 0;
+    if (typeof(objects) == OBJ)
+      "We were given one object; turn it into a list with one item.";
+      objects = {objects};
+    endif
+    for o in (objects)
+      try
+        verbs = verbs(o);
+      except e (E_PERM)
+        "This isn't an object the player owns; get all readable ones.";
+        verbs = $object_utils:accessible_verbs(o);
+      endtry
+      for vn, vi in (verbs)
+        data = this:comment_density(o, vi, true);
+        lines = lines + data["lines"];
+        comments = comments + data["comments"];
+      endfor
+    endfor
+    lines && (density = $math_utils:to_percent(comments, lines));
+    if (!full)
+      return density;
+    else
+      return ["density" -> density, "lines" -> lines, "comments" -> comments, "objects" -> length(objects)];
+    endif
+  endverb
+
+  verb rewrite_objids_in_value (this none this) owner: #2 flags: "rxd"
+    "$code_utils:rewrite_objids_in_value(LIST | MAP value, MAP IDs)";
+    "Given a value and a map of old -> new object IDs, change any references to `old` to be `new`";
+    "Returns the value with changes applied";
+    set_task_perms(caller_perms());
+    "CHECKME: I might even work with new UUID / anons!";
+    {val, mappings} = args;
+    tval = typeof(val);
+    if (tval == LIST)
+      for i, idx in (val)
+        ti = typeof(i);
+        if (ti == OBJ)
+          if (maphaskey(mappings, i))
+            val[idx] = mappings[i];
+          endif
+        elseif (ti == LIST)
+          val[idx] = this:(verb)(i, mappings);
+        elseif (ti == MAP)
+          val[idx] = this:(verb)(i, mappings);
+        endif
+      endfor
+    elseif (tval == MAP)
+      "Check to see if we need to rewrite object keys as well";
+      rewrite_keys = {};
+      for k in (mapkeys(val))
+        if (typeof(k) == OBJ && maphaskey(mappings, k))
+          rewrite_keys = {@rewrite_keys, k};
+        endif
+      endfor
+      "If we have any keys to rewrite, do so";
+      for k in (rewrite_keys)
+        new = mappings[k];
+        data = val[k];
+        val = mapdelete(val, k);
+        val[new] = data;
+      endfor
+      "Now rewrite values of the map:";
+      for v, k in (val)
+        tv = typeof(v);
+        if (tv == OBJ)
+          if (maphaskey(mappings, v))
+            val[k] = mappings[v];
+          endif
+        elseif (tv == LIST)
+          val[k] = this:(verb)(v, mappings);
+        elseif (tv == MAP)
+          val[k] = this:(verb)(v, mappings);
+        endif
+      endfor
+    elseif (tval == OBJ)
+      "If passed just an object, rewrite that as well according to mappings";
+      if (maphaskey(mappings, val))
+        return mappings[val];
+      else
+        return val;
+      endif
+    endif
+    return val;
   endverb
 endobject
