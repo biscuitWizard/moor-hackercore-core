@@ -239,4 +239,13 @@ object #9
     endif
     return result;
   endverb
+
+  verb get_object (this none this) owner: #2 flags: "rxd"
+    {object} = args;
+    result = worker_request("vcs", {"get_object", object});
+    if (typeof(result) == ERR)
+      raise(result, error_message(result));
+    endif
+    return result;
+  endverb
 endobject
