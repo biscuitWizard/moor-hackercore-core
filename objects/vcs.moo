@@ -17,7 +17,7 @@ object #9
     if ($cu:switched_command(verb, "vcs"))
       return;
     endif
-    repo = worker_request("vcs", {"status"});
+    repo = this:status();
     output = {};
     output = {@output, tostr($su:left($ansi:brwhite("Game "), 15), ":  ", `repo["game"] ! ANY => tostr($server["core_history"][1][1], " (Local)")')};
     output = {@output, tostr($su:right("Upstream ", 15), ":  ", repo["upstream"])};
@@ -44,7 +44,7 @@ object #9
   endverb
 
   verb _clone (this none this) owner: #2 flags: "rxd"
-    remaining_objects = all_objects = worker_request("vcs", {"list_objects"});
+    remaining_objects = all_objects = this:list_objects();
     all_obj_ids = {};
     for obj_spec in (all_objects)
       all_obj_ids = setadd(all_obj_ids, toobj(obj_spec["oid"]));
@@ -66,7 +66,7 @@ object #9
     while (remaining_objects)
       {obj_spec, remaining_objects} = $lu:dequeue(remaining_objects);
       obj_id = toobj(obj_spec["oid"]);
-      obj_dump = worker_request("vcs", {"get_objects", obj_spec["filename"]});
+      obj_dump = this:get_objects(obj_spec["filename"]);
       load_object(obj_dump, ["target_object" -> obj_id]);
       commit();
     endwhile
@@ -115,7 +115,7 @@ object #9
     "@vcs/log";
     "  Shows a log of commit messages";
     player:tell($ansi:white("Recent Changes:"));
-    commits = worker_request("vcs", {"get_commits"});
+    commits = this:get_commits();
     for commit in (commits)
       player:tell($ansi:cyan("  ["), commit["id"], $ansi:cyan("]"), " ", commit["message"]);
     endfor
@@ -123,20 +123,20 @@ object #9
 
   verb vcs_reset (this none this) owner: #2 flags: "rxd"
     ":@vcs/reset";
-    changes = worker_request("vcs", {"status"})["changes"];
+    changes = this:status()["changes"];
     if (!changes)
       return player:tell("No changes to discard; nothing to do.");
     elseif (!argstr || argstr != "confirm")
       return player:tell("@vcs/reset will !WIPE! everything back to the last change. To continue type @vcs/reset confirm.");
     endif
-    player:tell_lines(worker_request("vcs", {"reset"}));
+    player:tell_lines(this:reset());
     this:_clone();
   endverb
 
   verb vcs_pull (this none this) owner: #2 flags: "rxd"
     confirmed = "confirm" == argstr;
     "this will pull out our dry run";
-    pull_details = worker_request("vcs", {"pull", true});
+    pull_details = this:pull(true);
     if (!pull_details)
       return player:tell("Nothing to do; we're caught up!");
     endif
@@ -155,7 +155,7 @@ object #9
       return;
     endif
     "do the actual pull";
-    pull_details = worker_request("vcs", {"pull", false});
+    pull_details = this:pull(false);
     results = {$ansi:brwhite($su:left("Pulled Changes", 15), " :")};
     for commit in (pull_details)
       results = {@results, tostr($ansi:cyan("  ["), commit["commit_id"], $ansi:cyan("] "), commit["commit_message"], " (By ", commit["commit_author"], ")")};
@@ -185,6 +185,55 @@ object #9
   verb changes (this none this) owner: #2 flags: "rxd"
     ":changes() => Returns a list of active changes in our source control";
     result = worker_request("vcs", {"changes"});
+    if (typeof(result) == ERR)
+      raise(result, error_message(result));
+    endif
+    return result;
+  endverb
+
+  verb status (this none this) owner: #2 flags: "rxd"
+    result = worker_request("vcs", {"status"});
+    if (typeof(result) == ERR)
+      raise(result, error_message(result));
+    endif
+    return result;
+  endverb
+
+  verb reset (this none this) owner: #2 flags: "rxd"
+    result = worker_request("vcs", {"reset"});
+    if (typeof(result) == ERR)
+      raise(result, error_message(result));
+    endif
+    return result;
+  endverb
+
+  verb get_commits (this none this) owner: #2 flags: "rxd"
+    result = worker_request("vcs", {"get_commits"});
+    if (typeof(result) == ERR)
+      raise(result, error_message(result));
+    endif
+    return result;
+  endverb
+
+  verb pull (this none this) owner: #2 flags: "rxd"
+    {?dry_run = $true} = args;
+    result = worker_request("vcs", {"pull", dry_run});
+    if (typeof(result) == ERR)
+      raise(result, error_message(result));
+    endif
+    return result;
+  endverb
+
+  verb get_objects (this none this) owner: #2 flags: "rxd"
+    result = worker_request("vcs", {"get_objects", @args});
+    if (typeof(result) == ERR)
+      raise(result, error_message(result));
+    endif
+    return result;
+  endverb
+
+  verb list_objects (this none this) owner: #2 flags: "rxd"
+    result = worker_request("vcs", {"list_objects"});
     if (typeof(result) == ERR)
       raise(result, error_message(result));
     endif
