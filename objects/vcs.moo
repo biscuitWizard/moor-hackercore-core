@@ -159,7 +159,7 @@ object #9
     for commit in (pull_details)
       results = {@results, tostr($ansi:cyan("  ["), commit["commit_id"], $ansi:cyan("] "), commit["commit_message"], " (By ", commit["commit_author"], ")")};
       for deleted_obj in (commit["deleted_objects"])
-        $recycler:nuke(deleted_obj);
+        $recycler:nuke($ou:resolve_coreref(deleted_obj));
       endfor
       for added_obj in (commit["added_objects"])
         obj_def = worker_request("vcs", {"get_objects", tostr(added_obj)});
@@ -168,13 +168,13 @@ object #9
       for change in (commit["changes"])
         "these are all modified objects more or less";
         obj_def = worker_request("vcs", {"get_objects", tostr(change["obj_id"])});
-        target_object = typeof(change["obj_id"]) == STR ? $sysobj.((change["obj_id"])) | change["obj_id"];
-        load_object(obj_def, ["target_object" -> target_object]);
+        target_obj = $ou:resolve_coreref(change["obj_id"]);
+        load_object(obj_def, ["target_object" -> target_obj]);
         for deleted_prop in (change["deleted_props"])
-          delete_property(change["obj_id"], deleted_prop);
+          delete_property(target_obj, deleted_prop);
         endfor
         for deleted_verb in (change["deleted_verbs"])
-          delete_verb(change["obj_id"], deleted_verb);
+          delete_verb(target_obj, deleted_verb);
         endfor
       endfor
     endfor
