@@ -403,4 +403,65 @@ object #75
     editor = {@editor, "", ".", ""};
     player:tell_lines(editor);
   endverb
+
+  verb props_all (this none this) owner: #2 flags: "rxd"
+    return this:props_view(args[1], $ou:all_properties(args[1]));
+  endverb
+
+  verb "@props @props/* @properties/* @properties" (any any any) owner: #2 flags: "rxd"
+    if (!argstr)
+      return this:ooc_tell("Syntax is @props <obj>.");
+    endif
+    object = player:match(argstr);
+    if ($command_utils:object_match_failed(object, argstr))
+      return;
+    elseif ($cu:switched_command(verb, "props", {object}, "props_view"))
+      return;
+    endif
+  endverb
+
+  verb props_view (this none this) owner: #2 flags: "rxd"
+    ":props_view(OBJ object[, LIST properties]) => NONE";
+    "  Prints out a list of all properties for player";
+    {object, ?props = properties(object)} = args;
+    if (!props)
+      return player:tell("No properties are defined on ", $su:nn(object), ".");
+    endif
+    player:tell("Properties on ", $su:nn(object), " =>");
+    idx = 1;
+    lines = {$ansi:bright("IDX  TYPE   NAME                                             SYS LEVEL")};
+    for prop in (props)
+      try
+        if (!$perm_utils:can_read_prop(player, object, prop))
+          raise(E_PERM);
+        endif
+        {owner, perms} = property_info(object, prop);
+      except e (ANY)
+        lines = {@lines, tostr(" ", $su:left(idx, 4), $su:left("N/A", -5), $ansi:red(prop))};
+        idx = idx + 1;
+        continue;
+      endtry
+      clear_prop = !is_clear_property(object, prop) ? $ansi:brmagenta("*") | " ";
+      defined = $ou:defines_property(object, prop) ? " " | $ansi:brgreen(">");
+      type = "OBJ";
+      if (typeof(object.(prop)) == MAP)
+        type = "MAP";
+      elseif (typeof(object.(prop)) == INT)
+        type = "INT";
+      elseif (typeof(object.(prop)) == LIST)
+        type = "LIST";
+      elseif (typeof(object.(prop)) == ERR)
+        type = "ERR";
+      elseif (typeof(object.(prop)) == STR)
+        type = "STR";
+      endif
+      sys_level = $ansi:(($perm_utils:can_write_prop(player, object, prop) ? "brgreen" | "brred"))(owner:name());
+      idx_col = $ansi:((idx % 2 ? "GreyCharcoal" | "GreyWheat"))($su:left(idx, 4));
+      type = $ansi:((idx % 2 ? "GreyCharcoal" | "GreyWheat"))(type);
+      lines = {@lines, tostr(" ", idx_col, $su:left(type, -5), $su:left(tostr(defined, clear_prop, $ansi:yellow(prop)), -51), sys_level)};
+      idx = idx + 1;
+    endfor
+    player:tell_lines(lines);
+    player:tell($ansi:brmagenta("*"), " => Not-Clear Property, ", $ansi:brgreen(">"), " => Defined on Parent");
+  endverb
 endobject

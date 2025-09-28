@@ -403,7 +403,7 @@ object #56
   endverb
 
   verb switched_command (this none this) owner: #36 flags: "rxd"
-    {verbstr, cmd_prefix, ?default_verb = ""} = args;
+    {verbstr, cmd_prefix, ?switch_args = {}, ?default_verb = ""} = args;
     cmd_object = callers()[1][1];
     if ((switch = $su:explode(verbstr, "/")[$]) && switch != verbstr)
       if (!$ou:has_callable_verb(cmd_object, tostr(cmd_prefix, "_", switch)))
@@ -417,11 +417,11 @@ object #56
         player:notify(tostr("Unable to match switch '", switch, "', available switches are: ", $su:english_list(switches)));
         return $true;
       endif
-      cmd_object:(tostr(cmd_prefix, "_", switch))(@args);
+      cmd_object:(tostr(cmd_prefix, "_", switch))(@switch_args);
       return $true;
     endif
     if (default_verb)
-      cmd_object:(default_verb)(@args);
+      cmd_object:(default_verb)(@switch_args);
       return $true;
     endif
     return $false;
