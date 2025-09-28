@@ -1287,4 +1287,142 @@ object #57
     endif
     "Noop. Placeholder verb for MOO-specific cleanups.";
   endverb
+
+  verb "@argon2-config" (any any any) owner: #2 flags: "rd"
+    "Determine which combination of Argon2 settings will achieve the right balance between security, user convenience, and system resource usage.";
+    "The testing methodology is fairly simple. Starting from 1 MiB of memory, test hashing a password. If it's slower than the maximum time, increase by 1 MiB of memory and try again. If we hit max_memory and are still too slow, start increasing iterations. If we exceed the time, step down one MiB of memory and start trying iterations. Repeat until within 0.05 seconds of the target time.";
+    "This may not always result in hitting the EXACT time specified. However, it should get reasonably close.";
+    "Ripped from CFSG with Love";
+    if (!player.wizard)
+      player:tell("Wizards only. Sorry.");
+      return E_PERM;
+    endif
+    if (args)
+      if (length(args) != 3)
+        return player:tell("Usage: @argon2-config <seconds> <memory + unit>");
+      else
+        seconds = args[1];
+        max_memory = tostr(args[2], " ", args[3]);
+      endif
+    else
+      player:tell("Approximately how long, in seconds, should it take to hash a password? You may not hit this number exactly. If the testing results take significantly longer than this value, tweaking maximum memory may get you closer. (Default: 0.5)");
+      player:tell("");
+      player:tell("There is a tradeoff here between security and user experience. This is how long it will take, at minimum, for a player to successfully log in. Higher is more secure (and more resource intensive), but lower is more convenient.");
+      player:tell("");
+      seconds = $command_utils:read();
+      player:tell("What's the maximum amount of memory you want to use for each hash? The higher the better. Note: Setting this beyond what your machine is capable of is ill-advised. (Default: 64 MiB)");
+      max_memory = $command_utils:read();
+    endif
+    if (seconds == "")
+      seconds = 0.5;
+    else
+      seconds = `tofloat(seconds) ! E_INVARG';
+      if (typeof(seconds) == ERR || seconds < 0.1 || seconds > 60.0)
+        "It's unlikely anybody would intentionally want to take over a minute to hash a login password. If you do, or you're using this verb to test for non-login purposes, feel free to remove this check.";
+        return player:tell("Invalid time. Please enter a valid number between 0.1 and 60.0.");
+      endif
+    endif
+    if (max_memory == "")
+      max_memory = 65536;
+    else
+      "$convert_utils technically works in binary units, but doesn't use the correct labels. So convert if we were given correct units.";
+      max_memory = $string_utils:subst(max_memory, {{"mib", "mb"}, {"kib", "kb"}, {"gib", "gb"}});
+      max_memory = `toint($convert_utils:convert(max_memory, "kb")) ! E_TYPE';
+      if (typeof(max_memory) != INT || max_memory <= 0)
+        return player:tell("Invalid amount. Make sure to include a label, such as MiB or GiB.");
+      endif
+    endif
+    memory = min(max_memory, 1024);
+    "If max_memory is 1 GiB or more, increase the step size to 10 MiB. Otherwise step 1 Mib at a time.";
+    memory_step = max_memory >= 1048576 ? 10240 | 1024;
+    iterations = 1;
+    password = $wiz_utils:random_password(20);
+    salt = salt();
+    loops = 0;
+    player:tell("Testing parameters:");
+    player:tell(" Maximum Hash Time: ", seconds, " seconds");
+    player:tell(" Maximum Memory Usage: ", $convert_utils:bytes_to_human(max_memory * 1024));
+    player:tell(" Initial Iterations: ", iterations);
+    player:tell(" Initial Memory: ", $convert_utils:bytes_to_human(memory * 1024));
+    player:tell(" Memory Increased Each Loop: ", $convert_utils:bytes_to_human(memory_step * 1024));
+    player:tell("");
+    if ($command_utils:yes_or_no("This may take a long time. If you're not using threaded Argon2, your MOO will be unresponsive until testing is complete. Continue?") != 1)
+      return player:tell("Testing aborted.");
+    endif
+    debug_start = ftime(1);
+    skip_second_pass = 0;
+    while main(1)
+      "First pass: Determine the maximum amount of memory.";
+      "If the first pass is within .05 seconds of what we want, good enough.";
+      "Otherwise, step memory down a notch and try iterations.";
+      while (1)
+        loops = loops + 1;
+        start = ftime(1);
+        argon2(password, salt, iterations, memory);
+        time = ftime(1) - start;
+        if ($math_utils:precision(time, 2, 0) == seconds || (time >= seconds && time - seconds <= 0.05))
+          "If the result is exact or within 0.05, the whole process is done.";
+          skip_second_pass = 1;
+          break;
+        elseif (time > seconds)
+          "If the time is over the desired time, step down memory usage and start increasing iterations.";
+          memory = max(1024, memory - memory_step);
+          break;
+        elseif (memory >= max_memory)
+          "Start increasing iterations when we hit max_memory.";
+          break;
+        else
+          memory = min(max_memory, memory + memory_step);
+        endif
+        if (loops >= 10000)
+          return player:tell("Too many loops. Test aborted. You may want to try different parameters.");
+        endif
+      endwhile
+      "Second pass: Determine how many iterations get us close.";
+      if (!skip_second_pass)
+        while (1)
+          loops = loops + 1;
+          start = ftime(1);
+          argon2(password, salt, iterations, memory);
+          time = ftime(1) - start;
+          if ($math_utils:precision(time, 2, 0) == seconds || (time >= seconds && time - seconds <= 0.05))
+            "Same as above. The process is done.";
+            break;
+          elseif (time > seconds)
+            "If the desired time is exceeded, assume the last result is the best result.";
+            iterations = iterations - 1;
+            break;
+          else
+            iterations = iterations + 1;
+          endif
+          if (loops >= 10000)
+            return player:tell("Too many loops. Test aborted. You may want to try different parameters.");
+          endif
+        endwhile
+      endif
+      if (time >= seconds && time - seconds > 0.05)
+        "If we aren't within 0.05 seconds, try again with lower memory usage.";
+        max_memory = memory = memory - memory_step;
+        if (memory < 1024)
+          return player:tell("Test failed.");
+        endif
+        "Set iterations to 2, as we've previously tested all of these memory settings with 1 iteration.";
+        iterations = 2;
+      else
+        break main;
+      endif
+    endwhile
+    player:tell("DEBUG: [red]Finished in ", ftime(1) - debug_start, "[normal]");
+    player:tell("Testing complete. These Argon2 parameters resulted in a hash time of ", $math_utils:precision(time, 2, 0), " seconds:");
+    player:tell("Memory: ", memory, " KiB");
+    player:tell("Time (iterations): ", iterations);
+    player:tell("");
+    if ($command_utils:yes_or_no("Would you like to apply these values to $login now?") == 1)
+      $login.argon_parameters["iterations"] = iterations;
+      $login.argon_parameters["memory"] = memory;
+      player:tell("Settings have been applied!");
+    else
+      player:tell("Okay!");
+    endif
+  endverb
 endobject
