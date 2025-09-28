@@ -274,7 +274,4 @@ object #9
     endif
     return load_object(obj_data["obj_def"]);
   endverb
-
-  verb foo (this none this) owner: #2 flags: "rxd"
-  endverb
 endobject
