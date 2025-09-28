@@ -107,7 +107,8 @@ object #9
     if (!argstr)
       return player:notify("Syntax: @vcs/commit <msg>");
     endif
-    return player:tell(worker_request("vcs", {"commit", argstr}));
+    name = $cu:read("name to commit as");
+    return player:tell(worker_request("vcs", {"commit", argstr, name}));
   endverb
 
   verb vcs_log (this none this) owner: #2 flags: "rxd"
