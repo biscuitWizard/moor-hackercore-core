@@ -261,7 +261,12 @@ object #9
       for v, i in (obj_verbs = verbs(existing_object))
         obj_verbs[i] = verb_info(existing_object, v)[3];
       endfor
+      player:tell("Object Reconciliation:");
+      player:tell("  Current Obj (", $su:nn(existing_object), ") Verbs: ", toliteral(obj_verbs));
+      player:tell("  Clean Obj (", object, ") Verbs: ", toliteral(obj_data["verbs"]));
+      player:tell("    Verbs To Delete: ", toliteral($set_utils:diff(obj_verbs, obj_data["verbs"])));
       for invalid_verb in ($set_utils:diff(obj_verbs, obj_data["verbs"]))
+        player:tell("  ", $ansi:red("DANGER: "), " Deleting ", existing_object, ":", invalid_verb);
         delete_verb(existing_object, invalid_verb);
       endfor
       for invalid_prop in ($set_utils:diff(properties(existing_object), obj_data["properties"]))
