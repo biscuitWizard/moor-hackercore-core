@@ -248,4 +248,27 @@ object #9
     endif
     return result;
   endverb
+
+  verb load_object (this none this) owner: #2 flags: "rxd"
+    ":load_object(OBJ/STR object) => OBJ";
+    "  Loads a copy of an object from virtual control";
+    "  This is destructive and will typically blitz an object";
+    {object} = args;
+    obj_data = this:get_object(object);
+    if (existing_object = $ou:resolve_coreref(object))
+      "### STEP ONE: Delete any verbs or properties not on the object";
+      "              This ensures a clean wipe for load object";
+      for invalid_verb in ($set_utils:diff(verbs(existing_object), obj_data["verbs"]))
+        `delete_verb(existing_object, invalid_verb) ! E_VERBNF';
+      endfor
+      for invalid_prop in ($set_utils:diff(properties(existing_object), obj_data["properties"]))
+        `delete_property(existing_object, invalid_prop) ! E_PROPNF';
+      endfor
+      "### STEP TWO: Load the new object onto the now clean recipient";
+      load_object(obj_data["obj_def"], ["target_object" -> existing_object]);
+      "now we can return normally";
+      return existing_object;
+    endif
+    return load_object(obj_data["obj_def"]);
+  endverb
 endobject
