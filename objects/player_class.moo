@@ -44,7 +44,7 @@ object #6
     if (valid(cp = caller_perms()) && caller != this && !$perm_utils:controls(cp, this) && caller != #0)
       return E_PERM;
     endif
-    this:expunge_rmm();
+    "this:expunge_rmm()";
     return;
   endverb
 
@@ -935,8 +935,7 @@ object #6
       player:notify(r);
       return;
     endif
-    player.password = $login:encrypt_password(new_password);
-    player.last_password_time = time();
+    player.password = $login:encrypt_password(new_password, player);
     player:notify("New password set.");
   endverb
 

@@ -953,14 +953,16 @@ object #24
     if (!caller_perms().wizard)
       return E_PERM;
     endif
+    "TODO: ship a reasonable EFF list of diceword phrases for more modern password generation";
     {who, ?password = $wiz_utils:random_password(6)} = args;
     if (!password)
       password = $wiz_utils:random_password(6);
     endif
     whostr = $string_utils:nn(who);
     player:notify(tostr("About to change password for ", whostr, ". Old encrypted password is \"", who.password, "\""));
-    who.password = $login:encrypt_password(password);
-    who.last_password_time = time();
+    who.password_version != $login.password_version && player:notify(tostr("Upgrading: was version: ", who.password_version, ", now ", $login.password_version, "."));
+    "$login:encrypt_password updates last password time and version";
+    who.password = $login:encrypt_password(password, who);
     player:notify(tostr(whostr, " new password is `", password, "'."));
     if (!$wiz_utils:get_email_address(who))
       player:notify(tostr(whostr, " doesn't have a registered email_address, cannot mail password; tell them some some other way."));
@@ -1312,5 +1314,24 @@ object #24
     {who} = args;
     typeof(who) == OBJ || raise(E_INVARG, "First argument must be an object");
     return is_player(who) && who.wizard;
+  endverb
+
+  verb announce (this none this) owner: #2 flags: "rxd"
+    "$wiz_utils:announce(STR message, STR category)";
+    "Announce a message to all connected wizards";
+    "Security level is 3rd arg; 0 by default, 1 mirrors to server_log and 2 restricts caller perms to wizard";
+    {msg, ?category = "miscellaneous", ?level = 0} = args;
+    level > 0 && server_log(msg + "category=" + category);
+    level >= 2 && caller_perms().wizard || raise(E_PERM, "Level 2 calls are restricted to wiz perms");
+    n = 0;
+    for x in (connected_players())
+      if (!x.wizard || `x.silent_admin ! ANY => 0')
+        continue;
+      endif
+      "Later add category toggles back";
+      x:tell(tostr("[Administrators] ", msg));
+      n = n + 1;
+    endfor
+    return n;
   endverb
 endobject

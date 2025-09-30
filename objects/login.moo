@@ -12,7 +12,7 @@ object #10
   property connection_limit_msg (owner: #36, flags: "r") = "*** The MOO is too busy! The current lag is %l; there are %n connected.  WAIT FIVE MINUTES BEFORE TRYING AGAIN.";
   property create_enabled (owner: #2, flags: "rc") = 1;
   property current_lag (owner: #2, flags: "r") = 0;
-  property current_numcommands (owner: #2, flags: "rc") = [#-4 -> 2];
+  property current_numcommands (owner: #2, flags: "rc") = [#-20 -> 4, #-16 -> 2];
   property downtimes (owner: #2, flags: "rc") = {
     {1759022123, 0},
     {1758800578, 0},
@@ -211,9 +211,9 @@ object #10
       "=== Check password";
       if (typeof(cp = candidate.password) == STR)
         "=== Candidate requires a password";
-        if (password)
+        if (password != 0)
           "=== Candidate requires a password, and one was provided";
-          if (strcmp(crypt(password, cp), cp))
+          if (!this:verify_password(candidate, password))
             "=== Candidate requires a password, and one was provided, which was wrong";
             server_log(tostr("FAILED CONNECT: ", name, " (", candidate, ") on ", connection_name(player), $string_utils:connection_hostname(connection_name(player)) in candidate.all_connect_places ? "" | "******"));
             raise(E_INVARG, "Invalid password.");
@@ -272,7 +272,7 @@ object #10
         notify(player, tostr("Okay,... ", name, " is in use.  Logging you in as `", candidate.name, "'"));
       endif
       return candidate;
-    except (E_INVARG)
+    except e (E_INVARG)
       notify(player, "Either that player does not exist, or has a different password.");
       return 0;
     endtry
@@ -805,8 +805,13 @@ object #10
   verb encrypt_password (this none this) owner: #2 flags: "rxd"
     "Given a password, salt, hash with configured parameters and return";
     "Parems on $login.argon_parameters";
-    {password} = args;
+    "If given a player as second argument, updates their .password_version and .password_time";
+    {password, ?who = #-1} = args;
     salt = salt();
+    if (valid(who))
+      who.password_version = this.password_version;
+      who.last_password_time = time();
+    endif
     return call_function("argon2", password, salt, this.argon2["iterations"], this.argon2["memory"], this.argon2["threads"]);
   endverb
 
@@ -822,7 +827,7 @@ object #10
     "Password version 2: argon2, see $login.argon_parameters for current values";
     "If you change parems but not algorithm, increase $login.password_version";
     "If you do change algorithm, update this verb and $login:encrypt_password";
-    if (!no_update)
+    if (typeof(who) == OBJ && !no_update)
       if (who.password_version < this.password_version)
         if (who.password_version == 1)
           "BCrypt to latest.";
