@@ -1421,6 +1421,12 @@ object #57
       $login.argon_parameters["iterations"] = iterations;
       $login.argon_parameters["memory"] = memory;
       player:tell("Settings have been applied!");
+      if ($command_utils:yes_or_no("Do you wish to bump $login.password_version? This will re-encrypt passwords with new parameters upon next standard verification."))
+        $login.password_version = $login.password_version + 1;
+        player:tell("Version now: ", $login.password_version, ".");
+      else
+        player:tell("Okay, passwords will use new parameters when users next change them.");
+      endif
     else
       player:tell("Okay!");
     endif
