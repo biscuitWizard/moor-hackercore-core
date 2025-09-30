@@ -8,6 +8,7 @@ object #0
   property big_mail_recipient (owner: #2, flags: "r") = #14;
   property biglist (owner: #2, flags: "r") = #13;
   property builder (owner: #2, flags: "r") = #4;
+  property builder_feature (owner: #2, flags: "r") = #75;
   property building_utils (owner: #2, flags: "r") = #21;
   property class_registry (owner: #2, flags: "r") = {
     {
@@ -144,7 +145,6 @@ object #0
   ];
   property server_options (owner: #2, flags: "r") = #82;
   property set_utils (owner: #2, flags: "r") = #27;
-  property shapes (owner: #2, flags: "r") = #75;
   property singleton (owner: #2, flags: "r") = #17;
   property singleton_warehouse (owner: #2, flags: "r") = #84;
   property spell (owner: #2, flags: "r") = #32;
