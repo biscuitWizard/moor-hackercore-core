@@ -190,7 +190,7 @@ object #56
     ans = {};
     while (1)
       try
-        line = read();
+        line = read(player);
         if (line[1..min(6, $)] == "@abort" && (tail = line[7..$]) == $string_utils:space(tail))
           p:notify(">> Command Aborted <<");
           this:kill_task_callback(kill_task_verb, kill_task_args);
@@ -209,6 +209,7 @@ object #56
         this:kill_task_callback(kill_task_verb, kill_task_args);
         kill_task(task_id());
       except error (ANY)
+        player:notify(toliteral(error));
         return error[1];
       endtry
     endwhile

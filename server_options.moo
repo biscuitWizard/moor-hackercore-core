@@ -4,11 +4,11 @@ object #82
   owner: #2
   readable: true
 
-  property bg_ticks (owner: #2, flags: "rc") = 80000;
+  property bg_ticks (owner: #2, flags: "rc") = 10000000;
   property boot_msg (owner: #2, flags: "rc") = "";
   property connect_msg (owner: #2, flags: "rc") = "*** Connected ***";
   property dump_interval (owner: #2, flags: "rc") = 3600;
-  property fg_ticks (owner: #2, flags: "rc") = 150000;
+  property fg_ticks (owner: #2, flags: "rc") = 10000000;
   property help_msg (owner: #2, flags: "rc") = {
     "                Server Options <$server_options>",
     "                --------------------------------",

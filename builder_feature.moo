@@ -551,4 +551,122 @@ object #75
       player:tell(" ", $su:left(feature, -8), " ", feature:name());
     endfor
   endverb
+
+  verb "@set*prop" (any at any) owner: #2 flags: "rxd"
+    "Syntax:  @set <object>.<prop-name> to <value>";
+    "";
+    "Changes the value of the specified object's property to the given value.";
+    "You must have permission to modify the property, either because you own the property or if it is writable.";
+    set_task_perms(player);
+    l = $code_utils:parse_propref(dobjstr);
+    if (l)
+      dobj = player:match(l[1]);
+      if ($command_utils:object_match_failed(dobj, l[1]))
+        return;
+      endif
+      prop = l[2];
+      to_i = "to" in args;
+      at_i = "at" in args;
+      i = to_i && at_i ? min(to_i, at_i) | to_i || at_i;
+      iobjstr = argstr[$string_utils:word_start(argstr)[i][2] + 1..$];
+      iobjstr = $string_utils:trim(iobjstr);
+      if (!iobjstr)
+        try
+          if (prop == "name")
+            return player:system_tell("Please use @rename instead of setting .name directly.");
+          endif
+          val = dobj.(prop) = "";
+        except e (ANY)
+          return player:system_tell("Unable to set ", dobj, ".", prop, ": ", e[2]);
+        endtry
+        iobjstr = "\"\"";
+      else
+        val = $string_utils:to_value(iobjstr);
+        if (!val[1])
+          player:system_tell("Could not parse: ", iobjstr);
+          return;
+        elseif (!$object_utils:has_property(dobj, prop))
+          player:system_tell("That object does not define that property.");
+          return;
+        endif
+        try
+          if (!$perm_utils:can_write_property(player, dobj, prop))
+            return player:system_tell("Unable to set ", dobj, ".", prop, ".");
+          elseif ($ou:has_callable_verb(dobj, "can_set_" + prop) && (reason = dobj:(tostr("can_set_", prop))(val[2])))
+            return player:system_tell("Unable to set ", dobj, ".", prop, ": ", reason);
+          endif
+          val = dobj.(prop) = val[2];
+        except e (ANY)
+          return player:system_tell("Unable to set ", dobj, ".", prop, ": ", e[2]);
+        endtry
+      endif
+      player:system_tell("Property ", dobj, ".", prop, " set to ", $string_utils:print(val), ".");
+      $broadcast:build($su:nn(player), " @set ", $su:nn(dobj), ".", prop, " to ", $string_utils:print(val), ".");
+      $vcs:update(dobj);
+    else
+      player:system_tell("Property ", dobjstr, " not found.");
+    endif
+  endverb
+
+  verb "@chown" (any any any) owner: #2 flags: "rxd"
+    "@chown <verb or prop> to <player>";
+    set_task_perms(player);
+    args = setremove(args, "to");
+    if (length(args) != 2 || !args[2])
+      player:system_tell(tostr("Usage:  ", verb, " <object-or-property-or-verb> <owner>"));
+      return;
+    endif
+    what = args[1];
+    owner = $string_utils:match_player(args[2]);
+    bynumber = verb == "@chown#";
+    if ($command_utils:player_match_result(owner, args[2])[1])
+    elseif (spec = $code_utils:parse_verbref(what))
+      object = player:match(spec[1]);
+      if (!$command_utils:object_match_failed(object, spec[1]))
+        vname = spec[2];
+        if (bynumber)
+          vname = $code_utils:toint(vname);
+          if (vname == E_TYPE)
+            return player:system_tell("Verb number expected.");
+          elseif (vname < 1 || vname > length(verbs(object)))
+            return player:system_tell("Verb number out of range.");
+          endif
+        endif
+        info = `verb_info(object, vname) ! ANY';
+        if (info == E_VERBNF)
+          player:system_tell("That object does not define that verb.");
+        elseif (typeof(info) == ERR)
+          player:system_tell(tostr(info));
+        else
+          try
+            result = set_verb_info(object, vname, listset(info, owner, 1));
+            player:system_tell("Verb owner set.");
+            $broadcast:staff_alerts($su:nn(player), " has @chown'd verb ", object, ":", vname, " to ", $su:nn(owner), ".");
+          except e (ANY)
+            player:system_tell(e[2]);
+          endtry
+        endif
+      endif
+    elseif (bynumber)
+      player:notify("@chown# can only be used with verbs.");
+    elseif (index(what, ".") && (spec = $code_utils:parse_propref(what)))
+      object = player:match(spec[1]);
+      if (!$command_utils:object_match_failed(object, spec[1]))
+        pname = spec[2];
+        e = $wiz_utils:set_property_owner(object, pname, owner);
+        if (e == E_NONE)
+          player:system_tell("+c Property owner set.  Did you really want to do that?");
+        else
+          player:system_tell(tostr(e && "Property owner set."));
+        endif
+        $broadcast:staff_alerts($su:nn(player), " has @chown'd prop ", object, ".", pname, " to ", $su:nn(owner), ".");
+      endif
+    else
+      object = player:match(what);
+      if (!$command_utils:object_match_failed(object, what))
+        player:system_tell(tostr($wiz_utils:set_owner(object, owner) && "Object ownership changed."));
+        $broadcast:staff_alerts($su:nn(player), " has @chown'd ", $su:nn(object), " to ", $su:nn(owner), ".");
+      endif
+    endif
+  endverb
 endobject

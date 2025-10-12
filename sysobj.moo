@@ -7,9 +7,11 @@ object #0
   property ansi (owner: #2, flags: "r") = #25;
   property big_mail_recipient (owner: #2, flags: "r") = #14;
   property biglist (owner: #2, flags: "r") = #13;
+  property broadcast (owner: #2, flags: "r") = #71;
   property builder (owner: #2, flags: "r") = #4;
   property builder_feature (owner: #2, flags: "r") = #75;
   property building_utils (owner: #2, flags: "r") = #21;
+  property channel (owner: #2, flags: "r") = #70;
   property class_registry (owner: #2, flags: "r") = {
     {
       "generics",
@@ -72,7 +74,7 @@ object #0
   property edit_session (owner: #2, flags: "r") = #126;
   property edit_state (owner: #2, flags: "r") = #124;
   property edit_utils (owner: #2, flags: "r") = #122;
-  property error (owner: #2, flags: "r") = #69;
+  property error (owner: #2, flags: "r") = #79;
   property exit (owner: #2, flags: "r") = #7;
   property failed_match (owner: #2, flags: "r") = #-3;
   property false (owner: #2, flags: "r") = 0;
@@ -127,6 +129,7 @@ object #0
   property player_class (owner: #2, flags: "r") = #6;
   property player_start (owner: #2, flags: "r") = #62;
   property prog (owner: #2, flags: "r") = #58;
+  property prog_feature (owner: #2, flags: "r") = #73;
   property proto (owner: #2, flags: "r") = #114;
   property recycler (owner: #2, flags: "r") = #47;
   property recycling_pool (owner: #2, flags: "r") = #48;
@@ -139,7 +142,7 @@ object #0
       {"ToastCore", "2.7.1", 1713940026},
       {"a 2018 LambdaCore", "2.6.0", 1576791887}
     },
-    "last_restart_time" -> 1760228637,
+    "last_restart_time" -> 1760274408,
     "name" -> "LambdaMOO-ToastStunt",
     "shutdown_time" -> 0
   ];
@@ -263,8 +266,6 @@ object #0
     elseif (children(what) && $object_utils:isa(what, $player_class) && !$object_utils:isa(papa, $player_class))
       retval = E_PERM;
     elseif (is_player(what) && what in $wiz_utils.chparent_restricted && !who.wizard)
-      retval = E_PERM;
-    elseif (what.location == $mail_agent && $object_utils:isa(what, $mail_recipient) && !$object_utils:isa(papa, $mail_recipient) && !who.wizard)
       retval = E_PERM;
     elseif (!valid(papa) || ($perm_utils:controls(who, papa) || papa.f))
       retval = `chparent(@args) ! ANY';
@@ -425,12 +426,8 @@ object #0
   endverb
 
   verb handle_uncaught_error (this none this) owner: #2 flags: "rxd"
+    $error:log(args);
     if (!callers())
-      {code, msg, value, stack, traceback} = args;
-      if (!$object_utils:connected(player))
-        "Mail the player the traceback if e isn't connected.";
-        $mail_agent:send_message(#0, player, {"traceback", $wiz_utils.gripe_recipients}, traceback);
-      endif
       "now let the player do something with it if e wants...";
       return `player:(verb)(@args) ! ANY';
     endif

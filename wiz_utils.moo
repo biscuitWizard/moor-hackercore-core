@@ -310,27 +310,12 @@ object #24
     oldowner = object.owner;
     object.owner = newowner;
     for pname in ($object_utils:all_properties(object))
-      if (suspendok && (ticks_left() < 5000 || seconds_left() < 2))
-        suspend(0);
-      endif
       perms = property_info(object, pname)[2];
       if (index(perms, "c"))
         set_property_info(object, pname, {newowner, perms});
       endif
     endfor
-    if ($object_utils:isa(oldowner, $player))
-      if (typeof(oldowner.owned_objects) == LIST)
-        oldowner.owned_objects = setremove(oldowner.owned_objects, object);
-      endif
-    endif
-    if ($object_utils:isa(newowner, $player))
-      if (object != newowner)
-        $quota_utils:charge_quota(newowner, object);
-      endif
-      if (typeof(newowner.owned_objects) == LIST)
-        newowner.owned_objects = setadd(newowner.owned_objects, object);
-      endif
-    endif
+    $vcs:update(object);
     return 1;
   endverb
 
@@ -351,10 +336,12 @@ object #24
         return E_NONE;
       else
         set_property_info(object, pname, listset(info, newowner, 1));
+        $vcs:update(object);
         return newowner == object.owner || E_NONE;
       endif
     else
       set_property_info(object, pname, listset(info, newowner, 1));
+      $vcs:update(object);
       if (suspendok % 2 && (ticks_left() < 10000 || seconds_left() < 2))
         suspend(0);
       endif

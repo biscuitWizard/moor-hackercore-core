@@ -2856,4 +2856,16 @@ object #20
     endif
     return numstring + " " + unitstring;
   endverb
+
+  verb generate_symmetrical_columns (this none this) owner: #36 flags: "rxd"
+    "{string, length, [seperator]}";
+    AU = $ansi;
+    ret = "";
+    for x in (args)
+      NUM_ = toint(x[2]);
+      x[1] = tostr(x[1]);
+      ret = tostr(ret, tostr(AU:left(AU:length(x[1]) >= INT ? AU:cutoff(x[1], 1, NUM_ - 1) | x[1], NUM_, length(x) == 3 ? x[3] | " ")));
+    endfor
+    return ret;
+  endverb
 endobject

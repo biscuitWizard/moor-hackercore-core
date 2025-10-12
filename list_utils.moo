@@ -258,7 +258,7 @@ object #55
     "    slice({{\"z\",1},{\"y\",2},{\"x\",5}},2) => {1,2,5}.";
     "index defaults to 1 and may also be a nonempty list, e.g., ";
     "    slice({{\"z\",1,3},{\"y\",2,4}},{2,1}) => {{1,\"z\"},{2,\"y\"}}";
-    return slice(@args);
+    return slice(args[1], args[2]);
   endverb
 
   verb assoc (this none this) owner: #36 flags: "rxd"
