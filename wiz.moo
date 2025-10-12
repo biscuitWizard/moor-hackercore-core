@@ -1432,4 +1432,10 @@ object #57
       player:tell("Okay!");
     endif
   endverb
+
+  verb "@pool @pools @pool/* @pools/*" (any any any) owner: #36 flags: "rd"
+    if ($cu:switched_command(verb, "pool"))
+      return;
+    endif
+  endverb
 endobject

@@ -28,8 +28,12 @@ object #48
       return new_obj;
     endif
     this.max_object_id = this.max_object_id + 1;
-    new_obj = create_at(this.max_object_id, of_parent);
-    new_obj:initialize();
+    new_obj = create_at(this.max_object_id, of_parent, player);
+    try
+      new_obj:initialize();
+    except e (ANY)
+      $error:log(e);
+    endtry
     return new_obj;
   endverb
 endobject

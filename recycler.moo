@@ -86,8 +86,13 @@ object #47
     "  is specified it will create a numbered object.";
     {of_parent, ?from_pool = $nothing} = args;
     if (from_pool == $nothing)
-      new_obj = create(of_parent);
-      new_obj:initialize();
+      "this will create a UUID object";
+      new_obj = create(of_parent, player, 2);
+      try
+        new_obj:initialize();
+      except e (ANY)
+        $error:log(e);
+      endtry
       return new_obj;
     endif
     "handling pooled created for numbered objects";
