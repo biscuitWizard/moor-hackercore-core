@@ -51,7 +51,6 @@ object #6
 
   verb initialize (this none this) owner: #2 flags: "rxd"
     if (caller == this || $perm_utils:controls(caller_perms(), this))
-      this.help = 0;
       return pass(@args);
     else
       return E_PERM;
@@ -626,7 +625,7 @@ object #6
     endif
   endverb
 
-  verb remove_feature (this none this) owner: #36 flags: "rxd"
+  verb remove_feature (this none this) owner: #2 flags: "rxd"
     "Remove a feature from this player's features list.  Caller must be this, or have permissions of this, a wizard, or feature.owner.";
     "Returns true if successful, E_PERM if caller didn't have permission.";
     feature = args[1];

@@ -12,8 +12,9 @@ object #10
   property connection_limit_msg (owner: #36, flags: "r") = "*** The MOO is too busy! The current lag is %l; there are %n connected.  WAIT FIVE MINUTES BEFORE TRYING AGAIN.";
   property create_enabled (owner: #2, flags: "rc") = 1;
   property current_lag (owner: #2, flags: "r") = 0;
-  property current_numcommands (owner: #2, flags: "rc") = [#-19 -> 2, #-18 -> 3];
+  property current_numcommands (owner: #2, flags: "rc") = [#-7 -> 4, #-6 -> 9, #-5 -> 2, #-4 -> 2];
   property downtimes (owner: #2, flags: "rc") = {
+    {1760276139, 0},
     {1760228637, 0},
     {1759022123, 0},
     {1758800578, 0},
@@ -131,8 +132,6 @@ object #10
       "... we've disabled player creation ...";
     elseif (length(args) != 2)
       notify(player, tostr("Usage:  ", verb, " <new-player-name> <new-password>"));
-    elseif ($player_db.frozen)
-      notify(player, "Sorry, can't create any new players right now.  Try again in a few minutes.");
     elseif (!(name = args[1]) || name == "<>")
       notify(player, "You can't have a blank name!");
       if (name)
@@ -145,14 +144,14 @@ object #10
     elseif (index(name, " "))
       notify(player, "Sorry, no spaces are allowed in player names.  Use dashes or underscores.");
       "... lots of routines depend on there not being spaces in player names...";
-    elseif (!$player_db:available(name) || this:_match_player(name) != $failed_match)
+    elseif ($recycler:valid(this:_match_player(name)))
       notify(player, "Sorry, that name is not available.  Please choose another.");
       "... note the :_match_player call is not strictly necessary...";
       "... it is merely there to handle the case that $player_db gets corrupted.";
     elseif (!(password = args[2]))
       notify(player, "You must set a password for your player.");
     else
-      new = $quota_utils:bi_create($player_class, $nothing);
+      new = $recycler:create($player_class);
       set_player_flag(new, 1);
       new.name = name;
       new.aliases = {name};
@@ -162,9 +161,6 @@ object #10
       new.last_connect_time = $maxint;
       "Last disconnect time is creation time, until they login.";
       new.last_disconnect_time = time();
-      "make sure the owership quota isn't clear!";
-      $quota_utils:initialize_quota(new);
-      $player_db:insert(name, new);
       `move(new, $player_start) ! ANY';
       return new;
     endif
@@ -384,12 +380,6 @@ object #10
       return E_PERM;
     elseif ((hostname = args[1]) in sitelist[1] || hostname in sitelist[2])
       return 1;
-    elseif ($site_db:domain_literal(hostname))
-      for lit in (sitelist[1])
-        if (index(hostname, lit) == 1 && (hostname + ".")[length(lit) + 1] == ".")
-          return 1;
-        endif
-      endfor
     else
       for dom in (sitelist[2])
         if (index(dom, "*"))
@@ -706,12 +696,6 @@ object #10
       return this:templist_expired(lname, @entry);
     elseif (entry = $list_utils:assoc(hostname, sitelist[2]))
       return this:templist_expired(lname, @entry);
-    elseif ($site_db:domain_literal(hostname))
-      for lit in (sitelist[1])
-        if (index(hostname, lit[1]) == 1 && (hostname + ".")[length(lit[1]) + 1] == ".")
-          return this:templist_expired(lname, @lit);
-        endif
-      endfor
     else
       for dom in (sitelist[2])
         if (index(dom[1], "*"))
