@@ -1070,6 +1070,7 @@ object #6
     endif
     player.channels = setadd(player.channels, channel);
     channel:nrtransmit(tostr(player:name(), " has joined the channel."));
+    player:system_tell("You've joined ", $ansi:((channel.color))(channel.name), ".");
   endverb
 
   verb "@xleave @xsil*ence" (any any any) owner: #36 flags: "rd"

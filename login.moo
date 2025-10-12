@@ -12,7 +12,7 @@ object #10
   property connection_limit_msg (owner: #36, flags: "r") = "*** The MOO is too busy! The current lag is %l; there are %n connected.  WAIT FIVE MINUTES BEFORE TRYING AGAIN.";
   property create_enabled (owner: #2, flags: "rc") = 1;
   property current_lag (owner: #2, flags: "r") = 0;
-  property current_numcommands (owner: #2, flags: "rc") = [#-7 -> 4, #-6 -> 9, #-5 -> 2, #-4 -> 2];
+  property current_numcommands (owner: #2, flags: "rc") = [#-14 -> 2, #-12 -> 4, #-6 -> 10];
   property downtimes (owner: #2, flags: "rc") = {
     {1760276139, 0},
     {1760228637, 0},
@@ -156,7 +156,7 @@ object #10
       new.name = name;
       new.aliases = {name};
       new.programmer = $player_class.programmer;
-      new.password = $login:encrypt_password(password);
+      new.password = $login:encrypt_password(password, new);
       new.last_password_time = time();
       new.last_connect_time = $maxint;
       "Last disconnect time is creation time, until they login.";
