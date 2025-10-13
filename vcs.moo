@@ -395,6 +395,9 @@ object #9
     ":apply_change_diff(STR/OBJ object_name, MAP changes, LIST object_dump) => NONE";
     "  Applies a change diff to an object";
     {object_name, changes, object_dump} = args;
+    player:tell("Updating object ", object_name);
+    player:tell("Changes: ", toliteral(changes));
+    player:tell_lines(object_dump);
     "quick data validation";
     change_fields = {"props_added", "props_renamed", "props_modified", "props_deleted", "verbs_added", "verbs_renamed", "verbs_modified", "verbs_deleted"};
     for field in (change_fields)
@@ -438,7 +441,7 @@ object #9
     {diff} = args;
     for change in (diff["changes"])
       obj_id = change["obj_id"];
-      dump = {this:get_object(obj_id)};
+      dump = this:get_object(obj_id);
       "obj_id can be a bit special, if it's renamed we might not have the rename yet";
       "so it's good practice to just look up at the rename table";
       for value, key in (diff["objects_renamed"])
@@ -452,8 +455,5 @@ object #9
     for deleted_obj in (change["objects_deleted"])
       `recycle(deleted_obj) ! ANY';
     endfor
-  endverb
-
-  verb test (this none this) owner: #36 flags: "rxd"
   endverb
 endobject
