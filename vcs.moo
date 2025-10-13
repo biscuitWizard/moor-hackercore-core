@@ -431,4 +431,7 @@ object #9
     endif
     return result;
   endverb
+
+  verb test (none none none) owner: #36 flags: "rd"
+  endverb
 endobject
