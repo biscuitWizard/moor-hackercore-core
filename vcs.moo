@@ -155,13 +155,50 @@ object #9
       if ($cu:object_match_failed(object = player:match(argstr), argstr))
         return;
       endif
-      changes = this:object_history(object);
+      changes = $lu:reverse(this:object_history(object));
+      player:system_tell($ansi:white("Displaying object VCS history for ", $su:nn(object), ":"));
+      for change in (changes)
+        if (!maphaskey(change, "change_description"))
+          continue;
+        endif
+        player:system_tell($ansi:cyan("  ["), change["short_change_id"], $ansi:cyan("] "), change["change_description"], $ansi:white(" (", $time_utils:short_english_time(time() - change["timestamp"], time(), 2), " ago)"));
+        stats = {};
+        details = change["details"];
+        if (details["props_added"])
+          stats = {@stats, $ansi:green(length(details["props_added"]), " Props Added")};
+        endif
+        if (details["props_renamed"])
+          stats = {@stats, $ansi:cyan(length(mapkeys(details["props_renamed"])), " Props Renamed")};
+        endif
+        if (details["props_modified"])
+          stats = {@stats, $ansi:yellow(length(details["props_modified"]), " Props Modded")};
+        endif
+        if (details["props_deleted"])
+          stats = {@stats, $ansi:red(length(details["props_deleted"]), " Props Deleted")};
+        endif
+        if (details["verbs_added"])
+          stats = {@stats, $ansi:green(length(details["verbs_added"]), " Verbs Added")};
+        endif
+        if (details["verbs_renamed"])
+          stats = {@stats, $ansi:cyan(length(mapkeys(details["verbs_renamed"])), " Verbs Renamed")};
+        endif
+        if (details["verbs_modified"])
+          stats = {@stats, $ansi:yellow(length(details["verbs_modified"]), " Verbs Modded")};
+        endif
+        if (details["verbs_deleted"])
+          stats = {@stats, $ansi:red(length(details["verbs_deleted"]), " Verbs Deleted")};
+        endif
+        if (!stats)
+          continue;
+        endif
+        player:system_tell($ansi:white("    - "), $su:from_list(stats, " / "));
+      endfor
       return;
     endif
     index_list = $lu:reverse(this:index_list());
-    player:tell($ansi:white("Recent Changes:"));
+    player:system_tell($ansi:white("Recent Changes:"));
     for commit in (index_list)
-      player:tell($ansi:cyan("  ["), commit["short_id"], $ansi:cyan("]"), " ", commit["message"]);
+      player:system_tell($ansi:cyan("  ["), commit["short_id"], $ansi:cyan("]"), " ", commit["message"]);
     endfor
   endverb
 
@@ -182,25 +219,8 @@ object #9
     return result;
   endverb
 
-  verb reset (this none this) owner: #2 flags: "rxd"
-    result = worker_request("vcs", {"reset"});
-    if (typeof(result) == ERR)
-      raise(result, error_message(result));
-    endif
-    return result;
-  endverb
-
   verb get_commits (this none this) owner: #2 flags: "rxd"
     result = worker_request("vcs", {"get_commits"});
-    if (typeof(result) == ERR)
-      raise(result, error_message(result));
-    endif
-    return result;
-  endverb
-
-  verb pull (this none this) owner: #2 flags: "rxd"
-    {?dry_run = $true} = args;
-    result = worker_request("vcs", {"pull", dry_run});
     if (typeof(result) == ERR)
       raise(result, error_message(result));
     endif
@@ -369,5 +389,46 @@ object #9
     "$vcs:list_users() - returns a list... of users. format unknown. More to follow.";
     "set_task_perms(player)";
     return worker_request("vcs", {"user/list"});
+  endverb
+
+  verb apply_change_diff (this none this) owner: #36 flags: "rxd"
+    ":apply_change_diff(STR/OBJ object_name, MAP changes, LIST object_dump) => NONE";
+    "  Applies a change diff to an object";
+    {object_name, changes, object_dump} = args;
+    "quick data validation";
+    change_fields = {"props_added", "props_renamed", "props_modified", "props_deleted", "verbs_added", "verbs_renamed", "verbs_modified", "verbs_deleted"};
+    for field in (change_fields)
+      if (!maphaskey(changes, field))
+        raise(E_INVARG, tostr("Changes structure is missing required key: ", field));
+      endif
+    endfor
+    if (typeof(object_dump) != LIST)
+      raise(E_INVARG, "Invalid objdef dump provided. Must be a list of strings.");
+    endif
+    "validate our object target";
+    object = typeof(object_name) == OBJ ? object_name | $ou:resolve_coreref(object_name);
+    if (!$recycler:valid(object))
+      raise(E_INVARG, tostr(object_name, " resolved to ", object, ", which is invalid."));
+    endif
+    "delete any data that isn't needed";
+    for verb_name in ({@changes["verbs_deleted"], @mapkeys(changes["verbs_renamed"])})
+      `delete_verb(object, verb_name) ! ANY';
+    endfor
+    for prop_name in ({@changes["props_deleted"], @mapkeys(changes["props_renamed"])})
+      `delete_property(object, prop_name) ! ANY';
+    endfor
+    "now to apply the dump";
+    load_object(object_dump, ["target_object" -> object]);
+  endverb
+
+  verb vcs_abandon (this none this) owner: #36 flags: "rxd"
+  endverb
+
+  verb abandon (this none this) owner: #36 flags: "rxd"
+    result = worker_request("vcs", {"change/abandon"});
+    if (typeof(result) == ERR)
+      raise(result, error_message(result));
+    endif
+    return result;
   endverb
 endobject

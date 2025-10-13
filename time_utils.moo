@@ -683,7 +683,6 @@ object #43
       if (months > 2400)
         return tostr(">", months / 12, "y");
       endif
-      $command_utils:suspend_if_needed(0);
     endwhile
     timelist = {months / 12, months % 12, _time, @timelist};
     for unit in (units)
