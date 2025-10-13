@@ -438,7 +438,7 @@ object #9
     {diff} = args;
     for change in (diff["changes"])
       obj_id = change["obj_id"];
-      dump = this:get_object(obj_id);
+      dump = {this:get_object(obj_id)};
       "obj_id can be a bit special, if it's renamed we might not have the rename yet";
       "so it's good practice to just look up at the rename table";
       for value, key in (diff["objects_renamed"])
@@ -452,8 +452,5 @@ object #9
     for deleted_obj in (change["objects_deleted"])
       `recycle(deleted_obj) ! ANY';
     endfor
-  endverb
-
-  verb test (none none none) owner: #36 flags: "rd"
   endverb
 endobject
