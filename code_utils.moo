@@ -102,10 +102,6 @@ object #59
     E_FILE,
     E_EXEC,
     E_INTRPT
-  
-  
-  
-  
   };
   property error_names (owner: #36, flags: "rc") = {
     "E_NONE",
@@ -252,7 +248,11 @@ object #59
 
   verb toobj (this none this) owner: #36 flags: "rxd"
     ":toobj(objectid as string) => objectid";
-    return match(s = args[1], "^ *#[-+]?[0-9]+ *$") ? toobj(s) | E_TYPE;
+    {obj_id} = args;
+    if (obj_id == "#0")
+      return $sysobj;
+    endif
+    return (object = toobj(obj_id)) == $sysobj ? $failed_match | object;
   endverb
 
   verb toerr (this none this) owner: #36 flags: "rxd"

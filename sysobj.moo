@@ -142,7 +142,7 @@ object #0
       {"ToastCore", "2.7.1", 1713940026},
       {"a 2018 LambdaCore", "2.6.0", 1576791887}
     },
-    "last_restart_time" -> 1760274408,
+    "last_restart_time" -> 1760276139,
     "name" -> "LambdaMOO-ToastStunt",
     "shutdown_time" -> 0
   ];
@@ -529,5 +529,9 @@ object #0
       endif
     endif
     return typeof(retval) == ERR && $code_utils:dflag_on() ? raise(retval) | retval;
+  endverb
+
+  verb "s ies es" (this none this) owner: #36 flags: "rxd"
+    return $string_utils:pluralize(@args);
   endverb
 endobject
