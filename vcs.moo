@@ -422,9 +422,11 @@ object #9
   endverb
 
   verb vcs_abandon (this none this) owner: #36 flags: "rxd"
+    diff = this:abandon();
+    this:apply_game_diff(diff);
   endverb
 
-  verb abandon (this none this) owner: #36 flags: "rxd"
+  verb abandon (this none this) owner: #2 flags: "rxd"
     result = worker_request("vcs", {"change/abandon"});
     if (typeof(result) == ERR)
       raise(result, error_message(result));
@@ -432,6 +434,23 @@ object #9
     return result;
   endverb
 
-  verb test (none none none) owner: #36 flags: "rd"
+  verb apply_game_diff (this none this) owner: #36 flags: "rxd"
+    {diff} = args;
+    for change in (diff["changes"])
+      obj_id = change["obj_id"];
+      dump = this:get_object(obj_id);
+      "obj_id can be a bit special, if it's renamed we might not have the rename yet";
+      "so it's good practice to just look up at the rename table";
+      for value, key in (diff["objects_renamed"])
+        if (obj_id == value)
+          obj_id = key;
+          break;
+        endif
+      endfor
+      this:apply_change_diff(obj_id, change, dump);
+    endfor
+    for deleted_obj in (change["objects_deleted"])
+      `recycle(deleted_obj) ! ANY';
+    endfor
   endverb
 endobject
