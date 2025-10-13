@@ -12,8 +12,9 @@ object #10
   property connection_limit_msg (owner: #36, flags: "r") = "*** The MOO is too busy! The current lag is %l; there are %n connected.  WAIT FIVE MINUTES BEFORE TRYING AGAIN.";
   property create_enabled (owner: #2, flags: "rc") = 1;
   property current_lag (owner: #2, flags: "r") = 0;
-  property current_numcommands (owner: #2, flags: "rc") = [#-14 -> 2, #-12 -> 4, #-6 -> 10];
+  property current_numcommands (owner: #2, flags: "rc") = [#-29 -> 1, #-28 -> 1, #-27 -> 1, #-26 -> 1, #-22 -> 2, #-21 -> 2];
   property downtimes (owner: #2, flags: "rc") = {
+    {1760349043, 0},
     {1760276139, 0},
     {1760228637, 0},
     {1759022123, 0},
@@ -52,11 +53,13 @@ object #10
   property temporary_redlist (owner: #2, flags: "") = {{}, {}};
   property temporary_spooflist (owner: #2, flags: "") = {{}, {}};
   property welcome_message (owner: #2, flags: "rc") = {
+    "%g",
     "Welcome to the HackerCore database.",
     "",
     "Type 'connect wizard' to log in.",
     "",
-    "You will probably want to change this text and the output of the `help' command, which are stored in $login.welcome_message and $login.help_message, respectively."
+    "You will probably want to change this text and the output of the `help' command, which are stored in $login.welcome_message and $login.help_message, respectively.",
+    "Server version %v, up for %u"
   };
   property who_masks_wizards (owner: #2, flags: "") = 0;
 
@@ -87,11 +90,11 @@ object #10
     if (caller != #0 && caller != this)
       return E_PERM;
     else
-      msg = this.welcome_message;
-      version = server_version();
-      for line in (typeof(msg) == LIST ? msg | {msg})
+      raw_msg = this.welcome_message;
+      msg = this:welcome_sub(raw_msg);
+      for line in (msg)
         if (typeof(line) == STR)
-          notify(player, strsub(line, "%v", version));
+          notify(player, line);
         endif
       endfor
       this:check_for_shutdown();
@@ -830,5 +833,29 @@ object #10
     endif
     curpass = typeof(who) == STR ? who | who.password;
     return argon2_verify(curpass, password);
+  endverb
+
+  verb welcome_sub (this none this) owner: #36 flags: "rxd"
+    "$login:welcome_sub(LIST or STR welcome message)";
+    "This verb runs various substitutions on either a string or the lines of a login mesage.";
+    "%v: MOO version";
+    "%n: $network.moo_name, MOO's name";
+    "%c: core name";
+    "%u: uptime";
+    "%p: number of connections";
+    "%g: random greeting";
+    greetings = {"Hi!", "Hi.", "Hi chummers!", "Hi chum.", "Hi maybe-user.", "Hello there.", "Welcome, chump.", "Oh. Who are you again?", "What? Leave me alone.", "Glorious salutations, user.", "Sup pal.", "Are you sure you're supposed to be here? (Just kidding)", "Ehh?", "What's all this, here?", "A wild MOO appears!", "Cow say MOO.", "MOOOOOOOOOO.", "Hello, hacker!"};
+    {welcome} = args;
+    if (typeof(welcome) == STR)
+      welcome = {welcome};
+    endif
+    version = server_version();
+    uptime = $time_utils:dhms(time() - $server["last_restart_time"]);
+    con = tostr(length(connected_players()));
+    for I in [1..length(welcome)]
+      welcome[I] = $string_utils:substitute(welcome[I], {{"%v", version}, {"%u", uptime}, {"%p", con}, {"%n", `$network.moo_name ! ANY => ""'}, {"%g", greetings[random($)]}, {"%c", $server["name"]}});
+      "welcome[I] = parse_ansi(welcome[I])";
+    endfor
+    return welcome;
   endverb
 endobject
