@@ -391,7 +391,7 @@ object #9
     return worker_request("vcs", {"user/list"});
   endverb
 
-  verb apply_change_diff (this none this) owner: #36 flags: "rxd"
+  verb apply_change_diff (this none this) owner: #2 flags: "rxd"
     ":apply_change_diff(STR/OBJ object_name, MAP changes, LIST object_dump) => NONE";
     "  Applies a change diff to an object";
     {object_name, changes, object_dump} = args;
@@ -434,7 +434,7 @@ object #9
     return result;
   endverb
 
-  verb apply_game_diff (this none this) owner: #36 flags: "rxd"
+  verb apply_game_diff (this none this) owner: #2 flags: "rxd"
     {diff} = args;
     for change in (diff["changes"])
       obj_id = change["obj_id"];
@@ -452,5 +452,8 @@ object #9
     for deleted_obj in (change["objects_deleted"])
       `recycle(deleted_obj) ! ANY';
     endfor
+  endverb
+
+  verb test (none none none) owner: #36 flags: "rd"
   endverb
 endobject
