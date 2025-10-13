@@ -4,6 +4,7 @@ object #0
   readable: true
 
   property ambiguous_match (owner: #2, flags: "r") = #-2;
+  property anon (owner: #00016D-99DA0C4AD8, flags: "r") = #120;
   property ansi (owner: #2, flags: "r") = #25;
   property big_mail_recipient (owner: #2, flags: "r") = #14;
   property biglist (owner: #2, flags: "r") = #13;
