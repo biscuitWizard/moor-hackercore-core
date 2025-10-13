@@ -20,6 +20,7 @@ object #6
   property last_connect_time (owner: #2, flags: "r") = 0;
   property last_disconnect_time (owner: #2, flags: "r") = 0;
   property last_password_time (owner: #2, flags: "") = 0;
+  property moov_api_key (owner: #2, flags: "r") = 0;
   property more_msg (owner: #2, flags: "rc") = "*** More ***  %n lines left.  Do @more [rest|flush] for more.";
   property out_of_band_session (owner: #2, flags: "r") = #-1;
   property page_absent_msg (owner: #2, flags: "rc") = "%N is not currently logged in.";
@@ -1036,7 +1037,7 @@ object #6
     endif
   endverb
 
-  verb system_tell (this none this) owner: #36 flags: "rxd"
+  verb "system_tell systell" (this none this) owner: #36 flags: "rxd"
     return this:notify(tostr(@args));
   endverb
 

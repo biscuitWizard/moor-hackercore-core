@@ -21,6 +21,7 @@ object #9
     output = {};
     output = {@output, tostr($su:left($ansi:brwhite("Game "), 15), ":  ", `repo["game_name"] ! ANY => $server["core_history"][1][1]')};
     output = {@output, tostr($su:right("Upstream ", 15), ":  ", repo["remote_url"] || "Local")};
+    output = {@output, tostr("Logged in as ", worker_request("vcs", {"user/stat"})[1..3]:join(", "))};
     output = {@output, ""};
     if (repo["latest_merged_change"])
       change = repo["latest_merged_change"];
@@ -147,10 +148,17 @@ object #9
     return obj_name || tostr(object);
   endverb
 
-  verb vcs_log (this none this) owner: #2 flags: "rxd"
+  verb "vcs_log vcs_history" (this none this) owner: #2 flags: "rxd"
     "@vcs/log";
     "  Shows a log of commit messages";
-    index_list = this:index_list();
+    if (argstr)
+      if ($cu:object_match_failed(object = player:match(argstr), argstr))
+        return;
+      endif
+      changes = this:object_history(object);
+      return;
+    endif
+    index_list = $lu:reverse(this:index_list());
     player:tell($ansi:white("Recent Changes:"));
     for commit in (index_list)
       player:tell($ansi:cyan("  ["), commit["short_id"], $ansi:cyan("]"), " ", commit["message"]);
@@ -329,6 +337,37 @@ object #9
     return result;
   endverb
 
-  verb test (this none this) owner: #36 flags: "rxd"
+  verb object_history (this none this) owner: #2 flags: "rxd"
+    {object_id} = args;
+    if (typeof(object_id) == OBJ)
+      object_id = this:get_object_name(object_id);
+    endif
+    result = worker_request("vcs", {"object/history", object_id});
+    if (typeof(result) == ERR)
+      raise(result, error_message(result));
+    endif
+    return result;
+  endverb
+
+  verb create_user (this none this) owner: #36 flags: "rxd"
+    "create_user(OBJ user[, str email-address])";
+    "Creates a user in moov. Does not assign permissions or API keys.";
+    {user, ?email = E_NONE} = args;
+    valid(user) && is_player(user) || raise(E_INVARG, "User is not a valid object or has no player flag");
+    user.name != "" || raise(E_INVARG, "User " + toliteral(user) + " must have a name set");
+    set_task_perms(player);
+    name = user.name;
+    default_email = tostr(name, "@", $network.site);
+    if (email == E_NONE && user.email_address)
+      email = user.email_address;
+    endif
+    res = worker_request("vcs", {"user/create", user, email != E_NONE ? email | default_email, name});
+    return res;
+  endverb
+
+  verb list_users (this none this) owner: #2 flags: "rxd"
+    "$vcs:list_users() - returns a list... of users. format unknown. More to follow.";
+    "set_task_perms(player)";
+    return worker_request("vcs", {"user/list"});
   endverb
 endobject

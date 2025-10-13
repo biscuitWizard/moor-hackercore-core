@@ -676,7 +676,6 @@ object #55
     {_list, ?sep = " ", ?omit_empty = false} = args;
     res = "";
     for i in (_list)
-      yin();
       i = tostr(i);
       if (omit_empty && !i)
         continue;

@@ -10,7 +10,8 @@ object #2
 
   override aliases = {"Wizard"};
   override all_connect_places = {"192.168.1.187", "192.168.1.102"};
-  override features = {#90, #75, #73, #9};
+  override channels = {#85, #81, #80, #79};
+  override features = {#90, #75, #9, #73};
   override first_connect_time = 1755930095;
   override last_connect_place = "192.168.1.187";
   override last_connect_time = 1756637255;
