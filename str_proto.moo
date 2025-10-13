@@ -9,9 +9,9 @@ object #119
     if (verb in {"init_for_core", "proxy_for_core", "exitfunc", "enterfunc", "moveto"})
       return `pass(@args) ! ANY => 0';
     elseif (verb == "length" || verb == "len")
-      return length(this);
+      return length(args[1]);
     elseif (verb == "strip_ansi")
-      return $ansi_utils:delete(this);
+      return $ansi:strip_tags(args[1]);
     endif
     if (verb == "include_for_core")
       return {};
