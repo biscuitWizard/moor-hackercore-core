@@ -20,7 +20,7 @@ object #6
   property last_connect_time (owner: #2, flags: "r") = 0;
   property last_disconnect_time (owner: #2, flags: "r") = 0;
   property last_password_time (owner: #2, flags: "") = 0;
-  property moov_api_key (owner: #2, flags: "r") = 0;
+  property moov_api_key (owner: #2, flags: "") = 0;
   property more_msg (owner: #2, flags: "rc") = "*** More ***  %n lines left.  Do @more [rest|flush] for more.";
   property out_of_band_session (owner: #2, flags: "r") = #-1;
   property page_absent_msg (owner: #2, flags: "rc") = "%N is not currently logged in.";
@@ -283,17 +283,7 @@ object #6
   endverb
 
   verb "@who" (any any any) owner: #2 flags: "rxd"
-    if (caller != player)
-      return E_PERM;
-    endif
-    plyrs = args ? listdelete($command_utils:player_match_result($string_utils:match_player(args), args), 1) | connected_players();
-    if (!plyrs)
-      return;
-    elseif (length(plyrs) > 100)
-      player:tell("You have requested a listing of ", length(plyrs), " players.  Please either specify individual players you are interested in, to reduce the number of players in any single request, or else use the `@users' command instead.  The lag thanks you.");
-      return;
-    endif
-    $code_utils:show_who_listing(plyrs);
+    return this:notify_lines($who:return_detailed_lines(player));
   endverb
 
   verb "@wizards" (any none none) owner: #2 flags: "rxd"
@@ -1102,5 +1092,9 @@ object #6
     endfor
     lines = {@lines, "Type @xjoin <channel> to join that channel."};
     player:notify_lines(lines);
+  endverb
+
+  verb less_ascii (this none this) owner: #36 flags: "rxd"
+    return $false;
   endverb
 endobject

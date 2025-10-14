@@ -12,7 +12,7 @@ object #10
   property connection_limit_msg (owner: #36, flags: "r") = "*** The MOO is too busy! The current lag is %l; there are %n connected.  WAIT FIVE MINUTES BEFORE TRYING AGAIN.";
   property create_enabled (owner: #2, flags: "rc") = 1;
   property current_lag (owner: #2, flags: "r") = 0;
-  property current_numcommands (owner: #2, flags: "rc") = [#-29 -> 1, #-28 -> 1, #-27 -> 1, #-26 -> 1, #-22 -> 2, #-21 -> 2];
+  property current_numcommands (owner: #2, flags: "rc") = [#-54 -> 2, #-22 -> 2, #-21 -> 2];
   property downtimes (owner: #2, flags: "rc") = {
     {1760349043, 0},
     {1760276139, 0},
@@ -52,6 +52,7 @@ object #10
   property temporary_newts (owner: #2, flags: "c") = {};
   property temporary_redlist (owner: #2, flags: "") = {{}, {}};
   property temporary_spooflist (owner: #2, flags: "") = {{}, {}};
+  property top_players (owner: #36, flags: "r") = 0;
   property welcome_message (owner: #2, flags: "rc") = {
     "%g",
     "Welcome to the HackerCore database.",
@@ -857,5 +858,13 @@ object #10
       "welcome[I] = parse_ansi(welcome[I])";
     endfor
     return welcome;
+  endverb
+
+  verb update_top_players (this none this) owner: #36 flags: "rxd"
+    {top_player_count, timestamp} = this.top_players;
+    player_count = length(connected_players());
+    if (player_count > top_player_count)
+      this.top_players = {player_count, time()};
+    endif
   endverb
 endobject
