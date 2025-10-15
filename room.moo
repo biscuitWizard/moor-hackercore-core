@@ -213,39 +213,6 @@ object #3
     endif
   endverb
 
-  verb "l*ook" (any any any) owner: #2 flags: "rxd"
-    if (dobjstr == "" && !prepstr)
-      this:look_self();
-    elseif (prepstr != "in" && prepstr != "on")
-      if (!dobjstr && prepstr == "at")
-        dobjstr = iobjstr;
-        iobjstr = "";
-      else
-        dobjstr = dobjstr + (prepstr && (dobjstr && " ") + prepstr);
-        dobjstr = dobjstr + (iobjstr && (dobjstr && " ") + iobjstr);
-      endif
-      dobj = this:match(dobjstr);
-      if (!$command_utils:object_match_failed(dobj, dobjstr))
-        dobj:look_self();
-      endif
-    elseif (!iobjstr)
-      player:tell(verb, " ", prepstr, " what?");
-    else
-      iobj = this:match(iobjstr);
-      if (!$command_utils:object_match_failed(iobj, iobjstr))
-        if (dobjstr == "")
-          iobj:look_self();
-        elseif ((thing = iobj:match(dobjstr)) == $failed_match)
-          player:tell("I don't see any \"", dobjstr, "\" ", prepstr, " ", iobj.name, ".");
-        elseif (thing == $ambiguous_match)
-          player:tell("There are several things ", prepstr, " ", iobj.name, " one might call \"", dobjstr, "\".");
-        else
-          thing:look_self();
-        endif
-      endif
-    endif
-  endverb
-
   verb announce_all (this none this) owner: #2 flags: "rxd"
     for dude in (this:contents())
       try
@@ -622,5 +589,36 @@ object #3
   verb basic_accept_for_abode (this none this) owner: #2 flags: "rxd"
     who = args[1];
     return valid(who) && (this.free_home || $perm_utils:controls(who, this) || (typeof(residents = this.residents) == LIST ? who in this.residents | who == this.residents));
+  endverb
+
+  verb "l*ook" (any any any) owner: #36 flags: "rxd"
+    if (dobjstr == "" && !prepstr)
+      this:look_self();
+    elseif (prepstr != "in" && prepstr != "on")
+      if (!dobjstr && prepstr == "at")
+        dobjstr = iobjstr;
+        iobjstr = "";
+      else
+        dobjstr = dobjstr + (prepstr && (dobjstr && " ") + prepstr);
+        dobjstr = dobjstr + (iobjstr && (dobjstr && " ") + iobjstr);
+      endif
+      if (!$command_utils:object_match_failed(dobj = player:match(dobjstr), dobjstr))
+        dobj:look_self();
+      endif
+    elseif (!iobjstr)
+      player:tell(verb, " ", prepstr, " what?");
+    else
+      if (!$command_utils:object_match_failed(iobj = player:match(iobjstr), iobjstr))
+        if (dobjstr == "")
+          iobj:look_self();
+        elseif ((thing = iobj:match(dobjstr)) == $failed_match)
+          player:tell("I don't see any \"", dobjstr, "\" ", prepstr, " ", iobj.name, ".");
+        elseif (thing == $ambiguous_match)
+          player:tell("There are several things ", prepstr, " ", iobj.name, " one might call \"", dobjstr, "\".");
+        else
+          thing:look_self();
+        endif
+      endif
+    endif
   endverb
 endobject
