@@ -5,6 +5,7 @@ object #1
 
   property aliases (owner: #2, flags: "rc") = {};
   property description (owner: #2, flags: "rc") = "";
+  property features (owner: #2, flags: "r") = {};
   property generic (owner: #2, flags: "r") = 1;
   property instance_id (owner: #2, flags: "r") = "#1:1758753626.650987";
   property key (owner: #2, flags: "c") = 0;
@@ -94,7 +95,9 @@ object #1
       return $recycler:valid(this.location) ? this.location | $failed_match;
     endif
     matches = this:matches(subject);
-    if (!matches)
+    if (valid(matches))
+      return matches;
+    elseif (!matches)
       return $failed_match;
     elseif (length(matches) > 1)
       return $ambiguous_match;
@@ -251,23 +254,6 @@ object #1
     endif
   endverb
 
-  verb do_examine (this none this) owner: #2 flags: "rxd"
-    "do_examine(examiner)";
-    "the guts of examine";
-    "call a series of verbs and report their return values to the player";
-    who = args[1];
-    if (caller == who)
-      who:notify_lines(this:examine_names(who) || {});
-      who:notify_lines(this:examine_owner(who) || {});
-      who:notify_lines(this:examine_desc(who) || {});
-      who:notify_lines(this:examine_key(who) || {});
-      who:notify_lines(this:examine_contents(who) || {});
-      who:notify_lines(this:examine_verbs(who) || {});
-    else
-      return E_PERM;
-    endif
-  endverb
-
   verb examine_key (this none this) owner: #2 flags: "rxd"
     "examine_key(examiner)";
     "return a list of strings to be told to the player, indicating what the key on this type of object means, and what this object's key is set to.";
@@ -281,7 +267,7 @@ object #1
   verb examine_names (this none this) owner: #2 flags: "rxd"
     "examine_names(examiner)";
     "Return a list of strings to be told to the player, indicating the name and aliases (and, by default, the object number) of this.";
-    return {tostr(this.name, " (aka ", $string_utils:english_list({tostr(this), @this.aliases}), ")")};
+    return {tostr(this:name(), " (aka ", $string_utils:english_list(this:aliases()), ") ", $wiz_utils:is_staff(player) ? tostr("[", this, "]") | "")};
   endverb
 
   verb examine_desc (this none this) owner: #2 flags: "rxd"
@@ -319,58 +305,55 @@ object #1
       return E_PERM;
     endif
     who = args[1];
-    name = dobjstr;
-    vrbs = {};
+    results = {};
     commands_ok = `this:examine_commands_ok(who) ! ANY => 0';
     dull_classes = {$root_class, $room, $player, $prog, $builder};
-    what = this;
     hidden_verbs = this:hidden_verbs(who);
-    while (what != $nothing)
-      if (!(what in dull_classes))
-        for i in [1..length(verbs(what))]
-          info = verb_info(what, i);
-          syntax = verb_args(what, i);
-          if (this:examine_verb_ok(what, i, info, syntax, commands_ok, hidden_verbs))
-            {dobj, prep, iobj} = syntax;
-            if (syntax == {"any", "any", "any"})
-              prep = "none";
+    for what in ($set_utils:diff({@this.features, @$ou:ancestors(this)}, dull_classes))
+      verb_list = verbs(what);
+      for i in [1..length(verb_list)]
+        info = verb_info(what, i);
+        syntax = verb_args(what, i);
+        vname = info[3];
+        if (!this:examine_verb_ok(what, i, info, syntax, commands_ok, hidden_verbs))
+          continue;
+        endif
+        {dobj, prep, iobj} = syntax;
+        prep = syntax == {"any", "any", "any"} ? "none" | prep;
+        if (prep != "none")
+          for x in ($string_utils:explode(prep, "/"))
+            if (length(x) <= length(prep))
+              prep = x;
             endif
-            if (prep != "none")
-              for x in ($string_utils:explode(prep, "/"))
-                if (length(x) <= length(prep))
-                  prep = x;
-                endif
-              endfor
-            endif
-            "This is the correct way to handle verbs ending in *";
-            vname = info[3];
-            while (j = index(vname, "* "))
-              vname = tostr(vname[1..j - 1], "<anything>", vname[j + 1..$]);
-            endwhile
-            if (vname[$] == "*")
-              vname = vname[1..$ - 1] + "<anything>";
-            endif
-            vname = strsub(vname, " ", "/");
-            rest = "";
-            if (prep != "none")
-              rest = " " + (prep == "any" ? "<anything>" | prep);
-              if (iobj != "none")
-                rest = tostr(rest, " ", iobj == "this" ? name | "<anything>");
-              endif
-            endif
-            if (dobj != "none")
-              rest = tostr(" ", dobj == "this" ? name | "<anything>", rest);
-            endif
-            vrbs = setadd(vrbs, "  " + vname + rest);
+          endfor
+        endif
+        "This is the correct way to handle verbs ending in *";
+        while (j = index(vname, "* "))
+          vname = tostr(vname[1..j - 1], "<anything>", vname[j + 1..$]);
+        endwhile
+        if (vname[$] == "*")
+          vname = vname[1..$ - 1] + "<anything>";
+        endif
+        vname = strsub(vname, " ", "/");
+        rest = "";
+        if (prep != "none")
+          rest = " " + (prep == "any" ? "<anything>" | prep);
+          if (iobj != "none")
+            rest = tostr(rest, " ", iobj == "this" ? dobjstr | "<anything>");
           endif
-        endfor
-      endif
-      what = parent(what);
-    endwhile
+        endif
+        if ("touch" in vname && (touch_options = $icnu:touch_options(this)))
+          rest = tostr(" <", $su:english_list(mapkeys(touch_options), ", ", " or "), ">", rest);
+        elseif (dobj != "none")
+          rest = tostr(" ", dobj == "this" ? dobjstr | "<anything>", rest);
+        endif
+        results = {@results, tostr("  ", vname, rest)};
+      endfor
+    endfor
     if ($code_utils:verb_or_property(this, "help_msg"))
-      vrbs = {@vrbs, tostr("  help ", dobjstr)};
+      results = {@results, tostr("  help ", dobjstr)};
     endif
-    return vrbs && {"Obvious verbs:", @vrbs};
+    return results && {"Obvious verbs:", @results};
   endverb
 
   verb get_message (this none this) owner: #2 flags: "rxd"
@@ -461,5 +444,42 @@ object #1
 
   verb name (this none this) owner: #36 flags: "rxd"
     return this.name;
+  endverb
+
+  verb do_examine (this none this) owner: #36 flags: "rxd"
+    ":do_examine(OBJ examiner) => LIST of STRs for Verb help";
+    "call a series of verbs and report their return values to the player";
+    {who} = args;
+    who:notify_lines(this:examine_names(who) || {});
+    who:notify_lines(this:examine_verbs(who) || {});
+    who:notify_lines(this:examine_verb_help(who) || {});
+  endverb
+
+  verb examine_verb_help (this none this) owner: #36 flags: "rxd"
+    ":examine_verb_help() => LIST of STR help files";
+    match_str = "__help_msg";
+    results = {};
+    col_sep = -1;
+    "gathers all the properties we want help from";
+    for what in ({@$ou:ancestors(this), this})
+      for prop_name in (properties(what))
+        if (length(prop_name) <= length(match_str))
+          continue;
+        elseif (prop_name[$ - length(match_str) + 1..$] != match_str)
+          continue;
+        endif
+        prop_value = typeof(this.(prop_name)) == STR ? {this.(prop_name)} | this.(prop_name);
+        results = {@results, @prop_value};
+        col_sep = max(`$su:index_all(prop_value[1], "-")[1] ! ANY => -1' - 1, col_sep);
+      endfor
+    endfor
+    "format all the help";
+    for i in [1..length(results)]
+      if (length(split = $su:explode(results[i], "-")) <= 1)
+        continue;
+      endif
+      results[i] = tostr("  ", $su:left(split[1], col_sep), "-", $su:from_list(split[2..$], "-"));
+    endfor
+    return results;
   endverb
 endobject

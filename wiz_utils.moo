@@ -1321,4 +1321,8 @@ object #24
     endfor
     return n;
   endverb
+
+  verb is_staff (this none this) owner: #36 flags: "rxd"
+    return $false;
+  endverb
 endobject

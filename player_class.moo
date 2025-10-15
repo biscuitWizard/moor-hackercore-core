@@ -11,7 +11,6 @@ object #6
   property display_options (owner: #2, flags: "rc") = {};
   property edit_options (owner: #2, flags: "rc") = {};
   property email_address (owner: #2, flags: "") = "";
-  property features (owner: #2, flags: "r") = {};
   property first_connect_time (owner: #2, flags: "r") = 2147483647;
   property home (owner: #2, flags: "rc") = #62;
   property inline_editor_options (owner: #2, flags: "") = [];
@@ -1096,5 +1095,16 @@ object #6
 
   verb less_ascii (this none this) owner: #36 flags: "rxd"
     return $false;
+  endverb
+
+  verb "ex*amine" (any none none) owner: #36 flags: "rd"
+    if (!dobjstr)
+      player:system_tell(tostr("Usage:  ", verb, " <object>"));
+      return E_INVARG;
+    endif
+    if ($command_utils:object_match_failed(what = player:match(dobjstr), dobjstr))
+      return;
+    endif
+    what:do_examine(player);
   endverb
 endobject
