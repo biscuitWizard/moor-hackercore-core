@@ -17,7 +17,7 @@ object #2
   override last_connect_time = 1756637255;
   override last_disconnect_time = 1756637231;
   override last_password_time = 1760233523;
-  override password = "$argon2id$v=19$m=4096,t=3,p=1$Z1BxRDkrYVdWSm14WDdPOUxpSmpCZw$yhpN8wwCKhrO6DtFUqaItV5PRqygZdvY9fDzdDNP66w";
+  override password = 0;
   override password_version = 2;
   override previous_connection = {1755930095, "192.168.1.102"};
   override size_quota = {50000, 1152283, 1721212110, 1000};
