@@ -17,7 +17,7 @@ object #60
     endfor
     stats = [];
     for dude in (connected_players())
-      dude_name = is_wiz ? dude:name(viewer) | dude:bgbb_name();
+      dude_name = is_wiz ? dude:name(viewer) | `dude:bgbb_name() ! ANY => dude:name()';
       if (!is_wiz && dude:player_option("who_invis"))
         stats["invis"] = `stats["invis"] ! E_RANGE => 0' + 1;
         dude_name = "-- INVIS --";
