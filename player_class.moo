@@ -1098,8 +1098,7 @@ object #6
 
   verb "ex*amine" (any none none) owner: #36 flags: "rxd"
     if (!dobjstr)
-      player:system_tell(tostr("Usage:  ", verb, " <object>"));
-      return E_INVARG;
+      return player:system_tell(tostr("Usage:  ", verb, " <object>"));
     endif
     if ($command_utils:object_match_failed(what = player:match(dobjstr), dobjstr))
       return;
