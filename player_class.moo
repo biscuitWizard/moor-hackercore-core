@@ -158,14 +158,13 @@ object #6
   endverb
 
   verb notify_lines (this none this) owner: #2 flags: "rxd"
-    if ($perm_utils:controls(caller_perms(), this) || caller == this || caller_perms() == this)
-      set_task_perms(caller_perms());
-      for line in (typeof(lines = args[1]) != LIST ? {lines} | lines)
-        this:notify(tostr(line));
-      endfor
-    else
-      return E_PERM;
+    if (!$perm_utils:controls(caller_perms(), this) && caller != this && caller_perms() != this)
+      raise(E_PERM, tostr(caller_perms(), " has insufficient permissions to execute ", this, ":", verb, "."));
     endif
+    set_task_perms(caller_perms());
+    for line in (typeof(lines = args[1]) != LIST ? {lines} | lines)
+      this:notify(tostr(line));
+    endfor
   endverb
 
   verb page (any any any) owner: #2 flags: "rxd"
@@ -1097,7 +1096,7 @@ object #6
     return $false;
   endverb
 
-  verb "ex*amine" (any none none) owner: #36 flags: "rd"
+  verb "ex*amine" (any none none) owner: #36 flags: "rxd"
     if (!dobjstr)
       player:system_tell(tostr("Usage:  ", verb, " <object>"));
       return E_INVARG;
