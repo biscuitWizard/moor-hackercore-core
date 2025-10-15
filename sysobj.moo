@@ -136,6 +136,7 @@ object #0
   property recycling_pool (owner: #2, flags: "r") = #48;
   property room (owner: #2, flags: "r") = #3;
   property root_class (owner: #2, flags: "r") = #1;
+  property scheduler (owner: #36, flags: "r") = #50;
   property seq_utils (owner: #2, flags: "r") = #33;
   property server (owner: #2, flags: "r") = [
     "core_history" -> {
@@ -143,7 +144,7 @@ object #0
       {"ToastCore", "2.7.1", 1713940026},
       {"a 2018 LambdaCore", "2.6.0", 1576791887}
     },
-    "last_restart_time" -> 1760349043,
+    "last_restart_time" -> 1760442474,
     "name" -> "HackerCore-mooR",
     "shutdown_time" -> 0
   ];
