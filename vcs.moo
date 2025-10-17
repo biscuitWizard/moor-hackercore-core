@@ -245,7 +245,10 @@ object #9
 
   verb get_object (this none this) owner: #2 flags: "rxd"
     {object} = args;
-    result = worker_request("vcs", {"get_object", object});
+    if (typeof(object) == OBJ)
+      object = this:get_object_name(object);
+    endif
+    result = worker_request("vcs", {"object/get", object});
     if (typeof(result) == ERR)
       raise(result, error_message(result));
     endif

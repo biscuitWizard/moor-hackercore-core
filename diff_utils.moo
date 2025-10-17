@@ -76,10 +76,9 @@ object #96
 
   verb _hash_lines (this none this) owner: #36 flags: "rxd"
     {lines, ?intern = []} = args;
-    algo = this.default_hash_algo;
     result = {};
     for line in (lines)
-      hash = string_hash(line, algo);
+      hash = string_hash(line);
       hash = `intern[hash] ! E_RANGE => intern[hash] = hash';
       result = {@result, {line, hash}};
     endfor
@@ -103,7 +102,7 @@ object #96
         stacks = {@stacks, {{item, last}}};
       endif
     endfor
-    stacks = reverse(stacks);
+    stacks = $lu:reverse(stacks);
     i = stacks && length(stacks[1]);
     results = {};
     for stack in (stacks)
@@ -117,10 +116,10 @@ object #96
   verb diff (this none this) owner: #36 flags: "rxd"
     {lines1, lines2} = args;
     intern = [];
-    {lines1, intern} = this:_hash_lines(lines1, intern);
-    {lines2, intern} = this:_hash_lines(lines2, intern);
-    lcs = this:_find_lcs(this:_find_common_unique_lines(lines1, lines2, intern));
-    return this:_generate_diff(lines1, lines2, lcs);
+    {hashed1, intern} = this:_hash_lines(lines1, intern);
+    {hashed2, intern} = this:_hash_lines(lines2, intern);
+    lcs = this:_find_lcs(this:_find_common_unique_lines(hashed1, hashed2, intern));
+    return this:_generate_diff(hashed1, hashed2, lcs);
   endverb
 
   verb diff_display (this none this) owner: #36 flags: "rxd"
@@ -129,40 +128,60 @@ object #96
     "it is primarily designed to diff an existing verb against proposed changes";
     "the diff_1_lines are considered the primary, and the diff_2_lines are the dirty lines";
     {diff_1_name, diff_1_lines, diff_2_name, diff_2_lines} = args;
-    player:tell("--- ", diff_1_name);
-    player:tell("+++ ", diff_2_name, " (dirty)");
     diffs = this:diff(diff_1_lines, diff_2_lines);
+    if (!diffs)
+      player:tell("Files ", diff_1_name, " and ", diff_2_name, " are identical");
+      return;
+    endif
     for diff in (diffs)
-      pos1 = diff[2];
-      pos2 = diff[3];
-      if (diff[1] == "r")
-        df1 = diff[4];
-        ln1 = length(df1);
-        df2 = diff[5];
-        ln2 = length(df2);
-      elseif (diff[1] == "+")
-        df1 = {};
-        ln1 = 0;
-        df2 = diff[4];
-        ln2 = length(df2);
-      elseif (diff[1] = "-")
-        df1 = diff[4];
-        ln1 = length(df1);
-        df2 = {};
-        ln2 = 0;
+      type = diff[1];
+      if (type == "a")
+        " Add: lines added to file2 ";
+        pos1 = diff[2];
+        pos2_start = diff[3];
+        pos2_end = diff[4];
+        lines2 = diff[5];
+        if (pos2_start == pos2_end)
+          player:tell(tostr(pos1, "a", pos2_start));
+        else
+          player:tell(tostr(pos1, "a", pos2_start, ",", pos2_end));
+        endif
+        for l in (lines2)
+          player:tell(tostr("> ", l));
+        endfor
+      elseif (type == "d")
+        " Delete: lines deleted from file1 ";
+        pos1_start = diff[2];
+        pos1_end = diff[3];
+        pos2 = diff[4];
+        lines1 = diff[5];
+        if (pos1_start == pos1_end)
+          player:tell(tostr(pos1_start, "d", pos2));
+        else
+          player:tell(tostr(pos1_start, ",", pos1_end, "d", pos2));
+        endif
+        for l in (lines1)
+          player:tell(tostr("< ", l));
+        endfor
+      elseif (type == "c")
+        " Change: lines changed between file1 and file2 ";
+        pos1_start = diff[2];
+        pos1_end = diff[3];
+        pos2_start = diff[4];
+        pos2_end = diff[5];
+        lines1 = diff[6];
+        lines2 = diff[7];
+        range1 = pos1_start == pos1_end ? tostr(pos1_start) | tostr(pos1_start, ",", pos1_end);
+        range2 = pos2_start == pos2_end ? tostr(pos2_start) | tostr(pos2_start, ",", pos2_end);
+        player:tell(tostr(range1, "c", range2));
+        for l in (lines1)
+          player:tell(tostr("< ", l));
+        endfor
+        player:tell("---");
+        for l in (lines2)
+          player:tell(tostr("> ", l));
+        endfor
       endif
-      before = pos1 > 1 ? tostr(" ", diff_1_lines[pos1 - 1]) | 0;
-      after = pos1 + ln1 - 1 < length(diff_1_lines) ? tostr(" ", diff_1_lines[pos1 + ln1]) | 0;
-      player:tell("", "@@ -", pos1, ",", ln1, " +", pos2, ",", ln2, " @@");
-      before && player:notify(before);
-      for l in (df1)
-        player:tell($ansi:red(tostr("-", l)));
-      endfor
-      for l in (df2)
-        player:tell($ansi:green(tostr("+", l)));
-      endfor
-      after && player:tell(after);
     endfor
-    player:tell("(done)");
   endverb
 endobject
