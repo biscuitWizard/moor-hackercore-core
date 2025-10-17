@@ -460,4 +460,7 @@ object #9
       `recycle(deleted_obj) ! ANY';
     endfor
   endverb
+
+  verb test (this none this) owner: #36 flags: "rxd"
+  endverb
 endobject
