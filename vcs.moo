@@ -324,7 +324,8 @@ object #9
     endif
     result = this:submit(argstr);
     if (result && !result["changes"])
-      return player:tell("Changes have been submitted successfully.");
+      player:tell("Changes have been submitted successfully.");
+      $broadcast:staff_alerts($su:nn(player), " has submitted changes to VCS with comment: ", argstr);
     endif
   endverb
 
