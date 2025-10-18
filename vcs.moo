@@ -456,11 +456,8 @@ object #9
       endfor
       this:apply_change_diff(obj_id, change, dump);
     endfor
-    for deleted_obj in (change["objects_deleted"])
+    for deleted_obj in (diff["objects_deleted"])
       `recycle(deleted_obj) ! ANY';
     endfor
-  endverb
-
-  verb test (this none this) owner: #36 flags: "rxd"
   endverb
 endobject
