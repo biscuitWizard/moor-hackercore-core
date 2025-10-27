@@ -1,11 +1,11 @@
-object #35
+object YOU
   name: "You"
-  parent: #94
-  owner: #36
+  parent: GENDERED_OBJECT
+  owner: HACKER
   readable: true
 
-  property conjugations (owner: #36, flags: "r") = {{"is", "are"}, {"was", "were"}, {"does", "do"}, {"has", "have"}};
-  property help_msg (owner: #36, flags: "rc") = {
+  property conjugations (owner: HACKER, flags: "r") = {{"is", "are"}, {"was", "were"}, {"does", "do"}, {"has", "have"}};
+  property help_msg (owner: HACKER, flags: "rc") = {
     "This object is useful for announcing messages that switch between third and second person when addressed to the appropriate parties in a room.",
     "",
     "Verbs:",
@@ -40,7 +40,7 @@ object #35
   override ps = "you";
   override psc = "You";
 
-  verb verb_sub (this none this) owner: #36 flags: "rxd"
+  verb verb_sub (this none this) owner: HACKER flags: "rxd"
     "$you:verb_sub(STR verbspec) -> returns verbspec conjugated for singular use as if `you' were saying it.";
     return $gender_utils:get_conj(args[1], this);
     x = args[1];
@@ -61,7 +61,7 @@ object #35
     return x;
   endverb
 
-  verb say_action (this none this) owner: #36 flags: "rx"
+  verb say_action (this none this) owner: HACKER flags: "rx"
     "$you:say_action(message [,who [,thing, [,where [, excluding-whom]]]])";
     "announce 'message' with pronoun substitution as if it were just ";
     "  where:announce_all_but(excluding-whom, ";
@@ -101,7 +101,7 @@ object #35
     endif
   endverb
 
-  verb fixpos (this none this) owner: #36 flags: "rxd"
+  verb fixpos (this none this) owner: HACKER flags: "rxd"
     "This is horribly dwimmy.  E.g. %x's gets turned into your, %X's gets turned into Your, and %X'S gets turned into YOUR. --Nosredna";
     upper = $string_utils:uppercase(args[2]);
     allupper = upper + "'S";
@@ -110,7 +110,7 @@ object #35
     return strsub(strsub(strsub(args[1], lower, "your", 1), upper, "Your", 1), allupper, "YOUR", 1);
   endverb
 
-  verb reflexive (this none this) owner: #36 flags: "rxd"
+  verb reflexive (this none this) owner: HACKER flags: "rxd"
     "Copied from you (#67923):reflexive [verb author Blob (#21528)] at Wed Jul 13 05:09:32 2005 PDT";
     ":reflexive(msg, %[di])";
     "Make a message reflexive by replacing %d or %i with %r.";

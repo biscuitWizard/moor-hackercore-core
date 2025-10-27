@@ -1,18 +1,18 @@
-object #68
+object GENERIC_OPTIONS
   name: "Generic Option Package"
-  parent: #1
-  owner: #36
+  parent: ROOT_CLASS
+  owner: HACKER
   readable: true
 
-  property _namelist (owner: #36, flags: "r") = "!";
-  property extras (owner: #36, flags: "r") = {};
-  property names (owner: #36, flags: "r") = {};
-  property namewidth (owner: #36, flags: "rc") = 25;
+  property _namelist (owner: HACKER, flags: "r") = "!";
+  property extras (owner: HACKER, flags: "r") = {};
+  property names (owner: HACKER, flags: "r") = {};
+  property namewidth (owner: HACKER, flags: "rc") = 25;
 
   override aliases = {"Generic Option Package"};
   override description = "an option package in need of a description.  See `help $generic_option'...";
 
-  verb get (this none this) owner: #36 flags: "rxd"
+  verb get (this none this) owner: HACKER flags: "rxd"
     ":get(options,name) => returns the value of the option specified by name";
     "i.e., if {name,value} is present in options, return value";
     "      if name is present, return 1";
@@ -27,7 +27,7 @@ object #68
     endif
   endverb
 
-  verb set (this none this) owner: #36 flags: "rxd"
+  verb set (this none this) owner: HACKER flags: "rxd"
     ":set(optionlist,oname,value) => revised optionlist or string error message.";
     "oname must be the full name of an option in .names or .extras.";
     "Note that values must not be of type ERR.  ";
@@ -102,7 +102,7 @@ object #68
     return options;
   endverb
 
-  verb parse (this none this) owner: #36 flags: "rxd"
+  verb parse (this none this) owner: HACKER flags: "rxd"
     ":parse(args[,...]) => {oname [,value]} or string error message";
     "additional arguments are fed straight through to :parse_* routines.";
     " <option> <value>     => {option, value}";
@@ -166,7 +166,7 @@ object #68
     endif
   endverb
 
-  verb _name (this none this) owner: #36 flags: "rxd"
+  verb _name (this none this) owner: HACKER flags: "rxd"
     ":_name(string) => full option name corresponding to string ";
     "               => $failed_match or $ambiguous_match as appropriate.";
     if ((string = args[1]) in this.names || string in this.extras)
@@ -183,7 +183,7 @@ object #68
     endif
   endverb
 
-  verb add_name (this none this) owner: #36 flags: "rxd"
+  verb add_name (this none this) owner: HACKER flags: "rxd"
     ":add_name(name[,isextra]) adds name to the list of options recognized.";
     "name must be a nonempty string and must not contain spaces, -, +, !, or =.";
     "isextra true means that name isn't an actual option (recognized by :get) but merely a name that the option setting command should recognize to set a particular combination of options.  Actual options go in .names; others go in .extras";
@@ -224,7 +224,7 @@ object #68
     endif
   endverb
 
-  verb remove_name (this none this) owner: #36 flags: "rxd"
+  verb remove_name (this none this) owner: HACKER flags: "rxd"
     ":remove_name(name) removes name from the list of options recognized.";
     if (!$perm_utils:controls(caller_perms(), this))
       return E_PERM;
@@ -240,7 +240,7 @@ object #68
     endif
   endverb
 
-  verb show (this none this) owner: #36 flags: "rxd"
+  verb show (this none this) owner: HACKER flags: "rxd"
     ":show(options,name or list of names)";
     " => text describing current value of option and what it means";
     name = args[2];
@@ -293,7 +293,7 @@ object #68
     return show;
   endverb
 
-  verb actual (this none this) owner: #36 flags: "rxd"
+  verb actual (this none this) owner: HACKER flags: "rxd"
     ":actual(<name>,<value>) => list of {<name>,<value>} pairs or string errormsg";
     " corresponding to what setting option <name> to <value> actually means";
     " e.g., :actual(\"unfoo\",1) => {{\"foo\",0}}";
@@ -301,7 +301,7 @@ object #68
     return "Not implemented.";
   endverb
 
-  verb istype (this none this) owner: #36 flags: "rxd"
+  verb istype (this none this) owner: HACKER flags: "rxd"
     ":istype(value,types) => whether value is one of the given types";
     if ((vtype = typeof(value = args[1])) in (types = args[2]))
       return 1;
@@ -317,7 +317,7 @@ object #68
     return 0;
   endverb
 
-  verb islistof (this none this) owner: #36 flags: "rxd"
+  verb islistof (this none this) owner: HACKER flags: "rxd"
     ":islistof(value,types) => whether value (a list) has each element being one of the given types";
     types = args[2];
     for v in (value = args[1])
@@ -328,7 +328,7 @@ object #68
     return 1;
   endverb
 
-  verb desc_type (this none this) owner: #36 flags: "rxd"
+  verb desc_type (this none this) owner: HACKER flags: "rxd"
     ":desc_type(types) => string description of types";
     nlist = {};
     for t in (types = args[1])
@@ -347,7 +347,7 @@ object #68
     return $string_utils:english_list(nlist, "nothing", " or ");
   endverb
 
-  verb parsechoice (this none this) owner: #36 flags: "rxd"
+  verb parsechoice (this none this) owner: HACKER flags: "rxd"
     ":parsechoice(oname,rawval,assoclist)";
     which = {};
     oname = args[1];

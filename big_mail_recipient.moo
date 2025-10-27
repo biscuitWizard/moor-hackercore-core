@@ -1,13 +1,13 @@
-object #14
+object BIG_MAIL_RECIPIENT
   name: "Generic Large-Capacity Mail Recipient"
   parent: #45
-  owner: #36
+  owner: HACKER
   readable: true
 
-  property _genprop (owner: #36, flags: "r") = "";
-  property _mgr (owner: #36, flags: "rc") = #13;
-  property mowner (owner: #36, flags: "r") = #36;
-  property summary_uses_body (owner: #36, flags: "rc") = 0;
+  property _genprop (owner: HACKER, flags: "r") = "";
+  property _mgr (owner: HACKER, flags: "rc") = BIGLIST;
+  property mowner (owner: HACKER, flags: "r") = HACKER;
+  property summary_uses_body (owner: HACKER, flags: "rc") = 0;
 
   override aliases = {"Generic Large-Capacity Mail Recipient"};
   override description = {
@@ -54,7 +54,7 @@ object #14
     "Calling #OBJ:restore_from(...) COMPLETELY AND IRREVOCABLY REMOVES ALL MESSAGES from the object that it is run on (#OBJ); you MUST be sure to EITHER have made a copy of #OBJ OR be doing the restore to a DIFFERENT object."
   };
 
-  verb _genprop (this none this) owner: #36 flags: "rxd"
+  verb _genprop (this none this) owner: HACKER flags: "rxd"
     gp = this._genprop;
     ngp = "";
     for i in [1..length(gp)]
@@ -85,19 +85,19 @@ object #14
     `delete_property(this, args[1]) ! ANY';
   endverb
 
-  verb _get (this none this) owner: #36 flags: "rxd"
+  verb _get (this none this) owner: HACKER flags: "rxd"
     return caller == this._mgr ? `this.((args[1])) ! ANY' | E_PERM;
   endverb
 
-  verb _put (this none this) owner: #36 flags: "rxd"
+  verb _put (this none this) owner: HACKER flags: "rxd"
     return caller == this._mgr ? this.((args[1])) = listdelete(args, 1) | E_PERM;
   endverb
 
-  verb _ord (this none this) owner: #36 flags: "rxd"
+  verb _ord (this none this) owner: HACKER flags: "rxd"
     return (args[1])[2..3];
   endverb
 
-  verb _makemsg (this none this) owner: #36 flags: "rxd"
+  verb _makemsg (this none this) owner: HACKER flags: "rxd"
     ":_makemsg(ord,msg) => leafnode for msg";
     "msg = $mail_agent:__convert_new(@args[2])";
     msg = args[2];
@@ -110,7 +110,7 @@ object #14
     endif
   endverb
 
-  verb _killmsg (this none this) owner: #36 flags: "rxd"
+  verb _killmsg (this none this) owner: HACKER flags: "rxd"
     if (caller != this._mgr)
       return E_PERM;
     elseif (node = args[1][1])
@@ -118,19 +118,19 @@ object #14
     endif
   endverb
 
-  verb _message_num (this none this) owner: #36 flags: "rxd"
+  verb _message_num (this none this) owner: HACKER flags: "rxd"
     return args[2];
   endverb
 
-  verb _message_date (this none this) owner: #36 flags: "rxd"
+  verb _message_date (this none this) owner: HACKER flags: "rxd"
     return args[3];
   endverb
 
-  verb _message_hdr (this none this) owner: #36 flags: "rxd"
+  verb _message_hdr (this none this) owner: HACKER flags: "rxd"
     return args[3..$];
   endverb
 
-  verb _message_text (this none this) owner: #36 flags: "rxd"
+  verb _message_text (this none this) owner: HACKER flags: "rxd"
     if (caller == this || this:is_readable_by(caller_perms()))
       "perms check added HTC 16 Feb 1999";
       return {@args[3..$], @args[1] ? {"", @this.((args[1]))} | {}};
@@ -139,15 +139,15 @@ object #14
     endif
   endverb
 
-  verb _lt_msgnum (this none this) owner: #36 flags: "rxd"
+  verb _lt_msgnum (this none this) owner: HACKER flags: "rxd"
     return args[1] < args[2][1];
   endverb
 
-  verb _lt_msgdate (this none this) owner: #36 flags: "rxd"
+  verb _lt_msgdate (this none this) owner: HACKER flags: "rxd"
     return args[1] < args[2][2];
   endverb
 
-  verb receive_batch (this none this) owner: #36 flags: "rxd"
+  verb receive_batch (this none this) owner: HACKER flags: "rxd"
     if (!this:is_writable_by(caller_perms()))
       return E_PERM;
     else
@@ -163,7 +163,7 @@ object #14
     endif
   endverb
 
-  verb receive_message (this none this) owner: #36 flags: "rxd"
+  verb receive_message (this none this) owner: HACKER flags: "rxd"
     if (!this:is_writable_by(caller_perms()))
       return E_PERM;
     else
@@ -174,7 +174,7 @@ object #14
     endif
   endverb
 
-  verb messages_in_seq (this none this) owner: #36 flags: "rxd"
+  verb messages_in_seq (this none this) owner: HACKER flags: "rxd"
     if (!this:ok(caller, caller_perms()))
       return E_PERM;
     elseif (typeof(seq = args[1]) != LIST)
@@ -196,7 +196,7 @@ object #14
     endif
   endverb
 
-  verb display_seq_headers (this none this) owner: #36 flags: "rxd"
+  verb display_seq_headers (this none this) owner: HACKER flags: "rxd"
     ":display_seq_headers(msg_seq[,cur[,last_read_date]])";
     "This is the default header display routine.";
     "Prints a list of headers of messages on this to player.  msg_seq is the handle returned by this:parse_message_seq(...).  cur is the player's current message.  last_read_date is the date of the last of the already-read messages.";
@@ -227,7 +227,7 @@ object #14
     player:tell("-----+");
   endverb
 
-  verb display_seq_full (this none this) owner: #36 flags: "rxd"
+  verb display_seq_full (this none this) owner: HACKER flags: "rxd"
     ":display_seq_full(msg_seq[,preamble]) => {cur}";
     "This is the default message display routine.";
     "Prints the indicated messages on folder to player.  msg_seq is the handle returned by folder:parse_message_seq(...).  Returns the number of the final message in the sequence (to be the new current message number).";
@@ -251,7 +251,7 @@ object #14
     return {cur, date};
   endverb
 
-  verb list_rmm (this none this) owner: #36 flags: "rxd"
+  verb list_rmm (this none this) owner: HACKER flags: "rxd"
     if (!this:ok(caller, caller_perms()))
       return E_PERM;
     endif
@@ -288,7 +288,7 @@ object #14
     return len;
   endverb
 
-  verb undo_rmm (this none this) owner: #36 flags: "rxd"
+  verb undo_rmm (this none this) owner: HACKER flags: "rxd"
     if (!this:ok_write(caller, caller_perms()))
       return E_PERM;
     endif
@@ -316,7 +316,7 @@ object #14
     return seq;
   endverb
 
-  verb expunge_rmm (this none this) owner: #36 flags: "rxd"
+  verb expunge_rmm (this none this) owner: HACKER flags: "rxd"
     if (!this:ok_write(caller, caller_perms()))
       return E_PERM;
     endif
@@ -333,7 +333,7 @@ object #14
     return len;
   endverb
 
-  verb rm_message_seq (this none this) owner: #36 flags: "rxd"
+  verb rm_message_seq (this none this) owner: HACKER flags: "rxd"
     seq = args[1];
     if (!(this:ok_write(caller, caller_perms()) || (this:ok(caller, caller_perms()) && (seq = this:own_messages_filter(caller_perms(), @args)))))
       return E_PERM;
@@ -365,7 +365,7 @@ object #14
     return $seq_utils:tostr(nums);
   endverb
 
-  verb renumber (this none this) owner: #36 flags: "rxd"
+  verb renumber (this none this) owner: HACKER flags: "rxd"
     ":renumber([cur]) renumbers caller.messages, doing a suspend() if necessary.";
     "  => {number of messages,new cur}.";
     if (!this:ok_write(caller, caller_perms()))
@@ -425,23 +425,23 @@ object #14
     endwhile
   endverb
 
-  verb length_all_msgs (this none this) owner: #36 flags: "rxd"
+  verb length_all_msgs (this none this) owner: HACKER flags: "rxd"
     return this:ok(caller, caller_perms()) ? this.messages ? this.messages[2] | 0 | E_PERM;
   endverb
 
-  verb length_num_le (this none this) owner: #36 flags: "rxd"
+  verb length_num_le (this none this) owner: HACKER flags: "rxd"
     return this:ok(caller, caller_perms()) ? this._mgr:find_ord(this.messages, args[1], "_lt_msgnum") | E_PERM;
   endverb
 
-  verb length_date_le (this none this) owner: #36 flags: "rxd"
+  verb length_date_le (this none this) owner: HACKER flags: "rxd"
     return this:ok(caller, caller_perms()) ? this._mgr:find_ord(this.messages, args[1], "_lt_msgdate") | E_PERM;
   endverb
 
-  verb exists_num_eq (this none this) owner: #36 flags: "rxd"
+  verb exists_num_eq (this none this) owner: HACKER flags: "rxd"
     return this:ok(caller, caller_perms()) ? (i = this._mgr:find_ord(this.messages, args[1], "_lt_msgnum")) && (this:_message_num(@this._mgr:find_nth(this.messages, i)) == args[1] && i) | E_PERM;
   endverb
 
-  verb new_message_num (this none this) owner: #36 flags: "rxd"
+  verb new_message_num (this none this) owner: HACKER flags: "rxd"
     if (this:ok(caller, caller_perms()))
       new = (msgtree = this.messages) ? this:_message_num(@this._mgr:find_nth(msgtree, msgtree[2])) + 1 | 1;
       if (rmsgs = this.messages_going)
@@ -455,7 +455,7 @@ object #14
     endif
   endverb
 
-  verb from_msg_seq (this none this) owner: #36 flags: "rxd"
+  verb from_msg_seq (this none this) owner: HACKER flags: "rxd"
     ":from_msg_seq(object or list)";
     " => msg_seq of messages from any of these senders";
     if (!this:ok(caller, caller_perms()))
@@ -486,7 +486,7 @@ object #14
     return fseq || "%f %<has> no messages from " + $string_utils:english_list($list_utils:map_arg(2, $string_utils, "pronoun_sub", "%n (%#)", plist), "no one", " or ");
   endverb
 
-  verb "%from_msg_seq" (this none this) owner: #36 flags: "rxd"
+  verb "%from_msg_seq" (this none this) owner: HACKER flags: "rxd"
     ":%from_msg_seq(string or list of strings)";
     " => msg_seq of messages with one of these strings in the from line";
     if (!this:ok(caller, caller_perms()))
@@ -517,7 +517,7 @@ object #14
     return fseq || "%f %<has> no messages from " + $string_utils:english_list($list_utils:map_arg($string_utils, "print", nlist), "no one", " or ");
   endverb
 
-  verb to_msg_seq (this none this) owner: #36 flags: "rxd"
+  verb to_msg_seq (this none this) owner: HACKER flags: "rxd"
     ":to_msg_seq(object or list) => msg_seq of messages to those people";
     if (!this:ok(caller, caller_perms()))
       return E_PERM;
@@ -547,7 +547,7 @@ object #14
     return seq || "%f %<has> no messages to " + $string_utils:english_list($list_utils:map_arg(2, $string_utils, "pronoun_sub", "%n (%#)", plist), "no one", " or ");
   endverb
 
-  verb "%to_msg_seq" (this none this) owner: #36 flags: "rxd"
+  verb "%to_msg_seq" (this none this) owner: HACKER flags: "rxd"
     ":%to_msg_seq(string or list of strings)";
     " => msg_seq of messages containing one of strings in the to line";
     if (!this:ok(caller, caller_perms()))
@@ -578,7 +578,7 @@ object #14
     return seq || "%f %<has> no messages to " + $string_utils:english_list($list_utils:map_arg($string_utils, "print", nlist), "no one", " or ");
   endverb
 
-  verb subject_msg_seq (this none this) owner: #36 flags: "rxd"
+  verb subject_msg_seq (this none this) owner: HACKER flags: "rxd"
     ":subject_msg_seq(target) => msg_seq of messages with target in the Subject:";
     if (!this:ok(caller, caller_perms()))
       return E_PERM;
@@ -602,7 +602,7 @@ object #14
     return seq || "%f %<has> no messages with subjects containing `" + target + "'";
   endverb
 
-  verb body_msg_seq (this none this) owner: #36 flags: "rxd"
+  verb body_msg_seq (this none this) owner: HACKER flags: "rxd"
     ":body_msg_seq(target) => msg_seq of messages with target in the body";
     if (!this:ok(caller, caller_perms()))
       return E_PERM;
@@ -626,16 +626,16 @@ object #14
     return seq || tostr("%f %<has> no messages containing `", target, "' in the body.");
   endverb
 
-  verb date_sort (this none this) owner: #36 flags: "rxd"
+  verb date_sort (this none this) owner: HACKER flags: "rxd"
     return E_VERBNF;
   endverb
 
-  verb _fix_last_msg_date (this none this) owner: #36 flags: "rxd"
+  verb _fix_last_msg_date (this none this) owner: HACKER flags: "rxd"
     msgtree = this.messages;
     this.last_msg_date = msgtree && this:_message_hdr(@this._mgr:find_nth(msgtree, msgtree[2]))[1] || 0;
   endverb
 
-  verb __fix (this none this) owner: #36 flags: "rxd"
+  verb __fix (this none this) owner: HACKER flags: "rxd"
     if (!this:ok_write(caller, caller_perms()))
       return E_PERM;
     endif
@@ -651,7 +651,7 @@ object #14
     return 1;
   endverb
 
-  verb length_date_gt (this none this) owner: #36 flags: "rxd"
+  verb length_date_gt (this none this) owner: HACKER flags: "rxd"
     if (this:ok(caller, caller_perms()))
       date = args[1];
       return this.last_msg_date <= date ? 0 | this.messages[2] - this._mgr:find_ord(this.messages, args[1], "_lt_msgdate");
@@ -893,7 +893,7 @@ object #14
     endif
   endverb
 
-  verb set_message_body_by_index (this none this) owner: #36 flags: "rxd"
+  verb set_message_body_by_index (this none this) owner: HACKER flags: "rxd"
     {i, body} = args;
     if (!this:ok_write(caller, caller_perms()))
       "... maybe someday let people edit messages they've sent?";

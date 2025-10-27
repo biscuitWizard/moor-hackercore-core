@@ -1,9 +1,9 @@
-object #60
+object WHO
   name: "WHO System"
-  parent: #78
-  owner: #36
+  parent: GENERIC_UTILS
+  owner: HACKER
 
-  verb return_detailed_lines (this none this) owner: #36 flags: "rxd"
+  verb return_detailed_lines (this none this) owner: HACKER flags: "rxd"
     {?viewer = player} = args;
     $login:update_top_players();
     is_wiz = $wiz_utils:is_admin(viewer);
@@ -40,7 +40,7 @@ object #60
     return lines;
   endverb
 
-  verb header (this none this) owner: #36 flags: "rxd"
+  verb header (this none this) owner: HACKER flags: "rxd"
     {?viewer = player} = args;
     filler = "=";
     if (viewer:less_ascii())
@@ -49,7 +49,7 @@ object #60
     return $ansi:cyan($su:space(2, filler), $su:left($ansi:brcyan("[ ", $ansi:white($network.MOO_name), " ]"), 37, filler), $su:right($ansi:brcyan("[ ", $ansi:white("@WHO"), " ]"), 37, filler), $su:space(2, filler));
   endverb
 
-  verb footer (this none this) owner: #36 flags: "rxd"
+  verb footer (this none this) owner: HACKER flags: "rxd"
     {?viewer = player} = args;
     if (viewer:less_ascii())
       return $su:space(78);

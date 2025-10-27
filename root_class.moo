@@ -1,16 +1,17 @@
-object #1
+object ROOT_CLASS
   name: "Root Class"
   owner: #2
   readable: true
 
   property aliases (owner: #2, flags: "rc") = {};
+  property creation_time (owner: HACKER, flags: "r") = 0;
   property description (owner: #2, flags: "rc") = "";
   property features (owner: #2, flags: "r") = {};
   property generic (owner: #2, flags: "r") = 1;
   property instance_id (owner: #2, flags: "r") = "#1:1758753626.650987";
   property key (owner: #2, flags: "c") = 0;
 
-  verb aliases (this none this) owner: #36 flags: "rxd"
+  verb aliases (this none this) owner: HACKER flags: "rxd"
     return this.aliases;
   endverb
 
@@ -27,11 +28,8 @@ object #1
   endverb
 
   verb initialize (this none this) owner: #2 flags: "rxd"
-    if (caller == this || $perm_utils:controls(caller_perms(), this))
-      this.key = 0;
-    else
-      return E_PERM;
-    endif
+    caller != this || !$perm_utils:controls(caller_perms(), this) && raise(E_PERM);
+    this.creation_time = time();
   endverb
 
   verb recycle (this none this) owner: #2 flags: "rxd"
@@ -380,7 +378,7 @@ object #1
     endtry
   endverb
 
-  verb contents (this none this) owner: #36 flags: "rxd"
+  verb contents (this none this) owner: HACKER flags: "rxd"
     "Returns a list of the objects that are apparently inside this one.  Don't confuse this with .contents, which is a property kept consistent with .location by the server.  This verb should be used in `VR' situations, for instance when looking in a room, and does not necessarily have anything to do with the value of .contents (although the default implementation does).  `Non-VR' commands (like @contents) should look directly at .contents.";
     return this.contents;
   endverb
@@ -442,11 +440,11 @@ object #1
     "if you want to tell, before trying, whether :accept will fail, use :acceptable instead. Normally, they'll do the same thing.";
   endverb
 
-  verb name (this none this) owner: #36 flags: "rxd"
+  verb name (this none this) owner: HACKER flags: "rxd"
     return this.name;
   endverb
 
-  verb do_examine (this none this) owner: #36 flags: "rxd"
+  verb do_examine (this none this) owner: HACKER flags: "rxd"
     ":do_examine(OBJ examiner) => LIST of STRs for Verb help";
     "call a series of verbs and report their return values to the player";
     {who} = args;
@@ -455,7 +453,7 @@ object #1
     who:notify_lines(this:examine_verb_help(who) || {});
   endverb
 
-  verb examine_verb_help (this none this) owner: #36 flags: "rxd"
+  verb examine_verb_help (this none this) owner: HACKER flags: "rxd"
     ":examine_verb_help() => LIST of STR help files";
     match_str = "__help_msg";
     results = {};

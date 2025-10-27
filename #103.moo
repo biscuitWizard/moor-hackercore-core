@@ -1,6 +1,6 @@
 object #103
   name: "Generic Message Dispatch Object"
-  parent: #1
+  parent: ROOT_CLASS
   owner: #98
   readable: true
 

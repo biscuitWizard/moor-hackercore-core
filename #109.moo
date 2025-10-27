@@ -1,6 +1,6 @@
 object #109
   name: "MCP Package Registry"
-  parent: #1
+  parent: ROOT_CLASS
   owner: #98
   readable: true
 

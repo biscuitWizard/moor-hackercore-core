@@ -1,19 +1,19 @@
-object #43
+object TIME_UTILS
   name: "Time Utilities"
-  parent: #78
-  owner: #36
+  parent: GENERIC_UTILS
+  owner: HACKER
   readable: true
 
-  property corr (owner: #36, flags: "rc") = -122;
-  property ct (owner: #36, flags: "rc") = 7934;
-  property ctcd (owner: #36, flags: "rc") = 7276;
-  property day (owner: #36, flags: "rc") = 86400;
-  property dayabbrs (owner: #36, flags: "rc") = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-  property days (owner: #36, flags: "rc") = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-  property hour (owner: #36, flags: "rc") = 3600;
-  property minute (owner: #36, flags: "rc") = 60;
-  property month (owner: #36, flags: "rc") = 2592000;
-  property monthabbrs (owner: #36, flags: "rc") = {
+  property corr (owner: HACKER, flags: "rc") = -122;
+  property ct (owner: HACKER, flags: "rc") = 7934;
+  property ctcd (owner: HACKER, flags: "rc") = 7276;
+  property day (owner: HACKER, flags: "rc") = 86400;
+  property dayabbrs (owner: HACKER, flags: "rc") = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+  property days (owner: HACKER, flags: "rc") = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+  property hour (owner: HACKER, flags: "rc") = 3600;
+  property minute (owner: HACKER, flags: "rc") = 60;
+  property month (owner: HACKER, flags: "rc") = 2592000;
+  property monthabbrs (owner: HACKER, flags: "rc") = {
     "Jan",
     "Feb",
     "Mar",
@@ -27,8 +27,8 @@ object #43
     "Nov",
     "Dec"
   };
-  property monthlens (owner: #36, flags: "rc") = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-  property months (owner: #36, flags: "rc") = {
+  property monthlens (owner: HACKER, flags: "rc") = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+  property months (owner: HACKER, flags: "rc") = {
     "January",
     "February",
     "March",
@@ -42,8 +42,8 @@ object #43
     "November",
     "December"
   };
-  property stsd (owner: #36, flags: "rc") = 2427;
-  property time_units (owner: #36, flags: "rc") = {
+  property stsd (owner: HACKER, flags: "rc") = 2427;
+  property time_units (owner: HACKER, flags: "rc") = {
     {31536000, "year", "years", "yr", "yrs"},
     {2628000, "month", "months", "mo", "mos"},
     {604800, "week", "weeks", "wk", "wks"},
@@ -52,7 +52,7 @@ object #43
     {60, "minute", "minutes", "min", "mins"},
     {1, "second", "seconds", "sec", "secs"}
   };
-  property timezones (owner: #36, flags: "rc") = {
+  property timezones (owner: HACKER, flags: "rc") = {
     {"AuEST", -10},
     {"AuCST", -9},
     {"AuWST", -8},
@@ -70,8 +70,8 @@ object #43
     {"HST", 10},
     {"UTC", 0}
   };
-  property week (owner: #36, flags: "rc") = 604800;
-  property zones (owner: #36, flags: "rc") = {
+  property week (owner: HACKER, flags: "rc") = 604800;
+  property zones (owner: HACKER, flags: "rc") = {
     {{"est", "edt", "Massachusetts", "MA"}, 10800},
     {{"cst", "cdt"}, 7200},
     {{"mst", "mdt"}, 3600},
@@ -116,7 +116,7 @@ object #43
     "dst_midnight  (time)                 "
   };
 
-  verb day (none none none) owner: #36 flags: "rxd"
+  verb day (none none none) owner: HACKER flags: "rxd"
     "Given a time() or ctime()-style date, this returns the full name of the day.";
     if (typeof(args[1]) == INT)
       time = ctime(args[1]);
@@ -129,7 +129,7 @@ object #43
     return this.days[dayabbr in this.dayabbrs];
   endverb
 
-  verb month (none none none) owner: #36 flags: "rxd"
+  verb month (none none none) owner: HACKER flags: "rxd"
     "Given a time() or ctime()-style date, this returns the full name";
     "of the month.";
     if (typeof(args[1]) == INT)
@@ -143,7 +143,7 @@ object #43
     return this.months[monthabbr in this.monthabbrs];
   endverb
 
-  verb ampm (none none none) owner: #36 flags: "rxd"
+  verb ampm (none none none) owner: HACKER flags: "rxd"
     "Return a time in the form [h]h[:mm[:ss]] {a.m.|p.m.}.  Args are";
     "[1]   either a time()- or a ctime()-style date, and";
     "[2]   (optional) the precision desired--1 for hours, 2 for minutes,";
@@ -168,14 +168,14 @@ object #43
     return time;
   endverb
 
-  verb to_seconds (this none this) owner: #36 flags: "rxd"
+  verb to_seconds (this none this) owner: HACKER flags: "rxd"
     "Given string hh:mm:ss ($string_utils:explode(ctime(time))[4]), this returns";
     "the number of seconds elapsed since 00:00:00.  I can't remember why I";
     "created this verb, but I'm sure it serves some useful purpose.";
     return 60 * 60 * toint((args[1])[1..2]) + 60 * toint((args[1])[4..5]) + toint((args[1])[7..8]);
   endverb
 
-  verb sun (this none this) owner: #36 flags: "rxd"
+  verb sun (this none this) owner: HACKER flags: "rxd"
     {?time = time()} = args;
     r = 10000;
     h = r * r + r / 2;
@@ -188,7 +188,7 @@ object #43
     return (this.stsd * cs - this.ctcd * cpcs - this.ct * spss + h) / r - r;
   endverb
 
-  verb from_ctime (this none this) owner: #36 flags: "rxd"
+  verb from_ctime (this none this) owner: HACKER flags: "rxd"
     "Given a string such as returned by ctime(), return the corresponding time-in-seconds-since-1970 time returned by time(), or E_DIV if the format is wrong in some essential way.";
     words = $string_utils:explode(args[1]);
     if (length(words) == 5)
@@ -204,7 +204,7 @@ object #43
     return (((day - (day + 1038) / 1464 - (day + 672) / 1464 - (day + 306) / 1464 - (day + 109740) / 146400 - (day + 73140) / 146400 - (day + 36540) / 146400 - 719528) * 24 + toint(hms[1]) + zone) * 60 + toint(hms[2])) * 60 + toint(hms[3]);
   endverb
 
-  verb "dhms dayshoursminutesseconds" (this none this) owner: #36 flags: "rxd"
+  verb "dhms dayshoursminutesseconds" (this none this) owner: HACKER flags: "rxd"
     s = args[1];
     if (s < 0)
       return "-" + this:(verb)(-s);
@@ -228,7 +228,7 @@ object #43
     endif
   endverb
 
-  verb english_time (this none this) owner: #36 flags: "rxd"
+  verb english_time (this none this) owner: HACKER flags: "rxd"
     "english_time(time [,reference time]): returns the time as a string of";
     "years, months, days, hours, minutes and seconds using the reference time as";
     "the start time and incrementing forwards. it can be given in either ctime()";
@@ -273,7 +273,7 @@ object #43
     return $string_utils:english_list(units);
   endverb
 
-  verb from_day (this none this) owner: #36 flags: "rxd"
+  verb from_day (this none this) owner: HACKER flags: "rxd"
     "from_day(day_of_week,which [,reference time])";
     "numeric time (seconds since 1970) corresponding to midnight (PST) of the given weekday.  Use either the name of the day or a 1..7 number (1==Sunday,...)";
     "  which==-1 => use most recent such day.";
@@ -294,7 +294,7 @@ object #43
     return time * 604800 + delta;
   endverb
 
-  verb from_month (this none this) owner: #36 flags: "rxd"
+  verb from_month (this none this) owner: HACKER flags: "rxd"
     "from_month(month,which[,d])";
     "numeric time (seconds since 1970) corresponding to midnight (PST) of the dth (first) day of the given month.  Use either the month name or a 1..12 number (1==January,...)";
     "  which==-1 => use most recent such month.";
@@ -318,13 +318,13 @@ object #43
     return day * 86400 + 28800;
   endverb
 
-  verb dst_midnight (this none this) owner: #36 flags: "rxd"
+  verb dst_midnight (this none this) owner: HACKER flags: "rxd"
     "Takes a time that is midnight PST and converts it to the nearest PDT midnight time if it's during that part of the year where we use PDT.";
     time = args[1];
     return time - 3600 * ((toint(ctime(time)[12..13]) + 12) % 24 - 12);
   endverb
 
-  verb time_sub (this none this) owner: #36 flags: "rxd"
+  verb time_sub (this none this) owner: HACKER flags: "rxd"
     "Works like pronoun substitution, but substitutes time stuff.";
     "Call with time_sub(string, time). returns a string.";
     "time is an optional integer in time() format.  If omitted, time() is used.";
@@ -415,7 +415,7 @@ object #43
     return res + thestr;
   endverb
 
-  verb "mmddyy ddmmyy" (this none this) owner: #36 flags: "rxd"
+  verb "mmddyy ddmmyy" (this none this) owner: HACKER flags: "rxd"
     "Copied from Archer (#52775):mmddyy Tue Apr  6 17:04:26 1993 PDT";
     "Given a time() or ctime()-style date and an optional separator, this returns the MM/DD/YY or DD/MM/YY form of the date (depending on the verb called.)  The default seperator is '/'";
     {time, ?divstr = "/"} = args;
@@ -438,7 +438,7 @@ object #43
     endif
   endverb
 
-  verb parse_english_time_interval (this none this) owner: #36 flags: "rxd"
+  verb parse_english_time_interval (this none this) owner: HACKER flags: "rxd"
     "$time_utils:parse_english_time_interval(n1,u1,n2,u2,...)";
     "or $time_utils:parse_english_time_interval(\"n1 u1[,] [and] n2[,] u2 [and] ...\")";
     "There must be an even number of arguments, all of which must be strings,";
@@ -490,7 +490,7 @@ object #43
     return nsec;
   endverb
 
-  verb seconds_until_date (this none this) owner: #36 flags: "rx"
+  verb seconds_until_date (this none this) owner: HACKER flags: "rx"
     "Copied from Ballroom Complex (#29992):from_date by Keelah! (#30246) Tue Jul 13 19:42:32 1993 PDT";
     ":seconds_until_date(month,day,time,which)";
     "month is a string or the numeric representation of the month, day is a number, time is a string in the following format, hh:mm:ss.";
@@ -513,7 +513,7 @@ object #43
     return converted;
   endverb
 
-  verb seconds_until_time (this none this) owner: #36 flags: "rx"
+  verb seconds_until_time (this none this) owner: HACKER flags: "rx"
     "Copied from Ballroom Complex (#29992):seconds_until by Keelah! (#30246) Tue Jul 13 19:42:37 1993 PDT";
     ":seconds_until_time(hh:mm:ss)";
     "Given the string hh:mm:ss, this returns the number of seconds until that hh:mm:ss. If the hh:mm:ss is before the current time(), the number returned is a negative, else the number is a positive.";
@@ -530,7 +530,7 @@ object #43
     "Last modified Fri Oct 17 23:17:25 1997 EDT by neuro (#3642) on opal moo.";
   endverb
 
-  verb "mmddyyyy ddmmyyyy" (this none this) owner: #36 flags: "rxd"
+  verb "mmddyyyy ddmmyyyy" (this none this) owner: HACKER flags: "rxd"
     "Given a time() or ctime()-style date and an optional separator, this returns the MM/DD/YYYY or DD/MM/YYYY form of the date (depending on the verb called.)  The default seperator is '/'";
     {time, ?divstr = "/"} = args;
     if (typeof(time) == INT)
@@ -652,7 +652,7 @@ object #43
     return time;
   endverb
 
-  verb short_english_time (this none this) owner: #36 flags: "rxd"
+  verb short_english_time (this none this) owner: HACKER flags: "rxd"
     "english_time(time [,reference time]): returns the time as a string of";
     "years, months, days, hours, minutes and seconds using the reference time as";
     "the start time and incrementing forwards. it can be given in either ctime()";

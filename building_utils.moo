@@ -1,11 +1,24 @@
-object #21
+object BUILDING_UTILS
   name: "Building Utilities"
-  parent: #78
+  parent: GENERIC_UTILS
   owner: #2
   readable: true
 
   property class_string (owner: #2, flags: "rc") = {"p", "R", "E", "N", "C", "T", "F", "M", "H", "D", "U", "O"};
-  property classes (owner: #2, flags: "rc") = {#6, #3, #7, #9, #8, #5, #74, #45, #30, #37, #78, #68};
+  property classes (owner: #2, flags: "rc") = {
+    PLAYER,
+    ROOM,
+    EXIT,
+    VCS,
+    CONTAINER,
+    THING,
+    FEATURE,
+    #45,
+    GENERIC_HELP,
+    DATASTORE,
+    GENERIC_UTILS,
+    GENERIC_OPTIONS
+  };
 
   override aliases = {"Building Utilities"};
   override description = {

@@ -1,13 +1,13 @@
-object #47
+object RECYCLER
   name: "Recycling Center"
-  parent: #5
-  owner: #36
+  parent: THING
+  owner: HACKER
   readable: true
 
-  property garbage (owner: #36, flags: "rc") = [];
-  property obj_retention_time (owner: #36, flags: "rc") = 604800;
-  property recycling_pools (owner: #36, flags: "rc") = {};
-  property uuobj_retention_time (owner: #36, flags: "rc") = 259200;
+  property garbage (owner: HACKER, flags: "rc") = [];
+  property obj_retention_time (owner: HACKER, flags: "rc") = 604800;
+  property recycling_pools (owner: HACKER, flags: "rc") = {};
+  property uuobj_retention_time (owner: HACKER, flags: "rc") = 259200;
 
   override aliases = {"Recycling Center", "Center"};
 

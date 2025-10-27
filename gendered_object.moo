@@ -1,6 +1,6 @@
-object #94
+object GENDERED_OBJECT
   name: "Generic Gendered Object"
-  parent: #1
+  parent: ROOT_CLASS
   owner: #2
   readable: true
 

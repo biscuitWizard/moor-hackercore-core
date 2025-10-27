@@ -1,13 +1,13 @@
-object #32
+object SPELL
   name: "Mr. Spell"
-  parent: #1
-  owner: #36
+  parent: ROOT_CLASS
+  owner: HACKER
   readable: true
 
   override aliases = {"Mr. Spell", "spell"};
   override description = "For help on using the speller, use 'help spelling' and 'help @spell'.";
 
-  verb valid (this none this) owner: #36 flags: "rxd"
+  verb valid (this none this) owner: HACKER flags: "rxd"
     return call_function("spellcheck", args[1]) == 1 || args[1] in player.dict;
   endverb
 
@@ -89,7 +89,7 @@ object #32
     return data;
   endverb
 
-  verb guess_words (this none this) owner: #36 flags: "rxd"
+  verb guess_words (this none this) owner: HACKER flags: "rxd"
     {nastyword} = args;
     guesses = call_function("spellcheck", nastyword);
     "Transpose adjacent characters";
@@ -144,7 +144,7 @@ object #32
     return guesses;
   endverb
 
-  verb help_msg (none none none) owner: #36 flags: "rxd"
+  verb help_msg (none none none) owner: HACKER flags: "rxd"
     return this.description;
   endverb
 

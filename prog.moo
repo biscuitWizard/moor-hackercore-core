@@ -1,17 +1,17 @@
-object #58
+object PROG
   name: "Generic Programmer"
-  parent: #4
+  parent: BUILDER
   owner: #2
   readable: true
 
-  property eval_env (owner: #36, flags: "r") = "here=player.location;me=player";
-  property eval_subs (owner: #36, flags: "r") = {};
-  property eval_ticks (owner: #36, flags: "r") = 3;
+  property eval_env (owner: HACKER, flags: "r") = "here=player.location;me=player";
+  property eval_subs (owner: HACKER, flags: "r") = {};
+  property eval_ticks (owner: HACKER, flags: "r") = 3;
   property prog_options (owner: #2, flags: "rc") = {};
 
   override aliases = {"Generic Programmer"};
   override description = "You see a player who is too experienced to have any excuse for not having a description.";
-  override features = {#90, #75, #73, #9};
+  override features = {PASTING_FEATURE, BUILDER_FEATURE, PROG_FEATURE, VCS};
 
   verb "eval*-d" (any any any) owner: #2 flags: "rd"
     "A MOO-code evaluator.  Type `;CODE' or `eval CODE'.";
@@ -390,7 +390,7 @@ object #58
     endif
   endverb
 
-  verb set_eval_env (this none this) owner: #36 flags: "rxd"
+  verb set_eval_env (this none this) owner: HACKER flags: "rxd"
     "set_eval_env(string);";
     "Run <string> through eval.  If it doesn't compile, return E_INVARG.  If it crashes, well, it crashes.  If it works okay, set .eval_env to it and set .eval_ticks to the amount of time it took.";
     if (is_player(this) && $perm_utils:controls(caller_perms(), this))

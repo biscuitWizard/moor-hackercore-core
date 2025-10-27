@@ -1,17 +1,27 @@
-object #56
+object COMMAND_UTILS
   name: "Command Utilities"
-  parent: #78
+  parent: GENERIC_UTILS
   owner: #2
   readable: true
 
-  property ABORT (owner: #12, flags: "r") = 50;
-  property ALL (owner: #12, flags: "r") = 2;
-  property NO (owner: #12, flags: "r") = 0;
-  property NONE (owner: #12, flags: "r") = -1;
-  property NO_ABORT (owner: #12, flags: "r") = 100;
-  property YES (owner: #12, flags: "r") = 1;
-  property feature_task (owner: #36, flags: "") = {57, "@program", {"#56:do_huh"}, "#56:do_huh", #-3, "#56:do_huh", "", #-1, ""};
-  property idun_msg (owner: #36, flags: "r") = "I don't understand that.";
+  property ABORT (owner: GUEST_LOG, flags: "r") = 50;
+  property ALL (owner: GUEST_LOG, flags: "r") = 2;
+  property NO (owner: GUEST_LOG, flags: "r") = 0;
+  property NONE (owner: GUEST_LOG, flags: "r") = -1;
+  property NO_ABORT (owner: GUEST_LOG, flags: "r") = 100;
+  property YES (owner: GUEST_LOG, flags: "r") = 1;
+  property feature_task (owner: HACKER, flags: "") = {
+    57,
+    "@program",
+    {"#56:do_huh"},
+    "#56:do_huh",
+    FAILED_MATCH,
+    "#56:do_huh",
+    "",
+    NOTHING,
+    ""
+  };
+  property idun_msg (owner: HACKER, flags: "r") = "I don't understand that.";
 
   override aliases = {"Command Utilities"};
   override description = {
@@ -292,7 +302,7 @@ object #56
     endwhile
   endverb
 
-  verb dump_lines (this none this) owner: #36 flags: "rxd"
+  verb dump_lines (this none this) owner: HACKER flags: "rxd"
     ":dump_lines(text) => text `.'-quoted for :read_lines()";
     "  text is assumed to be a list of strings";
     "Returns a corresponding list of strings which, when read via :read_lines, ";
@@ -334,7 +344,7 @@ object #56
     return 0;
   endverb
 
-  verb do_huh (this none this) owner: #36 flags: "rx"
+  verb do_huh (this none this) owner: HACKER flags: "rx"
     ":do_huh(verb,args)  what :huh should do by default.";
     {verb, args} = args;
     testbit = player:my_huh(verb, args);
@@ -379,7 +389,7 @@ object #56
     return E_INVARG;
   endverb
 
-  verb validate_feature (this none this) owner: #36 flags: "rxd"
+  verb validate_feature (this none this) owner: HACKER flags: "rxd"
     ":validate_feature(verb, args)";
     "  (where `verb' and `args' are the arguments passed to :my_huh)";
     "  returns true or false based on whether this is the same command typed by the user (comparing it against $command_utils.feature_task, set by $command_utils:do_huh).";
@@ -393,7 +403,7 @@ object #56
     return `who.reading_input ! ANY => 0';
   endverb
 
-  verb switched_command (this none this) owner: #36 flags: "rxd"
+  verb switched_command (this none this) owner: HACKER flags: "rxd"
     {verbstr, cmd_prefix, ?switch_args = {}, ?default_verb = ""} = args;
     cmd_object = callers()[1][1];
     if ((switch = $su:explode(verbstr, "/")[$]) && switch != verbstr)

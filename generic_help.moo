@@ -1,11 +1,11 @@
-object #30
+object GENERIC_HELP
   name: "Generic Help Database"
-  parent: #1
-  owner: #36
+  parent: ROOT_CLASS
+  owner: HACKER
   readable: true
 
-  property index (owner: #36, flags: "rc") = {};
-  property index_cache (owner: #36, flags: "r") = {};
+  property index (owner: HACKER, flags: "rc") = {};
+  property index_cache (owner: HACKER, flags: "r") = {};
 
   override aliases = {"Generic Help Database"};
   override description = "A help database of the standard form in need of a description. See `help $generic_help'...";
@@ -70,7 +70,7 @@ object #30
     return text;
   endverb
 
-  verb sort_topics (this none this) owner: #36 flags: "rxd"
+  verb sort_topics (this none this) owner: HACKER flags: "rxd"
     ":sort_topics(list_of_topics) -- sorts the given list of strings, assuming that they're help-system topic names";
     buckets = "abcdefghijklmnopqrstuvwxyz";
     keys = names = $list_utils:make(length(buckets) + 1, {});
@@ -85,7 +85,7 @@ object #30
     return $list_utils:append(@names);
   endverb
 
-  verb columnize (this none this) owner: #36 flags: "rxd"
+  verb columnize (this none this) owner: HACKER flags: "rxd"
     ":columnize(@list_of_strings) -- prints the given list in a number of columns wide enough to accomodate longest entry. But no more than 4 columns.";
     longest = $list_utils:longest(args);
     for d in ({4, 3, 2, 1})
@@ -95,7 +95,7 @@ object #30
     endfor
   endverb
 
-  verb "forward pass" (this none this) owner: #36 flags: "rxd"
+  verb "forward pass" (this none this) owner: HACKER flags: "rxd"
     "{\"*forward*\", topic, @rest}  => text for topic from this help db.";
     "{\"*pass*\",    topic, @rest}  => text for topic from next help db.";
     "In both cases the text of @rest is appended.  ";
@@ -119,7 +119,7 @@ object #30
     endif
   endverb
 
-  verb subst (this none this) owner: #36 flags: "rxd"
+  verb subst (this none this) owner: HACKER flags: "rxd"
     "{\"*subst*\", @text} => text with the following substitutions:";
     "  \"...%[expr]....\" => \"...\"+value of expr (assumed to be a string)+\"....\"";
     "  \"%;expr\"         => @(value of expr (assumed to be a list of strings))";
@@ -169,7 +169,7 @@ object #30
     return newlines;
   endverb
 
-  verb index (this none this) owner: #36 flags: "rxd"
+  verb index (this none this) owner: HACKER flags: "rxd"
     "{\"*index*\" [, title]}";
     "This produces a columnated list of topics in this help db, headed by title.";
     title = args[1] ? args[1][1] | tostr(this.name, " (", this, ")");
@@ -206,7 +206,7 @@ object #30
     endtry
   endverb
 
-  verb objectdoc (this none this) owner: #36 flags: "rxd"
+  verb objectdoc (this none this) owner: HACKER flags: "rxd"
     "{\"*objectdoc*\", \"object\"} => text for topic from object:help_msg";
     if (!valid(object = $string_utils:literal_object(args[1][1])))
       return E_INVARG;
@@ -217,7 +217,7 @@ object #30
     endif
   endverb
 
-  verb find_index_topics (this none this) owner: #36 flags: "rxd"
+  verb find_index_topics (this none this) owner: HACKER flags: "rxd"
     ":find_index_topic([search])";
     "Return the list of index topics of this help DB";
     "(i.e., those which contain an index (list of topics)";

@@ -1,7 +1,7 @@
 object #77
   name: "Builder Options"
-  parent: #68
-  owner: #36
+  parent: GENERIC_OPTIONS
+  owner: HACKER
   readable: true
 
   property show_audit_bytes (owner: #2, flags: "r") = {"@audit/@prospectus shows `<1K'", "@audit/@prospectus shows bytes"};
@@ -9,12 +9,12 @@ object #77
     "@audit/@prospectus shows integer sizes (1K)",
     "@audit/@prospectus shows floating-point sizes (1.0K)"
   };
-  property show_bi_create (owner: #36, flags: "rc") = {
+  property show_bi_create (owner: HACKER, flags: "rc") = {
     "@create/@recycle re-use object numbers.",
     "@create/@recycle call create()/recycle() directly."
   };
-  property type_dig_exit (owner: #36, flags: "rc") = {1};
-  property type_dig_room (owner: #36, flags: "rc") = {1};
+  property type_dig_exit (owner: HACKER, flags: "rc") = {1};
+  property type_dig_room (owner: HACKER, flags: "rc") = {1};
 
   override _namelist = "!dig_room!dig_exit!create_flags!bi_create!audit_bytes!audit_float!";
   override aliases = {"Builder Options"};
@@ -28,7 +28,7 @@ object #77
     "audit_float"
   };
 
-  verb check_create_flags (this none this) owner: #36 flags: "rxd"
+  verb check_create_flags (this none this) owner: HACKER flags: "rxd"
     value = args[1];
     if (m = match(value, "[^rwf]"))
       return tostr("Unknown object flag:  ", value[m[1]]);
@@ -37,7 +37,7 @@ object #77
     endif
   endverb
 
-  verb show_create_flags (this none this) owner: #36 flags: "rxd"
+  verb show_create_flags (this none this) owner: HACKER flags: "rxd"
     if (value = this:get(@args))
       return {value, {tostr("Object flags for @create:  ", value)}};
     else
@@ -45,7 +45,7 @@ object #77
     endif
   endverb
 
-  verb parse_create_flags (this none this) owner: #36 flags: "rxd"
+  verb parse_create_flags (this none this) owner: HACKER flags: "rxd"
     raw = args[2];
     if (raw == 1)
       "...+create_flags => create_flags=r";
@@ -61,7 +61,7 @@ object #77
     endif
   endverb
 
-  verb "show_dig_room show_dig_exit" (this none this) owner: #36 flags: "rxd"
+  verb "show_dig_room show_dig_exit" (this none this) owner: HACKER flags: "rxd"
     name = args[2];
     what = verb == "show_dig_room" ? "room" | "exit";
     if ((value = this:get(args[1], name)) == 0)
@@ -71,7 +71,7 @@ object #77
     endif
   endverb
 
-  verb "parse_dig_room parse_dig_exit" (this none this) owner: #36 flags: "rxd"
+  verb "parse_dig_room parse_dig_exit" (this none this) owner: HACKER flags: "rxd"
     {oname, raw, data} = args;
     if (typeof(raw) == LIST)
       if (length(raw) > 1)

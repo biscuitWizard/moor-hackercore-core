@@ -1,6 +1,6 @@
-object #110
+object MCP
   name: "MCP 2.1"
-  parent: #1
+  parent: ROOT_CLASS
   owner: #98
   readable: true
 

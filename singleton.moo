@@ -1,6 +1,6 @@
-object #17
+object SINGLETON
   name: "Generic Singleton Objects"
-  parent: #1
+  parent: ROOT_CLASS
   owner: #2
   readable: true
 

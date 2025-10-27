@@ -1,6 +1,6 @@
-object #125
+object MENU_UTILS
   name: "Menu Utilities"
-  parent: #78
+  parent: GENERIC_UTILS
   owner: #2
   readable: true
 
@@ -168,7 +168,7 @@ object #125
     endif
   endverb
 
-  verb return_map_verb (this none this) owner: #36 flags: "rxd"
+  verb return_map_verb (this none this) owner: HACKER flags: "rxd"
     {OBJ, verb} = args;
     return `OBJ:(verb)() ! ANY => "Unknown"';
   endverb

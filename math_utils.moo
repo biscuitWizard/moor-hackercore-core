@@ -1,17 +1,17 @@
-object #26
+object MATH_UTILS
   name: "Math Utilities"
-  parent: #78
-  owner: #36
+  parent: GENERIC_UTILS
+  owner: HACKER
   readable: true
 
-  property base_alphabet (owner: #36, flags: "rc") = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-  property e (owner: #36, flags: "rc") = 2.71828182845905;
-  property e_string (owner: #36, flags: "rc") = "2.718281828459045235360287471352662497757247093699959574966967627724076630353547594571382178525166427427466391932003059921817413596629043572900334295260595630738132328627943490763233829880753195251019";
-  property factor (owner: #36, flags: "rc") = 10000;
-  property phi (owner: #36, flags: "rc") = 1.61803398874989;
-  property pi (owner: #36, flags: "rc") = 3.14159265358979;
-  property piscale (owner: #36, flags: "rc") = 0.00872664625997164;
-  property sines (owner: #36, flags: "rc") = {
+  property base_alphabet (owner: HACKER, flags: "rc") = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  property e (owner: HACKER, flags: "rc") = 2.71828182845905;
+  property e_string (owner: HACKER, flags: "rc") = "2.718281828459045235360287471352662497757247093699959574966967627724076630353547594571382178525166427427466391932003059921817413596629043572900334295260595630738132328627943490763233829880753195251019";
+  property factor (owner: HACKER, flags: "rc") = 10000;
+  property phi (owner: HACKER, flags: "rc") = 1.61803398874989;
+  property pi (owner: HACKER, flags: "rc") = 3.14159265358979;
+  property piscale (owner: HACKER, flags: "rc") = 0.00872664625997164;
+  property sines (owner: HACKER, flags: "rc") = {
     175,
     349,
     523,
@@ -374,7 +374,7 @@ object #26
     0,
     175
   };
-  property tangents (owner: #36, flags: "rc") = {
+  property tangents (owner: HACKER, flags: "rc") = {
     174,
     349,
     524,
@@ -421,7 +421,7 @@ object #26
     9656,
     10000
   };
-  property taylor (owner: #36, flags: "rc") = 100;
+  property taylor (owner: HACKER, flags: "rc") = 100;
 
   override aliases = {"Math Utilities", "Math_Utils", "trigonometric utilites", "trig_utils"};
   override description = {
@@ -481,7 +481,7 @@ object #26
     "  IntFromBl(b) -- converts a list of 1's and 0's (any precision) to decimal"
   };
 
-  verb xsin (this none this) owner: #36 flags: "rxd"
+  verb xsin (this none this) owner: HACKER flags: "rxd"
     "xsin(INT x) -- calculates the taylor approximation for the sine function";
     if (typeof(x = args[1]) != INT)
       return E_TYPE;
@@ -493,7 +493,7 @@ object #26
     endif
   endverb
 
-  verb xcos (this none this) owner: #36 flags: "rxd"
+  verb xcos (this none this) owner: HACKER flags: "rxd"
     "xcos(INT x) -- calculates the taylor approximation for the cosine function";
     if (typeof(x = args[1]) != INT)
       return E_TYPE;
@@ -505,7 +505,7 @@ object #26
     endif
   endverb
 
-  verb factorial (this none this) owner: #36 flags: "rxd"
+  verb factorial (this none this) owner: HACKER flags: "rxd"
     "factorial(INT n) -- returns n factorial for 0 <= n (<= 12).";
     if ((number = args[1]) < 0)
       return E_INVARG;
@@ -519,7 +519,7 @@ object #26
     return fact;
   endverb
 
-  verb fibonacci (this none this) owner: #36 flags: "rxd"
+  verb fibonacci (this none this) owner: HACKER flags: "rxd"
     "fibonacci(INT n) -- calculates the fibonacci numbers to the nth term";
     "and returns them in a list. n must be >= 0.";
     if (typeof(n = args[1]) != INT)
@@ -537,7 +537,7 @@ object #26
     endif
   endverb
 
-  verb geometric (this none this) owner: #36 flags: "rxd"
+  verb geometric (this none this) owner: HACKER flags: "rxd"
     "geometric(INT|FLOAT x [,INT n]) -- calculates the value of the geometric series at x to the nth term. i.e., approximates 1/(1-x) when |x| < 1. This, of course, is impossible in MOO, but someone may find it useful in some way.";
     "n defaults to 5. n must be >= 0.";
     "This verb was revised on 2006-03-16 by Gary (#110811) to allow for floating point input of the first argument.  The help documentation had said this was allowed but actually it caused a traceback.  How many people are actually using this, I wonder? ";
@@ -554,7 +554,7 @@ object #26
     return x;
   endverb
 
-  verb divmod (this none this) owner: #36 flags: "rxd"
+  verb divmod (this none this) owner: HACKER flags: "rxd"
     "divmod(INT n, INT d) => {q,r} such that n = dq + r";
     "  handles negative numbers correctly   0<=r<d if d>0, -d<r<=0 if d<0.";
     {n, d} = args;
@@ -566,7 +566,7 @@ object #26
     return {q, r};
   endverb
 
-  verb combinations (this none this) owner: #36 flags: "rxd"
+  verb combinations (this none this) owner: HACKER flags: "rxd"
     "combinations(INT n, INT r) -- returns the number of ways one can choose r";
     "objects from n distinct choices.";
     "C(n,r) = n!/[r!(n-r)!]";
@@ -587,7 +587,7 @@ object #26
     endif
   endverb
 
-  verb permutations (this none this) owner: #36 flags: "rxd"
+  verb permutations (this none this) owner: HACKER flags: "rxd"
     "permutations(INT n, INT r) -- returns the number of ways possible for one to";
     "order r distinct objects given n locations.";
     "P(n,r) = n!/(n-r)!";
@@ -606,7 +606,7 @@ object #26
     endif
   endverb
 
-  verb simpson (this none this) owner: #36 flags: "rxd"
+  verb simpson (this none this) owner: HACKER flags: "rxd"
     "simpson({a,b},{f(a),f((a+b)/2),f(b)} [,INT ret-float])";
     " -- given two endpoints, a and b, and the functions value at a, (a+b)/2, and b, this will calculate a numerical approximation of the integral using simpson's rule.";
     "Entries can either be all INT or all FLOAT. Don't mix!";
@@ -621,7 +621,7 @@ object #26
     endif
   endverb
 
-  verb parts (this none this) owner: #36 flags: "rxd"
+  verb parts (this none this) owner: HACKER flags: "rxd"
     "parts(INT n, INT q [,INT i]) -- returns a decomposition of n by q into integer and floating point parts with i = the number of digits after the decimal.";
     "i defaults to 5.";
     "warning: it is quite easy to hit maxint which results in unpredictable";
@@ -634,12 +634,12 @@ object #26
     return {parts[1], parts[2] * 10 ^ i / q};
   endverb
 
-  verb div (this none this) owner: #36 flags: "rxd"
+  verb div (this none this) owner: HACKER flags: "rxd"
     "div(INT n, INT d) => q such that n = dq + r and  (0<=r<d if d>0, -d<r<=0 if d<0).";
     return this:divmod(@args)[1];
   endverb
 
-  verb mod (this none this) owner: #36 flags: "rxd"
+  verb mod (this none this) owner: HACKER flags: "rxd"
     "A correct mod function.";
     "mod(INT n, INT d) => r such that n = dq + r and (0<=r<d if d>0 or -d<r<=0 if d<0).";
     {n, d} = args;
@@ -649,7 +649,7 @@ object #26
     return (n % d + d) % d;
   endverb
 
-  verb exp (this none this) owner: #36 flags: "rxd"
+  verb exp (this none this) owner: HACKER flags: "rxd"
     "exp(INT|FLOAT x[,INT n]) -- calculates an nth order taylor approximation for e^x.";
     "n defaults to 5. Any n given must be >= 0. you need to divide the result";
     "the answer will be returned as {integer part,fractional part} if the input x was an integer. If it is floating point, so will the answer (and this uses the builtin function.)";
@@ -667,7 +667,7 @@ object #26
     return this:parts(ex, nfact);
   endverb
 
-  verb aexp (this none this) owner: #36 flags: "rxd"
+  verb aexp (this none this) owner: HACKER flags: "rxd"
     "returns 10000 exp (x/10000)";
     "The accuracy seems to be ~0.1% for 0<x<4";
     x = args[1];
@@ -696,7 +696,7 @@ object #26
     endif
   endverb
 
-  verb random (this none this) owner: #36 flags: "rxd"
+  verb random (this none this) owner: HACKER flags: "rxd"
     "random(INT n): returns a random integer in the following manner:";
     "random(n > 0) will return a integer in the range 0 to n";
     "random(n < 0) will return a integer in the range n to 0";
@@ -707,7 +707,7 @@ object #26
     return mod * random(abs(prob + mod)) - mod;
   endverb
 
-  verb random_range (this none this) owner: #36 flags: "rxd"
+  verb random_range (this none this) owner: HACKER flags: "rxd"
     "random_range(INT range [,INT mean]): returns a random integer within the given range from the mean. if the mean isn't given, it defaults to 0";
     "e.g., random_range(10) => -10..10";
     "      random_range(10,4) => -6..14";
@@ -718,7 +718,7 @@ object #26
     return mean + (random(2) == 1 ? -1 | 1) * this:random(range);
   endverb
 
-  verb is_prime (this none this) owner: #36 flags: "rxd"
+  verb is_prime (this none this) owner: HACKER flags: "rxd"
     "is_prime(INT number) returns 1 if the number is prime or 0 if it isn't.";
     "of course, only positive numbers are candidates for primality.";
     if (typeof(number = args[1]) != INT)
@@ -744,7 +744,7 @@ object #26
     return 1;
   endverb
 
-  verb NOT (this none this) owner: #36 flags: "rxd"
+  verb NOT (this none this) owner: HACKER flags: "rxd"
     return -(1 + args[1]);
     "";
     "... here's what it used to be ...";
@@ -756,7 +756,7 @@ object #26
     return this:IntFromBL(blOut);
   endverb
 
-  verb BLFromInt (this none this) owner: #36 flags: "rxd"
+  verb BLFromInt (this none this) owner: HACKER flags: "rxd"
     "BlFromInt(INT x) => converts the number provided into a 32 bit binary number, which is returned via a 32 element LIST of 1's and 0's. Note that this verb was originally written to be used with the $math_utils verbs: AND, NOT, OR, XOR, but has since been taken out of them.";
     if (typeof(x = args[1]) != INT)
       return E_TYPE;
@@ -773,7 +773,7 @@ object #26
     return {firstbit, @l};
   endverb
 
-  verb IntFromBL (this none this) owner: #36 flags: "rxd"
+  verb IntFromBL (this none this) owner: HACKER flags: "rxd"
     "IntFromBl(LIST of 1's and 0's) => converts the 32 bit binary representation given by the list of 1's and 0's and converts it to a normal decimal number. Note that this verb was originally written to be used with the $math_utils verbs: AND, NOT, OR, XOR, but has since been taken out of them.";
     bl = args[1];
     x = 0;
@@ -784,7 +784,7 @@ object #26
     return x;
   endverb
 
-  verb "gcd greatest_common_divisor" (this none this) owner: #36 flags: "rxd"
+  verb "gcd greatest_common_divisor" (this none this) owner: HACKER flags: "rxd"
     "gcd(INT num1,INT num2): find the greatest common divisor of the two numbers";
     "using the division algorithm. the absolute values of num1 and num2 are";
     "used without loss of generality.";
@@ -803,7 +803,7 @@ object #26
     endif
   endverb
 
-  verb "lcm least_common_multiple" (this none this) owner: #36 flags: "rxd"
+  verb "lcm least_common_multiple" (this none this) owner: HACKER flags: "rxd"
     "lcm(INT num1,INT num2): find the least common multiple of the two numbers.";
     "we shall use the positive lcm value without loss of generality.";
     "since we have gcd already, we'll just use lcm*gcd = num1*num2";
@@ -812,7 +812,7 @@ object #26
     return num1 * num2 / this:gcd(num1, num2);
   endverb
 
-  verb "are_rel_prime are_relatively_prime" (this none this) owner: #36 flags: "rxd"
+  verb "are_rel_prime are_relatively_prime" (this none this) owner: HACKER flags: "rxd"
     "are_rel_prime(INT num1,INT num2): returns 1 if num1 and num2 are relatively";
     "prime.";
     "since we have gcd, this is pretty easy.";
@@ -823,7 +823,7 @@ object #26
     endif
   endverb
 
-  verb base_conversion (this none this) owner: #36 flags: "rxd"
+  verb base_conversion (this none this) owner: HACKER flags: "rxd"
     "Synopsis:    :base_conversion(number, current_base, desired_base)";
     "---";
     "Call with first arg either a number or a string, being the number";
@@ -872,7 +872,7 @@ object #26
     return thestring ? thestring | "0";
   endverb
 
-  verb norm (this none this) owner: #36 flags: "rxd"
+  verb norm (this none this) owner: HACKER flags: "rxd"
     ":norm(a,b,c,d...) => sqrt(a^2+b^2+c^2+...)";
     m = max(max(@args), -min(@args));
     logm = length(tostr(m));
@@ -893,7 +893,7 @@ object #26
     endif
   endverb
 
-  verb sin (this none this) owner: #36 flags: "rxd"
+  verb sin (this none this) owner: HACKER flags: "rxd"
     "Copied from Trig_Utils (#25800):sin by Obvious (#54879) Fri Nov 17 06:07:39 1995 PST";
     theta = args[1];
     if (typeof(theta) == FLOAT)
@@ -924,7 +924,7 @@ object #26
     return result;
   endverb
 
-  verb cos (this none this) owner: #36 flags: "rxd"
+  verb cos (this none this) owner: HACKER flags: "rxd"
     "Copied from Trig_Utils (#25800):cos by Obvious (#54879) Fri Nov 17 06:07:50 1995 PST";
     theta = args[1];
     if (typeof(theta) == FLOAT)
@@ -941,7 +941,7 @@ object #26
     return this:sin({degtheta, mintheta});
   endverb
 
-  verb tan (this none this) owner: #36 flags: "rxd"
+  verb tan (this none this) owner: HACKER flags: "rxd"
     "Copied from Trig_Utils (#25800):tan by Obvious (#54879) Fri Nov 17 06:07:53 1995 PST";
     {theta} = args;
     if (typeof(theta) == FLOAT)
@@ -952,7 +952,7 @@ object #26
     return (sine * 10000 + (cosine + 1) / 2) / cosine;
   endverb
 
-  verb "arcsin asin" (this none this) owner: #36 flags: "rxd"
+  verb "arcsin asin" (this none this) owner: HACKER flags: "rxd"
     "Copied from Trig_Utils (#25800):arcsin by Obvious (#54879) Fri Nov 17 06:08:01 1995 PST";
     {given} = args;
     if (typeof(given) == FLOAT)
@@ -990,7 +990,7 @@ object #26
     return {degrees, minutes};
   endverb
 
-  verb "arccos acos" (this none this) owner: #36 flags: "rxd"
+  verb "arccos acos" (this none this) owner: HACKER flags: "rxd"
     "Copied from Trig_Utils (#25800):arccos by Obvious (#54879) Fri Nov 17 06:08:08 1995 PST";
     given = args[1];
     if (typeof(given) == FLOAT)
@@ -1007,7 +1007,7 @@ object #26
     return {degrees, minutes};
   endverb
 
-  verb "arctan atan" (this none this) owner: #36 flags: "rxd"
+  verb "arctan atan" (this none this) owner: HACKER flags: "rxd"
     "Copied from Trig_Utils (#25800):arctan by Obvious (#54879) Fri Nov 17 06:08:18 1995 PST";
     given = args[1];
     if (typeof(given) == FLOAT)
@@ -1019,17 +1019,17 @@ object #26
     return this:arccos(cosine);
   endverb
 
-  verb "deg2rads deg2rad" (this none this) owner: #36 flags: "rxd"
+  verb "deg2rads deg2rad" (this none this) owner: HACKER flags: "rxd"
     ":deg2rad(FLOAT Degrees) => FLOAT Radians";
     return tofloat(args[1]) * 0.0174532925199433;
   endverb
 
-  verb "rads2deg rad2deg" (this none this) owner: #36 flags: "rxd"
+  verb "rads2deg rad2deg" (this none this) owner: HACKER flags: "rxd"
     ":rads2deg(FLOAT Radians) => FLOAT Degrees";
     return tofloat(args[1]) * 57.2957795130824;
   endverb
 
-  verb precision (this none this) owner: #36 flags: "rxd"
+  verb precision (this none this) owner: HACKER flags: "rxd"
     ":precision(FLOAT Number, INT Digits of Precision) => FLOAT Number";
     "Cuts the given number to the given digits of precision.  Uses rounding.";
     {digits, pre} = args;
@@ -1037,7 +1037,7 @@ object #26
     return this:rint(digits * mult) / mult;
   endverb
 
-  verb round (this none this) owner: #36 flags: "rxd"
+  verb round (this none this) owner: HACKER flags: "rxd"
     "Usage: round(INT number, INT round)";
     "Rounds 'number' off to the nearest multiple of 'round'.";
     "Rounds UP numbers exactly half way in between two round possibilities.";
@@ -1046,14 +1046,14 @@ object #26
     return what < low + round / 2 ? low | low + round;
   endverb
 
-  verb "mean average" (this none this) owner: #36 flags: "rxd"
+  verb "mean average" (this none this) owner: HACKER flags: "rxd"
     "Usage: mean(INT, INT, ... )";
     "       mean({INT, INT, ...})";
     "Returns the average of all integers provided.";
     return this:sum(rlist = typeof(args[1]) == LIST ? args[1] | args) / length(rlist);
   endverb
 
-  verb sum_float (this none this) owner: #36 flags: "rxd"
+  verb sum_float (this none this) owner: HACKER flags: "rxd"
     ":sum_float(FLOAT num, num, num ...) => Total of all arguments added together.";
     ":sum_float({num, num, num, ...}) will also work.";
     {?total = 0.0, @rest} = args;
@@ -1066,7 +1066,7 @@ object #26
     return total;
   endverb
 
-  verb "sum_int sum" (this none this) owner: #36 flags: "rxd"
+  verb "sum_int sum" (this none this) owner: HACKER flags: "rxd"
     ":sum_int(INT num, num, num ...) => Total of all arguments added together.";
     ":sum_int({num, num, num, ...}) will also work.";
     "(...also named :sum for backward compatibility).";
@@ -1082,14 +1082,14 @@ object #26
     "... N.B.  For the sake of backward compatibility this routine will also return the float sum of a non-empty lists of floats, but using it this way should not be encouraged.";
   endverb
 
-  verb rint (this none this) owner: #36 flags: "rxd"
+  verb rint (this none this) owner: HACKER flags: "rxd"
     ":rint(FLOAT Number) => FLOAT Number";
     "Returns the given floating-point number rounded to the nearest integer, as a floating-point number.  In case of ties, rounds away from 0.";
     {f} = args;
     return trunc(f > 0.0 ? f + 0.5 | f - 0.5);
   endverb
 
-  verb to_percent (this none this) owner: #36 flags: "rxd"
+  verb to_percent (this none this) owner: HACKER flags: "rxd"
     {per1, per2} = args;
     return tofloat(per1) / tofloat(per2) * 100.0;
   endverb

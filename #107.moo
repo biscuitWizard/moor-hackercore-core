@@ -1,6 +1,6 @@
 object #107
   name: "MCP 2.1 Parser"
-  parent: #1
+  parent: ROOT_CLASS
   owner: #98
   readable: true
 

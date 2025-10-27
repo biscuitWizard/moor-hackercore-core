@@ -1,6 +1,6 @@
-object #82
+object SERVER_OPTIONS
   name: "Server Options"
-  parent: #1
+  parent: ROOT_CLASS
   owner: #2
   readable: true
 
@@ -59,11 +59,11 @@ object #82
   property protect_set_property_info (owner: #2, flags: "r") = 1;
   property protect_set_verb_info (owner: #2, flags: "rc") = 1;
   property queued_task_limit (owner: #2, flags: "rc") = 300;
-  property support_numeric_verbname_strings (owner: #36, flags: "r") = 0;
+  property support_numeric_verbname_strings (owner: HACKER, flags: "r") = 0;
 
   override aliases = {"Server Options"};
 
-  verb help_msg (this none this) owner: #36 flags: "rxd"
+  verb help_msg (this none this) owner: HACKER flags: "rxd"
     output = {"On $server_options, the following settings have been established by the wizards:", ""};
     wizonly = {};
     etc = {};

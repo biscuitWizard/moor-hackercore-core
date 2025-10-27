@@ -1,6 +1,6 @@
-object #78
+object GENERIC_UTILS
   name: "Generic Utilities Package"
-  parent: #1
+  parent: ROOT_CLASS
   owner: #2
   readable: true
 

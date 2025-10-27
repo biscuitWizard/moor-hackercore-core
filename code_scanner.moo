@@ -1,10 +1,10 @@
-object #95
+object CODE_SCANNER
   name: "Slither's Code Scanner"
-  parent: #78
+  parent: GENERIC_UTILS
   owner: #2
   readable: true
 
-  property integration_msg (owner: #12, flags: "r") = "%T is hard at work, scanning dat code.";
+  property integration_msg (owner: GUEST_LOG, flags: "r") = "%T is hard at work, scanning dat code.";
 
   override aliases = {"Slither's Code Scanner", "Code Scanner", "Scanner", "Code"};
   override help_msg = {
@@ -18,7 +18,7 @@ object #95
     "If you integrate this with your @Program verb I recommend you make a copy of it first and test on that just in case! But you can always use .program if you mess up!"
   };
 
-  verb scan_for_issues (this none this) owner: #36 flags: "rxd"
+  verb scan_for_issues (this none this) owner: HACKER flags: "rxd"
     "MOO Code Scanner 1.1 by Brendan Butts <slither@sindome.org>";
     "GitHub for this: https://github.com/SevenEcks/lambda-moo-programming";
     ":scan_for_issues(OBJ object, STR verbname, ?LIST options, ?LIST code";
@@ -109,7 +109,7 @@ object #95
     return warnings;
   endverb
 
-  verb display_issues (this none this) owner: #36 flags: "rxd"
+  verb display_issues (this none this) owner: HACKER flags: "rxd"
     ":display_issues(LIST warnings) => none";
     "takes the output of :scan_for_issues and displays it";
     {warnings} = args;
@@ -123,86 +123,86 @@ object #95
     endfor
   endverb
 
-  verb match_if (this none this) owner: #36 flags: "rxd"
+  verb match_if (this none this) owner: HACKER flags: "rxd"
     ":match_if(STR line) => bool";
     {line} = args;
     return match(line, "^[ ]*if ");
   endverb
 
-  verb match_for (this none this) owner: #36 flags: "rxd"
+  verb match_for (this none this) owner: HACKER flags: "rxd"
     ":match_for(STR line) => bool";
     {line} = args;
     return match(line, "^[ ]*for ");
   endverb
 
-  verb match_while (this none this) owner: #36 flags: "rxd"
+  verb match_while (this none this) owner: HACKER flags: "rxd"
     ":match_while(STR line) => bool";
     {line} = args;
     return match(line, "^[ ]*while ");
   endverb
 
-  verb match_endif (this none this) owner: #36 flags: "rxd"
+  verb match_endif (this none this) owner: HACKER flags: "rxd"
     ":match_endif(STR line) => bool";
     {line} = args;
     return match(line, "^[ ]*endif$");
   endverb
 
-  verb match_endfor (this none this) owner: #36 flags: "rxd"
+  verb match_endfor (this none this) owner: HACKER flags: "rxd"
     ":match_if(STR line) => bool";
     {line} = args;
     return match(line, "^[ ]*endfor$");
   endverb
 
-  verb match_endwhile (this none this) owner: #36 flags: "rxd"
+  verb match_endwhile (this none this) owner: HACKER flags: "rxd"
     ":match_endwhile(STR line) => bool";
     {line} = args;
     return match(line, "^[ ]*endwhile");
   endverb
 
-  verb match_fork (this none this) owner: #36 flags: "rxd"
+  verb match_fork (this none this) owner: HACKER flags: "rxd"
     ":match_fork(STR line) => bool";
     {line} = args;
     return match(line, "^[ ]*fork");
   endverb
 
-  verb match_object (this none this) owner: #36 flags: "rxd"
+  verb match_object (this none this) owner: HACKER flags: "rxd"
     ":match_object(STR line) => bool";
     {line} = args;
     return match(line, "^#[0-9]+");
   endverb
 
-  verb match_tell_tostr (this none this) owner: #36 flags: "rxd"
+  verb match_tell_tostr (this none this) owner: HACKER flags: "rxd"
     ":match_tell_tostr(STR line) => bool";
     {line} = args;
     return match(line, "^.*:tell(.*tostr(");
   endverb
 
-  verb match_comment (this none this) owner: #36 flags: "rxd"
+  verb match_comment (this none this) owner: HACKER flags: "rxd"
     ":match_comment(STR line) => bool";
     {line} = args;
     return match(line, "^[ ]*\"");
   endverb
 
-  verb match_arg_scatter (this none this) owner: #36 flags: "rxd"
+  verb match_arg_scatter (this none this) owner: HACKER flags: "rxd"
     ":match_arg_scatter(STR line) => bool";
     {line} = args;
     return match(line, "{.+} = args;");
   endverb
 
-  verb match_location_assignment (this none this) owner: #36 flags: "rxd"
+  verb match_location_assignment (this none this) owner: HACKER flags: "rxd"
     ":match_if(STR line) => bool";
     {line} = args;
     return match(line, "^[ ]*if (.+.location = .+)");
   endverb
 
-  verb match_if_assignment (this none this) owner: #36 flags: "rxd"
+  verb match_if_assignment (this none this) owner: HACKER flags: "rxd"
     ":match_if_assignment(STR line) => bool";
     "looks for assignment operators in if statements";
     {line} = args;
     return match(line, "^[ ]*if (.+ = .+)");
   endverb
 
-  verb match_recycler_valid (this none this) owner: #36 flags: "rxd"
+  verb match_recycler_valid (this none this) owner: HACKER flags: "rxd"
     ":match_recycler_valid(STR line) => LIST";
     {line} = args;
     return match(line, "^[ ]*if (%$recycler:valid");

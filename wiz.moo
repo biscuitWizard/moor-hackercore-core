@@ -1,22 +1,22 @@
-object #57
+object WIZ
   name: "Generic Wizard"
-  parent: #58
+  parent: PROG
   owner: #2
   readable: true
 
   property advertised (owner: #2, flags: "rc") = 1;
-  property mail_identity (owner: #2, flags: "c") = #-1;
+  property mail_identity (owner: #2, flags: "c") = NOTHING;
   property newt_msg (owner: #2, flags: "rc") = "%n @newts %d (%[#d])";
   property newt_victim_msg (owner: #2, flags: "rc") = "";
   property programmer_msg (owner: #2, flags: "rc") = "%d is now a programmer.";
   property programmer_victim_msg (owner: #2, flags: "rc") = "You are now a programmer.";
-  property public_identity (owner: #2, flags: "rc") = #-1;
+  property public_identity (owner: #2, flags: "rc") = NOTHING;
   property toad_msg (owner: #2, flags: "rc") = "%n @toads %d (%[#d])";
   property toad_victim_msg (owner: #2, flags: "rc") = "Have a nice life...";
 
   override aliases = {"Generic Wizard"};
   override description = "You see a wizard who chooses not to reveal its true appearance.";
-  override features = {#90, #75, #73, #9};
+  override features = {PASTING_FEATURE, BUILDER_FEATURE, PROG_FEATURE, VCS};
   override password = "really impossible password to type";
 
   verb "@shout" (any any any) owner: #2 flags: "rd"
@@ -375,7 +375,7 @@ object #57
       player:notify(tostr(who, ":recycle renamed."));
     endif
     "MOO-specific cleanup while still a player object.";
-    this:toad_cleanup(who);
+    $wiz_utils:toad_cleanup(who);
     e = $wiz_utils:unset_player(who, $hacker);
     player:notify(e ? tostr(who.name, "(", who, ") is now a toad.") | tostr(e));
     if (e && ($object_utils:isa(who.location, $room) && (msg = player:toad_msg())))
@@ -1153,7 +1153,7 @@ object #57
     endif
   endverb
 
-  verb parse_templist_duration (this none this) owner: #36 flags: "rxd"
+  verb parse_templist_duration (this none this) owner: HACKER flags: "rxd"
     "parses out the time interval at the beginning of the args[1], assumes rest is commentary.";
     if ((fw = $string_utils:first_word(args[1]))[1] == "for")
       words = $string_utils:words(fw[2]);
@@ -1280,13 +1280,6 @@ object #57
     endfor
     this.messages = msgs;
     return 1;
-  endverb
-
-  verb toad_cleanup (this none this) owner: #2 flags: "rxd"
-    if (!player.wizard || caller != this)
-      raise(E_PERM);
-    endif
-    "Noop. Placeholder verb for MOO-specific cleanups.";
   endverb
 
   verb "@argon2-config" (any any any) owner: #2 flags: "rd"
@@ -1433,9 +1426,44 @@ object #57
     endif
   endverb
 
-  verb "@pool @pools @pool/* @pools/*" (any any any) owner: #36 flags: "rd"
+  verb "@pool @pools @pool/* @pools/*" (any any any) owner: HACKER flags: "rd"
     if ($cu:switched_command(verb, "pool"))
       return;
     endif
+  endverb
+
+  verb "@grep*all @egrep*all" (any any any) owner: #2 flags: "rd"
+    "@grep <term>[in <objectlist>]";
+    set_task_perms(player);
+    if (prepstr == "in")
+      pattern = dobjstr;
+      objlist = player:eval_cmd_string(iobjstr, 0);
+      if (!objlist[1])
+        player:notify(tostr("Had trouble reading `", iobjstr, "':  "));
+        player:notify_lines(@objlist[2]);
+        return;
+      elseif (typeof(objlist[2]) == OBJ)
+        objlist = {objlist[2..2]};
+      elseif (typeof(objlist[2]) != LIST)
+        player:notify(tostr("Value of `", iobjstr, "' is not an object or list:  ", toliteral(objlist[2])));
+        return;
+      else
+        objlist = objlist[2..2];
+      endif
+    elseif (prepstr == "from" && (player.wizard && (n = toint(toobj(iobjstr)))))
+      pattern = dobjstr;
+      objlist = {n};
+    elseif (args && player.wizard)
+      pattern = argstr;
+      objlist = {};
+    else
+      player:notify(tostr("Usage:  ", verb, " <pattern> ", player.wizard ? "[in {<objectlist>} | from <number>]" | "in {<objectlist>}"));
+      return;
+    endif
+    player:notify(tostr("Searching for verbs ", @prepstr ? {prepstr, " ", iobjstr, " "} | {}, verb == "@egrep" ? "matching the pattern " | "containing the string ", toliteral(pattern), " ..."));
+    player:notify("");
+    egrep = verb[2] == "e";
+    all = index(verb, "a");
+    $code_utils:((all ? egrep ? "find_verb_lines_matching" | "find_verb_lines_containing" | (egrep ? "find_verbs_matching" | "find_verbs_containing")))(pattern, @objlist);
   endverb
 endobject

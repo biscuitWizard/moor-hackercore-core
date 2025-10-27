@@ -1,7 +1,7 @@
-object #27
+object SET_UTILS
   name: "Set Utilities"
-  parent: #78
-  owner: #36
+  parent: GENERIC_UTILS
+  owner: HACKER
   readable: true
 
   override aliases = {"Set Utilities", "set_utilities"};
@@ -33,7 +33,7 @@ object #27
     "        => true if and only if set1 and set2 are equal"
   };
 
-  verb union (this none this) owner: #36 flags: "rxd"
+  verb union (this none this) owner: HACKER flags: "rxd"
     "Returns the set union of all of the lists provided as arguments.";
     if (!args)
       return {};
@@ -47,7 +47,7 @@ object #27
     return set;
   endverb
 
-  verb intersection (this none this) owner: #36 flags: "rxd"
+  verb intersection (this none this) owner: HACKER flags: "rxd"
     "Returns the set intersection of all the lists provided as arguments.";
     if (!args)
       return {};
@@ -72,7 +72,7 @@ object #27
     return result;
   endverb
 
-  verb "diff*erence" (this none this) owner: #36 flags: "rxd"
+  verb "diff*erence" (this none this) owner: HACKER flags: "rxd"
     "Usage:  diff(set 1, set 2, ..., set n)";
     "Returns all elements of set 1 that are not in sets 2..n";
     {set, @rest} = args;
@@ -84,7 +84,7 @@ object #27
     return set;
   endverb
 
-  verb contains (this none this) owner: #36 flags: "rxd"
+  verb contains (this none this) owner: HACKER flags: "rxd"
     "True if the first list given is a superset of all subsequent lists.";
     "False otherwise.  {} is a superset of {} and nothing else; anything is";
     "a superset of {}.  If only one list is given, return true.";
@@ -99,7 +99,7 @@ object #27
     return 1;
   endverb
 
-  verb "exclusive_or xor" (this none this) owner: #36 flags: "rxd"
+  verb "exclusive_or xor" (this none this) owner: HACKER flags: "rxd"
     "Usage:  exclusive_or(set, set, ...)";
     "Return the set of all elements that are in exactly one of the input sets";
     "For two sets, this is the equivalent of (A u B) - (A n B).";
@@ -121,7 +121,7 @@ object #27
     return set;
   endverb
 
-  verb equal (this none this) owner: #36 flags: "rxd"
+  verb equal (this none this) owner: HACKER flags: "rxd"
     "True if the two lists given contain the same elements.";
     "False otherwise.";
     {set1, set2} = args;
@@ -146,7 +146,7 @@ object #27
     endif
   endverb
 
-  verb intersection_preserve_case (this none this) owner: #36 flags: "rxd"
+  verb intersection_preserve_case (this none this) owner: HACKER flags: "rxd"
     "Copied from Fox (#54902):intersection Mon Dec 27 17:02:57 1993 PST";
     "a version of $set_utils:intersection that maintains the property that everything in the return value is in the first argument, even considering case";
     if (!args)

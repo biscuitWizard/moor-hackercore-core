@@ -1,11 +1,11 @@
-object #79
+object ERROR
   name: "Trace-Back"
-  parent: #70
-  owner: #36
+  parent: CHANNEL
+  owner: HACKER
 
   override color = "brred";
 
-  verb log (this none this) owner: #36 flags: "rxd"
+  verb log (this none this) owner: HACKER flags: "rxd"
     {code, msg, value, ?stack = {}, ?traceback = {}} = args[1];
     best_stack = {};
     trace = {};
@@ -26,7 +26,7 @@ object #79
     this:transmit($ansi:red($su:from_list(trace, " <- ")));
   endverb
 
-  verb get_innermost_exception (this none this) owner: #36 flags: "rxd"
+  verb get_innermost_exception (this none this) owner: HACKER flags: "rxd"
     {exception} = args;
     if (typeof(exception) == LIST)
       if (typeof(exception[1]) == ERR)

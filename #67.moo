@@ -1,15 +1,15 @@
 object #67
   name: "Display Options"
-  parent: #68
-  owner: #36
+  parent: GENERIC_OPTIONS
+  owner: HACKER
   readable: true
 
-  property show_blank_tnt (owner: #36, flags: "rc") = {
+  property show_blank_tnt (owner: HACKER, flags: "rc") = {
     "Treat `this none this' verbs like the others.",
     "Blank out the args on `this none this' verbs."
   };
-  property show_shortprep (owner: #36, flags: "rc") = {"Display prepositions in full.", "Use short forms of prepositions."};
-  property show_thisonly (owner: #36, flags: "rc") = {
+  property show_shortprep (owner: HACKER, flags: "rc") = {"Display prepositions in full.", "Use short forms of prepositions."};
+  property show_thisonly (owner: HACKER, flags: "rc") = {
     "./: will show ancestor properties/verbs if none on this.",
     "./: will not show ancestor properties/verbs."
   };

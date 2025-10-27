@@ -1,6 +1,6 @@
 object #102
   name: "ANSI Options"
-  parent: #68
+  parent: GENERIC_OPTIONS
   owner: #98
   readable: true
 

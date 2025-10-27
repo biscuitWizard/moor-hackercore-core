@@ -1,10 +1,10 @@
-object #13
+object BIGLIST
   name: "Generic BigList Utilities"
-  parent: #78
-  owner: #36
+  parent: GENERIC_UTILS
+  owner: HACKER
   readable: true
 
-  property about (owner: #36, flags: "rc") = {
+  property about (owner: HACKER, flags: "rc") = {
     "Implementation notes",
     "--------------------",
     "Each biglist is actually a tree (a kind of B-tree, actually).",
@@ -21,7 +21,7 @@ object #13
     "the height is 0, in which case the subtrees are actually biglist elements of the arbitrary form determined by the home object.",
     "At every level, each node except the rightmost has between this.maxfanout/2 and this.maxfanout subtrees; the rightmost is allowed to have as few as 1 subtree."
   };
-  property maxfanout (owner: #36, flags: "rc") = 7;
+  property maxfanout (owner: HACKER, flags: "rc") = 7;
 
   override aliases = {"ghblu", "biglist_utils"};
   override description = {
@@ -103,24 +103,24 @@ object #13
     "     Calls home:leafkiller on each element."
   };
 
-  verb length (this none this) owner: #36 flags: "rxd"
+  verb length (this none this) owner: HACKER flags: "rxd"
     ":length(tree) => number of leaves in tree.";
     return args[1] ? args[1][2] | 0;
   endverb
 
-  verb find_nth (this none this) owner: #36 flags: "rxd"
+  verb find_nth (this none this) owner: HACKER flags: "rxd"
     ":find_nth(tree,n) => nth leaf of tree.  Assumes n in [1..tree[2]]";
     return this:_find_nth(caller, @args);
   endverb
 
-  verb find_ord (this none this) owner: #36 flags: "rxd"
+  verb find_ord (this none this) owner: HACKER flags: "rxd"
     ":_find_ord(tree,n,comp) ";
     " => index of rightmost leaf for which :(comp)(n,:_ord(leaf)) is false.";
     "returns 0 if true for all leaves.";
     return args[1] ? this:_find_ord(caller, @args) | 0;
   endverb
 
-  verb set_nth (this none this) owner: #36 flags: "rxd"
+  verb set_nth (this none this) owner: HACKER flags: "rxd"
     ":set_nth(tree,n,value) => tree";
     "modifies tree so that nth leaf == value";
     if ((n = args[2]) < 1 || (!(tree = args[1]) || tree[2] < n))
@@ -131,7 +131,7 @@ object #13
     endif
   endverb
 
-  verb kill (this none this) owner: #36 flags: "rxd"
+  verb kill (this none this) owner: HACKER flags: "rxd"
     ":kill(tree[,leafverb]) deletes tree and _kills all of the nodes that it uses.";
     "if leafverb is given, caller:leafverb is called on all leaves in tree.";
     if (tree = args[1])
@@ -141,7 +141,7 @@ object #13
     "... otherwise nothing to do...";
   endverb
 
-  verb "insert_after insert_before" (this none this) owner: #36 flags: "rxd"
+  verb "insert_after insert_before" (this none this) owner: HACKER flags: "rxd"
     ":insert_after(tree,subtree,n)";
     ":insert_before(tree,subtree,n)";
     "  inserts subtree after (before) the nth leaf of tree,";
@@ -166,12 +166,12 @@ object #13
     endif
   endverb
 
-  verb extract_range (this none this) owner: #36 flags: "rxd"
+  verb extract_range (this none this) owner: HACKER flags: "rxd"
     ":extract_range(tree,first,last) => {newtree,extraction}";
     return this:_extract(caller, @args);
   endverb
 
-  verb delete_range (this none this) owner: #36 flags: "rxd"
+  verb delete_range (this none this) owner: HACKER flags: "rxd"
     ":delete_range(tree,first,last[,leafkill]) => newtree";
     extract = this:_extract(caller, @args);
     if (die = extract[2])
@@ -180,7 +180,7 @@ object #13
     return extract[1];
   endverb
 
-  verb keep_range (this none this) owner: #36 flags: "rxd"
+  verb keep_range (this none this) owner: HACKER flags: "rxd"
     ":keep_range(tree,first,last[,leafkill]) => range";
     extract = this:_extract(caller, @args);
     if (die = extract[1])
@@ -189,7 +189,7 @@ object #13
     return extract[2];
   endverb
 
-  verb insert_last (this none this) owner: #36 flags: "rxd"
+  verb insert_last (this none this) owner: HACKER flags: "rxd"
     ":insert_last(tree,insert) => newtree";
     "insert a new leaf to be inserted at the righthand end of the tree";
     tree = args[1];
@@ -225,7 +225,7 @@ object #13
     return {caller:_make(length(rspine), {tree, insert}), tree[2] + 1, tree[3]};
   endverb
 
-  verb start (this none this) owner: #36 flags: "rxd"
+  verb start (this none this) owner: HACKER flags: "rxd"
     ":start(tree,first,last) => {list of leaf nodes, @handle}";
     "handle is of the form {{node,next,size}...}";
     if (tree = args[1])
@@ -252,7 +252,7 @@ object #13
     endif
   endverb
 
-  verb next (this none this) owner: #36 flags: "rxd"
+  verb next (this none this) owner: HACKER flags: "rxd"
     ":next(@handle) => {list of more leaf nodes, @newhandle}";
     if (args)
       spine = listdelete(args, 1);
@@ -275,7 +275,7 @@ object #13
     endif
   endverb
 
-  verb _find_nth (this none this) owner: #36 flags: "rxd"
+  verb _find_nth (this none this) owner: HACKER flags: "rxd"
     ":_find_nth(home,tree,n) => nth leaf of tree.";
     "...Assumes n in [1..tree[2]]";
     if (caller != this)
@@ -296,7 +296,7 @@ object #13
     endif
   endverb
 
-  verb _find_ord (this none this) owner: #36 flags: "rxd"
+  verb _find_ord (this none this) owner: HACKER flags: "rxd"
     ":_find_ord(home,tree,n,less_than) ";
     " => index of rightmost leaf for which :(less_than)(n,:_ord(leaf)) is false.";
     "returns 0 if true for all leaves.";
@@ -324,7 +324,7 @@ object #13
     endif
   endverb
 
-  verb _set_nth (this none this) owner: #36 flags: "rxd"
+  verb _set_nth (this none this) owner: HACKER flags: "rxd"
     ":_set_nth(home,tree,n,value) => tree[n] = value";
     "Assumes n in [1..tree[2]]";
     if (caller != this)
@@ -344,7 +344,7 @@ object #13
     endif
   endverb
 
-  verb _skill (this none this) owner: #36 flags: "rxd"
+  verb _skill (this none this) owner: HACKER flags: "rxd"
     ":_skill(home,node,kill_leaf)";
     "home:_kill's node and all descendants, home:(kill_leaf)'s all leaves";
     if (caller != this)
@@ -368,7 +368,7 @@ object #13
     home:_kill(node);
   endverb
 
-  verb _extract (this none this) owner: #36 flags: "rxd"
+  verb _extract (this none this) owner: HACKER flags: "rxd"
     ":_extract(home,tree,first,last) => {newtree,extraction}";
     if (caller != this)
       return E_PERM;
@@ -403,7 +403,7 @@ object #13
     return {this:_scrunch(home, newtree), this:_scrunch(home, extract)};
   endverb
 
-  verb _merge (this none this) owner: #36 flags: "rxd"
+  verb _merge (this none this) owner: HACKER flags: "rxd"
     "_merge(home,ltree,rtree) => newtree";
     "assumes ltree and rtree to be nonempty.";
     if (caller != this)
@@ -422,7 +422,7 @@ object #13
     return length(m) <= 1 ? m[1] | {home:_make(rh + 1, m), m[1][2] + m[2][2], m[1][3]};
   endverb
 
-  verb _smerge (this none this) owner: #36 flags: "rxd"
+  verb _smerge (this none this) owner: HACKER flags: "rxd"
     "_smerge(home, height, ltree, rtree) =>{ltree[,rtree]}";
     "assumes ltree and rtree are at the given height.";
     "merges the trees if the combined number of children is <= maxfanout";
@@ -472,7 +472,7 @@ object #13
     endif
   endverb
 
-  verb _split (this none this) owner: #36 flags: "rxd"
+  verb _split (this none this) owner: HACKER flags: "rxd"
     "_split(home, height,lmax,ltree[,@rtrees]}) => {ltree,[mtree,]@rtrees}";
     "ltree is split after the lmax'th leaf, the righthand portion grafted onto the leftmost of the rtrees, if possible.  Otherwise we create a new tree mtree, stealing from rtrees[1] if necessary.";
     "Assumes 1<=lmax<ltree[2]";
@@ -542,7 +542,7 @@ object #13
     endif
   endverb
 
-  verb _rmerge (this none this) owner: #36 flags: "rxd"
+  verb _rmerge (this none this) owner: HACKER flags: "rxd"
     ":_rmerge(home, tree, insertree) => newtree ";
     "(newtree is tree with insertree appended to the right)";
     "insertree is assumed to be of height < tree";
@@ -588,7 +588,7 @@ object #13
     return {home:_make(length(rspine) + iheight + 1, m), m[1][2] + m[2][2], m[1][3]};
   endverb
 
-  verb _scrunch (this none this) owner: #36 flags: "rxd"
+  verb _scrunch (this none this) owner: HACKER flags: "rxd"
     ":_scrunch(home,tree) => newtree";
     "decapitates single-child nodes from the top of the tree, returns new root.";
     if (caller != this)
@@ -604,7 +604,7 @@ object #13
     return tree;
   endverb
 
-  verb _listfind_nth (this none this) owner: #36 flags: "rxd"
+  verb _listfind_nth (this none this) owner: HACKER flags: "rxd"
     "_listfind_nth(nodelist,key) => {i,k} where i is the smallest i such that the sum of the first i elements of intlist is > key, and k==key - sum(first i-1 elements).";
     "1 <= i <= length(intlist)+1";
     {lst, key} = args;
@@ -617,13 +617,13 @@ object #13
     return {length(lst) + 1, key};
   endverb
 
-  verb _insertfirst (this none this) owner: #36 flags: "rxd"
+  verb _insertfirst (this none this) owner: HACKER flags: "rxd"
     if (caller != this)
       return E_PERM;
     endif
   endverb
 
-  verb debug (this none this) owner: #36 flags: "rxd"
+  verb debug (this none this) owner: HACKER flags: "rxd"
     return $perm_utils:controls(caller_perms(), this) ? this:((args[1]))(@listdelete(args, 1)) | E_PERM;
   endverb
 

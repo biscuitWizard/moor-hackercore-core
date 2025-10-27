@@ -1,10 +1,10 @@
-object #96
+object DIFF_UTILS
   name: "Diff Utils"
-  parent: #78
+  parent: GENERIC_UTILS
   owner: #2
   readable: true
 
-  property default_hash_algo (owner: #12, flags: "r") = "md5";
+  property default_hash_algo (owner: GUEST_LOG, flags: "r") = "md5";
 
   override aliases = {"Diff", "Utils", "Diff Utils"};
   override help_msg = {
@@ -13,7 +13,7 @@ object #96
     "This is a repackage (01/17/2021 by Slither) of the Diff Utility & Verbs that were provided as part of the original Stunt Improvise.db. The relevant verbs were combined and rewritten to work with ToastCore. Essentially that meant rewriting how the utility outputs text, and moving from using prototype calls of :slice and :reverse to using the ToastStunt builtins for the same functionality."
   };
 
-  verb _find_common_unique_lines (this none this) owner: #36 flags: "rxd"
+  verb _find_common_unique_lines (this none this) owner: HACKER flags: "rxd"
     {lines1, lines2, intern} = args;
     for v, k in (intern)
       intern[k] = {{0, 0}, {0, 0}};
@@ -34,7 +34,7 @@ object #96
     return items;
   endverb
 
-  verb _generate_diff (this none this) owner: #36 flags: "rxd"
+  verb _generate_diff (this none this) owner: HACKER flags: "rxd"
     {lines1, lines2, lcs} = args;
     last = {0, 0};
     lcs = {@lcs, {length(lines1) + 1, length(lines2) + 1}};
@@ -74,7 +74,7 @@ object #96
     return results;
   endverb
 
-  verb _hash_lines (this none this) owner: #36 flags: "rxd"
+  verb _hash_lines (this none this) owner: HACKER flags: "rxd"
     {lines, ?intern = []} = args;
     result = {};
     for line in (lines)
@@ -85,7 +85,7 @@ object #96
     return {result, intern};
   endverb
 
-  verb _find_lcs (this none this) owner: #36 flags: "rxd"
+  verb _find_lcs (this none this) owner: HACKER flags: "rxd"
     {items} = args;
     stacks = {};
     for item in (items)
@@ -113,7 +113,7 @@ object #96
     return results;
   endverb
 
-  verb diff (this none this) owner: #36 flags: "rxd"
+  verb diff (this none this) owner: HACKER flags: "rxd"
     {lines1, lines2} = args;
     intern = [];
     {hashed1, intern} = this:_hash_lines(lines1, intern);
@@ -122,7 +122,7 @@ object #96
     return this:_generate_diff(hashed1, hashed2, lcs);
   endverb
 
-  verb diff_display (this none this) owner: #36 flags: "rxd"
+  verb diff_display (this none this) owner: HACKER flags: "rxd"
     ":diff_display(STR diff_1_name, LIST diff_1_lines, STR diff_2_name, LIST diff_2_line) => NONE";
     "this verb will diff two sets of data and display the results";
     "it is primarily designed to diff an existing verb against proposed changes";

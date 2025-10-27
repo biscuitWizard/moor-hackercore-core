@@ -1,6 +1,6 @@
-object #53
+object LOCK_UTILS
   name: "Lock Utilities"
-  parent: #78
+  parent: GENERIC_UTILS
   owner: #2
   readable: true
 

@@ -1,6 +1,6 @@
-object #24
+object WIZ_UTILS
   name: "Wizard Utilities"
-  parent: #78
+  parent: GENERIC_UTILS
   owner: #2
   readable: true
 
@@ -10,7 +10,7 @@ object #24
   property chparent_restricted (owner: #2, flags: "") = {};
   property default_player_quota (owner: #2, flags: "rc") = 7;
   property default_programmer_quota (owner: #2, flags: "rc") = 7;
-  property expiration_progress (owner: #2, flags: "rc") = #-1;
+  property expiration_progress (owner: #2, flags: "rc") = NOTHING;
   property expiration_recipient (owner: #2, flags: "rc") = {#2};
   property gripe_recipients (owner: #2, flags: "rc") = {#2};
   property missed_help_counters (owner: #2, flags: "r") = {};
@@ -171,11 +171,11 @@ object #24
   property programmer_restricted_temp (owner: #2, flags: "rc") = {};
   property record_missed_help (owner: #2, flags: "rc") = 0;
   property registration_domain_restricted (owner: #2, flags: "rc") = 0;
-  property rename_restricted (owner: #36, flags: "") = {};
+  property rename_restricted (owner: HACKER, flags: "") = {};
   property shutdown_message (owner: #2, flags: "rc") = "";
   property shutdown_task (owner: #2, flags: "rc") = E_NONE;
   property suicide_string (owner: #2, flags: "rc") = "You don't *really* want to commit suicide, do you?";
-  property system_chars (owner: #2, flags: "rc") = {#36, #38, #71};
+  property system_chars (owner: #2, flags: "rc") = {HACKER, NO_ONE, BROADCAST};
   property wizards (owner: #2, flags: "rc") = {#2};
 
   override aliases = {"Wizard Utilities"};
@@ -525,7 +525,7 @@ object #24
     endif
   endverb
 
-  verb "connected_wizards connected_wizards_unadvertised" (this none this) owner: #36 flags: "rxd"
+  verb "connected_wizards connected_wizards_unadvertised" (this none this) owner: HACKER flags: "rxd"
     ":connected_wizards() => list of currently connected wizards and players mentioned in .public_identity properties as being wizard counterparts.";
     wizzes = $object_utils:leaves($wiz);
     wlist = {};
@@ -543,7 +543,7 @@ object #24
     return wlist;
   endverb
 
-  verb "all_wizards_advertised all_wizards all_wizards_unadvertised" (this none this) owner: #36 flags: "rxd"
+  verb "all_wizards_advertised all_wizards all_wizards_unadvertised" (this none this) owner: HACKER flags: "rxd"
     ":all_wizards_advertised() => list of all wizards who have set .advertised true and players mentioned their .public_identity properties as being wizard counterparts";
     wizzes = $object_utils:leaves($wiz);
     wlist = {};
@@ -823,10 +823,10 @@ object #24
       return E_PERM;
     endif
     {name, address, @rest} = args;
-    new = $quota_utils:bi_create($player_class, $nothing);
+    new = create($player_class, $nothing);
     new.name = name;
     new.aliases = {name};
-    new.password = $login:encrypt_password(password = $wiz_utils:random_password(5));
+    new.password = $login:encrypt_password(password = $wiz_utils:random_password(5), new);
     new.last_password_time = time();
     new.last_connect_time = $maxint;
     "Last disconnect time is creation time, until they login.";
@@ -1151,7 +1151,7 @@ object #24
     endif
   endverb
 
-  verb is_wizard (this none this) owner: #36 flags: "rxd"
+  verb is_wizard (this none this) owner: HACKER flags: "rxd"
     ":is_wizard(who) => whether `who' is a wizard or is the .public_identity of some wizard.";
     "This verb is used for permission checks on commands that should only be accessible to wizards or their ordinary-player counterparts.  It will return true for unadvertised wizards.";
     who = args[1];
@@ -1322,7 +1322,12 @@ object #24
     return n;
   endverb
 
-  verb is_staff (this none this) owner: #36 flags: "rxd"
+  verb is_staff (this none this) owner: HACKER flags: "rxd"
     return $false;
+  endverb
+
+  verb toad_cleanup (this none this) owner: #2 flags: "rxd"
+    "placeholder verb for moo-specific code to run when a player is toaded";
+    caller != this || !caller_perms().wizard || raise(E_PERM);
   endverb
 endobject

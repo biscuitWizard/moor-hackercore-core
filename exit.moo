@@ -1,18 +1,18 @@
-object #7
+object EXIT
   name: "Generic Exit"
-  parent: #1
+  parent: ROOT_CLASS
   owner: #2
   readable: true
 
   property arrive_msg (owner: #2, flags: "rc") = 0;
-  property dest (owner: #2, flags: "rc") = #-1;
+  property dest (owner: #2, flags: "rc") = NOTHING;
   property leave_msg (owner: #2, flags: "rc") = 0;
   property nogo_msg (owner: #2, flags: "rc") = 0;
   property oarrive_msg (owner: #2, flags: "rc") = 0;
   property obvious (owner: #2, flags: "rc") = 1;
   property oleave_msg (owner: #2, flags: "rc") = 0;
   property onogo_msg (owner: #2, flags: "rc") = 0;
-  property source (owner: #2, flags: "rc") = #-1;
+  property source (owner: #2, flags: "rc") = NOTHING;
 
   override aliases = {"Generic Exit"};
 

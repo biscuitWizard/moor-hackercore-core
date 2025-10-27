@@ -1,14 +1,14 @@
-object #74
+object FEATURE
   name: "Generic Feature Object"
-  parent: #5
-  location: #83
-  owner: #36
+  parent: THING
+  location: FEATURE_WAREHOUSE
+  owner: HACKER
   readable: true
 
-  property feature_ok (owner: #36, flags: "r") = 1;
-  property feature_verbs (owner: #36, flags: "r") = {"Using"};
-  property help_msg (owner: #36, flags: "rc") = "The Generic Feature Object--not to be used as a feature object.";
-  property warehouse (owner: #36, flags: "r") = #83;
+  property feature_ok (owner: HACKER, flags: "r") = 1;
+  property feature_verbs (owner: HACKER, flags: "r") = {"Using"};
+  property help_msg (owner: HACKER, flags: "rc") = "The Generic Feature Object--not to be used as a feature object.";
+  property warehouse (owner: HACKER, flags: "r") = FEATURE_WAREHOUSE;
 
   override aliases = {
     "Generic Feature Object",
@@ -18,7 +18,7 @@ object #74
   };
   override description = "This is the Generic Feature Object.  It is not meant to be used as a feature object itself, but is handy for making new feature objects.";
 
-  verb help_msg (this none this) owner: #36 flags: "rxd"
+  verb help_msg (this none this) owner: HACKER flags: "rxd"
     all_help = this.help_msg;
     if (typeof(all_help) == STR)
       all_help = {all_help};
@@ -41,7 +41,7 @@ object #74
     return {@all_help, "----"};
   endverb
 
-  verb look_self (this none this) owner: #36 flags: "rxd"
+  verb look_self (this none this) owner: HACKER flags: "rxd"
     "Definition from #1";
     desc = this:description();
     if (desc)
@@ -52,7 +52,7 @@ object #74
     player:tell("Please type \"help ", this, "\" for more information.");
   endverb
 
-  verb "using this" (this none this) owner: #36 flags: "rxd"
+  verb "using this" (this none this) owner: HACKER flags: "rxd"
     "Proper usage for the Generic Feature Object:";
     "";
     "First of all, the Generic Feature Object is constructed with the idea";
@@ -77,7 +77,7 @@ object #74
     return this in args[1].features;
   endverb
 
-  verb set_feature_ok (this none this) owner: #36 flags: "rxd"
+  verb set_feature_ok (this none this) owner: HACKER flags: "rxd"
     if ($perm_utils:controls(caller_perms(), this) || caller == this)
       return this.feature_ok = args[1];
     else
@@ -85,7 +85,7 @@ object #74
     endif
   endverb
 
-  verb hidden_verbs (this none this) owner: #36 flags: "rxd"
+  verb hidden_verbs (this none this) owner: HACKER flags: "rxd"
     "Can't see `get' unless it's in the room; can't see `drop' unless it's in the player.  Should possibly go on $thing.";
     "Should use :contents, but I'm in a hurry.";
     hidden = pass(@args);
@@ -99,7 +99,7 @@ object #74
     return hidden;
   endverb
 
-  verb set_feature_verbs (this none this) owner: #36 flags: "rxd"
+  verb set_feature_verbs (this none this) owner: HACKER flags: "rxd"
     if ($perm_utils:controls(caller_perms(), this) || caller == this)
       return this.feature_verbs = args[1];
     else
@@ -107,7 +107,7 @@ object #74
     endif
   endverb
 
-  verb initialize (this none this) owner: #36 flags: "rxd"
+  verb initialize (this none this) owner: HACKER flags: "rxd"
     if (caller == this || $perm_utils:controls(caller_perms(), this))
       pass(@args);
       this.feature_verbs = {};

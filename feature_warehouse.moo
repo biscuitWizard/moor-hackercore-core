@@ -1,15 +1,15 @@
-object #83
+object FEATURE_WAREHOUSE
   name: "Feature Warehouse"
-  parent: #8
-  location: #62
-  owner: #36
+  parent: CONTAINER
+  location: PLAYER_START
+  owner: HACKER
   readable: true
 
   override aliases = {"Feature Warehouse", "warehouse"};
   override dark = 0;
   override opened = 1;
 
-  verb list (any in this) owner: #36 flags: "rxd"
+  verb list (any in this) owner: HACKER flags: "rxd"
     "Copied from Features Feature Object (#24300):list by Joe (#2612) Mon Oct 10 21:07:35 1994 PDT";
     if (this.contents)
       player:tell(".features objects:");

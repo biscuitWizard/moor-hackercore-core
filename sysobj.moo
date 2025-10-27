@@ -1,120 +1,134 @@
-object #0
+object SYSOBJ
   name: "The System Object"
   owner: #2
   readable: true
 
-  property ambiguous_match (owner: #2, flags: "r") = #-2;
-  property anon (owner: #2, flags: "r") = #120;
-  property ansi (owner: #2, flags: "r") = #25;
-  property big_mail_recipient (owner: #2, flags: "r") = #14;
-  property biglist (owner: #2, flags: "r") = #13;
-  property broadcast (owner: #2, flags: "r") = #71;
-  property builder (owner: #2, flags: "r") = #4;
-  property builder_feature (owner: #2, flags: "r") = #75;
-  property building_utils (owner: #2, flags: "r") = #21;
-  property channel (owner: #2, flags: "r") = #70;
+  property ambiguous_match (owner: #2, flags: "r") = AMBIGUOUS_MATCH;
+  property anon (owner: #2, flags: "r") = ANON;
+  property ansi (owner: #2, flags: "r") = ANSI;
+  property big_mail_recipient (owner: #2, flags: "r") = BIG_MAIL_RECIPIENT;
+  property biglist (owner: #2, flags: "r") = BIGLIST;
+  property broadcast (owner: #2, flags: "r") = BROADCAST;
+  property builder (owner: #2, flags: "r") = BUILDER;
+  property builder_feature (owner: #2, flags: "r") = BUILDER_FEATURE;
+  property building_utils (owner: #2, flags: "r") = BUILDING_UTILS;
+  property channel (owner: #2, flags: "r") = CHANNEL;
   property class_registry (owner: #2, flags: "r") = {
     {
       "generics",
       "Generic objects intended for use as the parents of new objects",
-      {#3, #7, #5, #9, #54, #8, #1, #6, #58, #57, #50, #45, #46},
-      #4
+      {
+        ROOM,
+        EXIT,
+        THING,
+        VCS,
+        #54,
+        CONTAINER,
+        ROOT_CLASS,
+        PLAYER,
+        PROG,
+        WIZ,
+        SCHEDULER,
+        #45,
+        #46
+      },
+      BUILDER
     },
     {
       "utilities",
       "Objects holding useful general-purpose verbs",
       {
-        #20,
-        #55,
-        #24,
-        #27,
-        #41,
-        #26,
-        #43,
-        #51,
-        #52,
-        #53,
-        #56,
-        #42,
-        #21,
-        #33,
-        #13,
-        #79,
+        STRING_UTILS,
+        LIST_UTILS,
+        WIZ_UTILS,
+        SET_UTILS,
+        GENDER_UTILS,
+        MATH_UTILS,
+        TIME_UTILS,
+        MATCH_UTILS,
+        OBJECT_UTILS,
+        LOCK_UTILS,
+        COMMAND_UTILS,
+        PERM_UTILS,
+        BUILDING_UTILS,
+        SEQ_UTILS,
+        BIGLIST,
+        ERROR,
         #81,
-        #59,
-        #91,
-        #93,
+        CODE_UTILS,
+        MATRIX_UTILS,
+        CONVERT_UTILS,
         #99,
-        #122,
-        #125,
-        #75
+        EDIT_UTILS,
+        MENU_UTILS,
+        BUILDER_FEATURE
       },
-      #58
+      PROG
     },
     {
       "server",
       "Objects containing functionality that affects the server.",
-      {#64, #82, #97},
-      #57
+      {TELNET, SERVER_OPTIONS, HELP},
+      WIZ
     },
     {
       "prototypes",
       "Objects containing verbs that can be called on their corresponding types.",
-      {#117, #119, #115, #114, #111},
-      #58
+      {MAP_PROTO, STR_PROTO, LIST_PROTO, PROTO, OBJ_PROTO},
+      PROG
     }
   };
-  property code_scanner (owner: #2, flags: "r") = #95;
-  property code_utils (owner: #2, flags: "r") = #59;
-  property command_utils (owner: #2, flags: "r") = #56;
-  property container (owner: #2, flags: "r") = #8;
-  property convert_utils (owner: #2, flags: "r") = #93;
-  property cu (owner: #2, flags: "r") = #56;
-  property datastore (owner: #2, flags: "r") = #37;
-  property diff_utils (owner: #2, flags: "r") = #96;
-  property edit_session (owner: #2, flags: "r") = #126;
-  property edit_state (owner: #2, flags: "r") = #124;
-  property edit_utils (owner: #2, flags: "r") = #122;
-  property error (owner: #2, flags: "r") = #79;
-  property exit (owner: #2, flags: "r") = #7;
-  property failed_match (owner: #2, flags: "r") = #-3;
+  property code_scanner (owner: #2, flags: "r") = CODE_SCANNER;
+  property code_utils (owner: #2, flags: "r") = CODE_UTILS;
+  property command_utils (owner: #2, flags: "r") = COMMAND_UTILS;
+  property container (owner: #2, flags: "r") = CONTAINER;
+  property convert_utils (owner: #2, flags: "r") = CONVERT_UTILS;
+  property cu (owner: #2, flags: "r") = COMMAND_UTILS;
+  property datastore (owner: #2, flags: "r") = DATASTORE;
+  property diff_utils (owner: #2, flags: "r") = DIFF_UTILS;
+  property edit_session (owner: #2, flags: "r") = EDIT_SESSION;
+  property edit_state (owner: #2, flags: "r") = EDIT_STATE;
+  property edit_utils (owner: #2, flags: "r") = EDIT_UTILS;
+  property error (owner: #2, flags: "r") = ERROR;
+  property exit (owner: #2, flags: "r") = EXIT;
+  property failed_match (owner: #2, flags: "r") = FAILED_MATCH;
   property false (owner: #2, flags: "r") = 0;
-  property feature (owner: #2, flags: "r") = #74;
-  property feature_warehouse (owner: #2, flags: "r") = #83;
+  property feature (owner: #2, flags: "r") = FEATURE;
+  property feature_warehouse (owner: #2, flags: "r") = FEATURE_WAREHOUSE;
   property frobs (owner: #2, flags: "r") = {};
-  property garbage (owner: #2, flags: "r") = #49;
-  property gender_utils (owner: #2, flags: "r") = #41;
-  property gendered_object (owner: #2, flags: "r") = #94;
-  property generic_help (owner: #2, flags: "r") = #30;
-  property generic_options (owner: #2, flags: "r") = #68;
-  property generic_utils (owner: #2, flags: "r") = #78;
-  property guest (owner: #2, flags: "r") = #31;
-  property guest_log (owner: #2, flags: "r") = #12;
-  property hacker (owner: #2, flags: "r") = #36;
-  property help (owner: #2, flags: "r") = #97;
-  property int_proto (owner: #2, flags: "r") = #116;
-  property last_huh (owner: #2, flags: "r") = #11;
-  property limbo (owner: #2, flags: "r") = #15;
-  property list_proto (owner: #2, flags: "r") = #115;
-  property list_utils (owner: #2, flags: "r") = #55;
-  property lock_utils (owner: #2, flags: "r") = #53;
-  property login (owner: #2, flags: "r") = #10;
-  property lu (owner: #2, flags: "r") = #55;
-  property map_proto (owner: #2, flags: "r") = #117;
-  property match_utils (owner: #2, flags: "r") = #51;
-  property math_utils (owner: #2, flags: "r") = #26;
-  property matrix_utils (owner: #36, flags: "r") = #91;
+  property garbage (owner: #2, flags: "r") = GARBAGE;
+  property gender_utils (owner: #2, flags: "r") = GENDER_UTILS;
+  property gendered_object (owner: #2, flags: "r") = GENDERED_OBJECT;
+  property generic_help (owner: #2, flags: "r") = GENERIC_HELP;
+  property generic_options (owner: #2, flags: "r") = GENERIC_OPTIONS;
+  property generic_utils (owner: #2, flags: "r") = GENERIC_UTILS;
+  property guest (owner: #2, flags: "r") = GUEST;
+  property guest_log (owner: #2, flags: "r") = GUEST_LOG;
+  property hacker (owner: #2, flags: "r") = HACKER;
+  property help (owner: #2, flags: "r") = HELP;
+  property int_proto (owner: #2, flags: "r") = INT_PROTO;
+  property last_huh (owner: #2, flags: "r") = LAST_HUH;
+  property limbo (owner: #2, flags: "r") = LIMBO;
+  property list_proto (owner: #2, flags: "r") = LIST_PROTO;
+  property list_utils (owner: #2, flags: "r") = LIST_UTILS;
+  property lock_utils (owner: #2, flags: "r") = LOCK_UTILS;
+  property login (owner: #2, flags: "r") = LOGIN;
+  property lu (owner: #2, flags: "r") = LIST_UTILS;
+  property map_proto (owner: #2, flags: "r") = MAP_PROTO;
+  property match_utils (owner: #2, flags: "r") = MATCH_UTILS;
+  property math_utils (owner: #2, flags: "r") = MATH_UTILS;
+  property matrix_utils (owner: HACKER, flags: "r") = MATRIX_UTILS;
   property maxint (owner: #2, flags: "r") = 9223372036854775807;
-  property mcp (owner: #2, flags: "r") = #110;
-  property menu_utils (owner: #2, flags: "r") = #125;
+  property mcp (owner: #2, flags: "r") = MCP;
+  property menu_utils (owner: #2, flags: "r") = MENU_UTILS;
   property minint (owner: #2, flags: "r") = -9223372036854775807;
-  property mu (owner: #2, flags: "r") = #26;
-  property network (owner: #2, flags: "r") = #72;
-  property news (owner: #2, flags: "r") = #61;
-  property no_one (owner: #2, flags: "r") = #38;
-  property nothing (owner: #2, flags: "r") = #-1;
-  property obj_proto (owner: #2, flags: "r") = #111;
-  property object_utils (owner: #2, flags: "r") = #52;
+  property mu (owner: #2, flags: "r") = MATH_UTILS;
+  property network (owner: #2, flags: "r") = NETWORK;
+  property news (owner: #2, flags: "r") = NEWS;
+  property no_one (owner: #2, flags: "r") = NO_ONE;
+  property nothing (owner: #2, flags: "r") = NOTHING;
+  property obj_proto (owner: #2, flags: "r") = OBJ_PROTO;
+  property object_utils (owner: #2, flags: "r") = OBJECT_UTILS;
   property options (owner: #2, flags: "r") = [
     "ansi" -> #102,
     "build" -> #77,
@@ -123,51 +137,51 @@ object #0
     "mail" -> #65,
     "prog" -> #76
   ];
-  property ou (owner: #2, flags: "r") = #52;
-  property pasting_feature (owner: #2, flags: "r") = #90;
-  property perm_utils (owner: #2, flags: "r") = #42;
-  property player (owner: #2, flags: "r") = #6;
-  property player_class (owner: #2, flags: "r") = #6;
-  property player_start (owner: #2, flags: "r") = #62;
-  property prog (owner: #2, flags: "r") = #58;
-  property prog_feature (owner: #2, flags: "r") = #73;
-  property proto (owner: #2, flags: "r") = #114;
-  property recycler (owner: #2, flags: "r") = #47;
-  property recycling_pool (owner: #2, flags: "r") = #48;
-  property room (owner: #2, flags: "r") = #3;
-  property root_class (owner: #2, flags: "r") = #1;
-  property scheduler (owner: #36, flags: "r") = #50;
-  property seq_utils (owner: #2, flags: "r") = #33;
+  property ou (owner: #2, flags: "r") = OBJECT_UTILS;
+  property pasting_feature (owner: #2, flags: "r") = PASTING_FEATURE;
+  property perm_utils (owner: #2, flags: "r") = PERM_UTILS;
+  property player (owner: #2, flags: "r") = PLAYER;
+  property player_class (owner: #2, flags: "r") = PLAYER;
+  property player_start (owner: #2, flags: "r") = PLAYER_START;
+  property prog (owner: #2, flags: "r") = PROG;
+  property prog_feature (owner: #2, flags: "r") = PROG_FEATURE;
+  property proto (owner: #2, flags: "r") = PROTO;
+  property recycler (owner: #2, flags: "r") = RECYCLER;
+  property recycling_pool (owner: #2, flags: "r") = RECYCLING_POOL;
+  property room (owner: #2, flags: "r") = ROOM;
+  property root_class (owner: #2, flags: "r") = ROOT_CLASS;
+  property scheduler (owner: HACKER, flags: "r") = SCHEDULER;
+  property seq_utils (owner: #2, flags: "r") = SEQ_UTILS;
   property server (owner: #2, flags: "r") = [
     "core_history" -> {
       {"HackerCore", "2.7.2", 1721211497},
       {"ToastCore", "2.7.1", 1713940026},
       {"a 2018 LambdaCore", "2.6.0", 1576791887}
     },
-    "last_restart_time" -> 1760442474,
+    "last_restart_time" -> 1761539693,
     "name" -> "HackerCore-mooR",
     "shutdown_time" -> 0
   ];
-  property server_options (owner: #2, flags: "r") = #82;
-  property set_utils (owner: #2, flags: "r") = #27;
-  property singleton (owner: #2, flags: "r") = #17;
-  property singleton_warehouse (owner: #2, flags: "r") = #84;
-  property spell (owner: #2, flags: "r") = #32;
-  property str_proto (owner: #2, flags: "r") = #119;
-  property string_utils (owner: #2, flags: "r") = #20;
-  property su (owner: #2, flags: "r") = #20;
-  property sysobj (owner: #2, flags: "r") = #0;
-  property telnet (owner: #2, flags: "r") = #64;
-  property thing (owner: #2, flags: "r") = #5;
-  property time_utils (owner: #2, flags: "r") = #43;
-  property trig_utils (owner: #2, flags: "r") = #26;
+  property server_options (owner: #2, flags: "r") = SERVER_OPTIONS;
+  property set_utils (owner: #2, flags: "r") = SET_UTILS;
+  property singleton (owner: #2, flags: "r") = SINGLETON;
+  property singleton_warehouse (owner: #2, flags: "r") = SINGLETON_WAREHOUSE;
+  property spell (owner: #2, flags: "r") = SPELL;
+  property str_proto (owner: #2, flags: "r") = STR_PROTO;
+  property string_utils (owner: #2, flags: "r") = STRING_UTILS;
+  property su (owner: #2, flags: "r") = STRING_UTILS;
+  property sysobj (owner: #2, flags: "r") = SYSOBJ;
+  property telnet (owner: #2, flags: "r") = TELNET;
+  property thing (owner: #2, flags: "r") = THING;
+  property time_utils (owner: #2, flags: "r") = TIME_UTILS;
+  property trig_utils (owner: #2, flags: "r") = MATH_UTILS;
   property true (owner: #2, flags: "r") = 1;
-  property tu (owner: #36, flags: "r") = #43;
-  property vcs (owner: #2, flags: "r") = #9;
-  property who (owner: #36, flags: "r") = #60;
-  property wiz (owner: #2, flags: "r") = #57;
-  property wiz_utils (owner: #2, flags: "r") = #24;
-  property you (owner: #36, flags: "r") = #35;
+  property tu (owner: HACKER, flags: "r") = TIME_UTILS;
+  property vcs (owner: #2, flags: "r") = VCS;
+  property who (owner: HACKER, flags: "r") = WHO;
+  property wiz (owner: #2, flags: "r") = WIZ;
+  property wiz_utils (owner: #2, flags: "r") = WIZ_UTILS;
+  property you (owner: HACKER, flags: "r") = YOU;
 
   verb do_login_command (this none this) owner: #2 flags: "rxd"
     "...This code should only be run as a server task...";
@@ -535,7 +549,7 @@ object #0
     return typeof(retval) == ERR && $code_utils:dflag_on() ? raise(retval) | retval;
   endverb
 
-  verb "s ies es" (this none this) owner: #36 flags: "rxd"
+  verb "s ies es" (this none this) owner: HACKER flags: "rxd"
     return $string_utils:pluralize(@args);
   endverb
 endobject

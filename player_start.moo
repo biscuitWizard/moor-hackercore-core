@@ -1,7 +1,7 @@
-object #62
+object PLAYER_START
   name: "The First Room"
-  parent: #3
-  owner: #36
+  parent: ROOM
+  owner: HACKER
   readable: true
 
   override description = "This is all there is right now.";
@@ -29,7 +29,7 @@ object #62
     endif
   endverb
 
-  verb match (this none this) owner: #36 flags: "rxd"
+  verb match (this none this) owner: HACKER flags: "rxd"
     "Copied from The Coat Closet (#11):match by Lambda (#50) Mon May  8 10:42:01 1995 PDT";
     m = pass(@args);
     if (m == $failed_match)

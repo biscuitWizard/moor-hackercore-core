@@ -1,13 +1,13 @@
-object #38
+object NO_ONE
   name: "Generic Property-Based Columnar Datastore"
-  parent: #37
-  location: #84
-  owner: #36
+  parent: DATASTORE
+  location: SINGLETON_WAREHOUSE
+  owner: HACKER
   readable: true
 
-  property key_prefix (owner: #36, flags: "r") = "_";
+  property key_prefix (owner: HACKER, flags: "r") = "_";
 
-  verb save (this none this) owner: #36 flags: "rxd"
+  verb save (this none this) owner: HACKER flags: "rxd"
     ":save(OBJ/STR/INT/FLOAT key, LIST values) => NONE";
     "  Adds or updates a value in the datastore";
     {key, @data} = args;
@@ -25,7 +25,7 @@ object #38
     endtry
   endverb
 
-  verb save_at (this none this) owner: #36 flags: "rxd"
+  verb save_at (this none this) owner: HACKER flags: "rxd"
     ":save_at(STR key, INT/STR column_index, ANY value) => ROW LIST values";
     "  Saves a value at a specific cell.";
     "  column index is 1-based, not 0-based.";
@@ -49,7 +49,7 @@ object #38
     endtry
   endverb
 
-  verb retrieve (this none this) owner: #36 flags: "rxd"
+  verb retrieve (this none this) owner: HACKER flags: "rxd"
     ":retrieve(STR key) => ROW LIST values";
     "  Retrieves a row stored at key";
     {raw_key} = args;
@@ -61,7 +61,7 @@ object #38
     endtry
   endverb
 
-  verb retrieve_at (this none this) owner: #36 flags: "rxd"
+  verb retrieve_at (this none this) owner: HACKER flags: "rxd"
     ":retrieve(STR key, INT column_index) => CELL ANY value";
     "  Retrieves a cell of row stored at key";
     {raw_key, column_index} = args;
@@ -74,7 +74,7 @@ object #38
     endtry
   endverb
 
-  verb keys (this none this) owner: #36 flags: "rxd"
+  verb keys (this none this) owner: HACKER flags: "rxd"
     ":keys() => LIST of all keys present on datastore";
     keys = {};
     for prop in (properties(this))
@@ -86,7 +86,7 @@ object #38
     return keys;
   endverb
 
-  verb delete (this none this) owner: #36 flags: "rxd"
+  verb delete (this none this) owner: HACKER flags: "rxd"
     ":delete(OBJ/STR/FLOAT/INT key) => NONE";
     "  Deletes a key, will not throw if the key does not exist";
     {raw_key} = args;
@@ -94,7 +94,7 @@ object #38
     `delete_property(this, key) ! E_PROPNF';
   endverb
 
-  verb has_key (this none this) owner: #36 flags: "rxd"
+  verb has_key (this none this) owner: HACKER flags: "rxd"
     ":has(OBJ/STR/FLOAT/INT key) => BOOL if key exits";
     "  retrieves data located at key";
     {key} = args;
@@ -102,7 +102,7 @@ object #38
     return $ou:has_property(this, key);
   endverb
 
-  verb format_key (this none this) owner: #36 flags: "rxd"
+  verb format_key (this none this) owner: HACKER flags: "rxd"
     ":format_key(OBJ/STR/INT/FLOAT key) => STR key";
     "  converts a key into proper format";
     {key} = args;
@@ -112,7 +112,7 @@ object #38
     return tostr(this.key_prefix, $su:lowercase(pcre_replace(tostr(key), "s/\\s/_/g")));
   endverb
 
-  verb resolve_column_index (this none this) owner: #36 flags: "rxd"
+  verb resolve_column_index (this none this) owner: HACKER flags: "rxd"
     ":resolve_column_index(STR/INT column_index) => INT";
     "  Resolves a column identifier into an index";
     "  and also validates that the index is correct.";

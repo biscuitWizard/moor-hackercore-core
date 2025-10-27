@@ -1,6 +1,6 @@
-object #3
+object ROOM
   name: "Generic Room"
-  parent: #1
+  parent: ROOT_CLASS
   owner: #2
   readable: true
 
@@ -568,7 +568,7 @@ object #3
     endif
   endverb
 
-  verb free_entry (this none this) owner: #36 flags: "rxd"
+  verb free_entry (this none this) owner: HACKER flags: "rxd"
     return this.free_entry;
   endverb
 
@@ -591,7 +591,7 @@ object #3
     return valid(who) && (this.free_home || $perm_utils:controls(who, this) || (typeof(residents = this.residents) == LIST ? who in this.residents | who == this.residents));
   endverb
 
-  verb "l*ook" (any any any) owner: #36 flags: "rxd"
+  verb "l*ook" (any any any) owner: HACKER flags: "rxd"
     if (dobjstr == "" && !prepstr)
       this:look_self();
     elseif (prepstr != "in" && prepstr != "on")

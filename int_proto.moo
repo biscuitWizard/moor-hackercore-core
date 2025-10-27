@@ -1,6 +1,6 @@
-object #116
+object INT_PROTO
   name: "Integer Prototype"
-  parent: #114
+  parent: PROTO
   owner: #2
 
   verb "*" (this none this) owner: #2 flags: "rxd"

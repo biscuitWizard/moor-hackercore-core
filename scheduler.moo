@@ -1,14 +1,14 @@
-object #50
+object SCHEDULER
   name: "Moo Task Scheduler"
-  parent: #78
-  owner: #36
+  parent: GENERIC_UTILS
+  owner: HACKER
 
-  property incoming_tasks (owner: #36, flags: "r") = {};
-  property kill_tasks (owner: #36, flags: "r") = {};
-  property killed_tasks (owner: #36, flags: "r") = {};
-  property processing (owner: #36, flags: "r") = 0;
-  property run_task (owner: #36, flags: "r") = 0;
-  property scheduled_tasks (owner: #36, flags: "r") = {};
+  property incoming_tasks (owner: HACKER, flags: "r") = {};
+  property kill_tasks (owner: HACKER, flags: "r") = {};
+  property killed_tasks (owner: HACKER, flags: "r") = {};
+  property processing (owner: HACKER, flags: "r") = 0;
+  property run_task (owner: HACKER, flags: "r") = 0;
+  property scheduled_tasks (owner: HACKER, flags: "r") = {};
 
   override help_msg = {
     "OVERVIEW",
@@ -177,7 +177,7 @@ object #50
     endif
   endverb
 
-  verb schedule_for (this none this) owner: #36 flags: "rxd"
+  verb schedule_for (this none this) owner: HACKER flags: "rxd"
     "schedule_for( INT time, OBJ object, STR verbname [, LIST optional_args]) =>";
     "add verbname on object to be run at time seconds from now.  If optional_args is given, then they are passed to the verb when it's run";
     {runtime, object, verbname, ?opargs = {}} = args;
@@ -191,7 +191,7 @@ object #50
     return this:start();
   endverb
 
-  verb schedule_at (this none this) owner: #36 flags: "rxd"
+  verb schedule_at (this none this) owner: HACKER flags: "rxd"
     "schedule_at( INT time, OBJ object, STR verbname [, LIST optional_args]) =>";
     "add verbname on object to be run at time (as time() returns).  If optional_args is given, then they are passed to the verb when it's run";
     {runtime, object, verbname, ?opargs = {}} = args;
@@ -213,7 +213,7 @@ object #50
     return this:start();
   endverb
 
-  verb "start halt" (this none this) owner: #36 flags: "rxd"
+  verb "start halt" (this none this) owner: HACKER flags: "rxd"
     "halt => stops scheduler";
     "start => starts scheduler";
     kill = 0;
@@ -223,7 +223,7 @@ object #50
     return this:run_scheduled(kill);
   endverb
 
-  verb schedule_every (this none this) owner: #36 flags: "rxd"
+  verb schedule_every (this none this) owner: HACKER flags: "rxd"
     "schedule_every( VARIES interval, OBJ object, STR verbname [, LIST optional_args, INT allow_duplicates]) =>";
     "add verbname on object to be run every interval seconds from now.  If optional_args is given, then they are passed to the verb when it's run";
     "if allow_duplicates is passed and true, duplicate entries will be allowed, otherwise they will not";
@@ -256,12 +256,12 @@ object #50
     return this:start();
   endverb
 
-  verb look_Self (this none this) owner: #36 flags: "rxd"
+  verb look_Self (this none this) owner: HACKER flags: "rxd"
     pass(@args);
     this:display_schedule();
   endverb
 
-  verb remove_scheduled (this none this) owner: #36 flags: "rxd"
+  verb remove_scheduled (this none this) owner: HACKER flags: "rxd"
     "remove_scheduled( OBJ object, STR verbname, LIST iargs = \"THIS IS A NULL VALUE\") => remove object:verbname from scheduled tasks to be run.";
     " Returns 1 if the task was successfully removed, 0 if it wasn't";
     " Returns E_PERM if the caller is not the owner and not a wizard";
@@ -295,7 +295,7 @@ object #50
     return killed;
   endverb
 
-  verb is_scheduled (this none this) owner: #36 flags: "rxd"
+  verb is_scheduled (this none this) owner: HACKER flags: "rxd"
     ":is_scheduled(object OBJ, verbname STR) => returns 1 if the object:verbname is scheduled, 0 if it's not";
     {objt, verbname} = args;
     for tasks in ({this.scheduled_tasks, this.incoming_tasks})
@@ -308,7 +308,7 @@ object #50
     return 0;
   endverb
 
-  verb match (this none this) owner: #36 flags: "rxd"
+  verb match (this none this) owner: HACKER flags: "rxd"
     command = callers()[$][2];
     if (command in {"look", "l"})
       filter = args[1];
@@ -325,7 +325,7 @@ object #50
     return pass(@args);
   endverb
 
-  verb when_scheduled (this none this) owner: #36 flags: "rxd"
+  verb when_scheduled (this none this) owner: HACKER flags: "rxd"
     ":when_scheduled(OBJ objt, STR verbname) => INT";
     "returns timestamp when a verb is scheduled for";
     {objt, verbname} = args;
@@ -339,7 +339,7 @@ object #50
     return 0;
   endverb
 
-  verb next_runtime (this none this) owner: #36 flags: "rxd"
+  verb next_runtime (this none this) owner: HACKER flags: "rxd"
     ":next_runtime(@scheduled_task) => runtime INT (time value)";
     " given a scheduled task, calculates the next runtime";
     {repeat, object, verbo, runtime, owner, ?opargs = {}} = args;
@@ -372,7 +372,7 @@ object #50
     return 0;
   endverb
 
-  verb check_repeat_args (this none this) owner: #36 flags: "rxd"
+  verb check_repeat_args (this none this) owner: HACKER flags: "rxd"
     {repeat} = args;
     typeis = typeof(repeat);
     if (typeis == LIST)
@@ -405,7 +405,7 @@ object #50
     endif
   endverb
 
-  verb describe_repeat (this none this) owner: #36 flags: "rxd"
+  verb describe_repeat (this none this) owner: HACKER flags: "rxd"
     {repeat} = args;
     if (!repeat)
       return "";
@@ -423,7 +423,7 @@ object #50
     return "bad args";
   endverb
 
-  verb display_schedule (this none this) owner: #36 flags: "rxd"
+  verb display_schedule (this none this) owner: HACKER flags: "rxd"
     ":display_schedule(?LIST tasks) => none";
     "display the scheduled tasks that are passed in, or the entire schedule if none passed in";
     {?to_do = this.scheduled_tasks} = args;
@@ -466,7 +466,7 @@ object #50
     player:tell("List too long? 'help $scheduler' to view @scheduled options to prune it down.");
   endverb
 
-  verb core_references (this none this) owner: #36 flags: "rxd"
+  verb core_references (this none this) owner: HACKER flags: "rxd"
     ":core_references(OBJ thing) => LIST";
     "return a list of props on $sysobj that point to thing";
     {thing} = args;

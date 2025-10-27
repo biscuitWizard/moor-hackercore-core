@@ -1,6 +1,6 @@
-object #64
+object TELNET
   name: "Telnet Handler"
-  parent: #1
+  parent: ROOT_CLASS
   owner: #2
   readable: true
 

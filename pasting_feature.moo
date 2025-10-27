@@ -1,7 +1,7 @@
-object #90
+object PASTING_FEATURE
   name: "Pasting Feature"
-  parent: #74
-  owner: #36
+  parent: FEATURE
+  owner: HACKER
   readable: true
 
   override aliases = {"Pasting Feature"};
@@ -9,7 +9,7 @@ object #90
   override feature_verbs = {"@paste", "|", "@paste-to"};
   override help_msg = "The Pasting Feature is mostly useful to people with fancy clients (such as Emacs) or who connect using a windowing system that allows them to copy text they've already seen.  It's intended to give people a way to quote verbatim text at other people in the room.";
 
-  verb "@paste" (any any any) owner: #36 flags: "rx"
+  verb "@paste" (any any any) owner: HACKER flags: "rx"
     "Usage: @paste <prefix> <suffix>";
     "Announce a series of entered lines to the room the player is in.";
     "Before the lines are quoted, player.paste_header is run through";
@@ -37,7 +37,7 @@ object #90
     player:tell("Done @pasting.");
   endverb
 
-  verb "|*" (any any any) owner: #36 flags: "rxd"
+  verb "|*" (any any any) owner: HACKER flags: "rxd"
     "Echo a line prefaced by a vertical bar.";
     "Usage:";
     "  |message";
@@ -49,7 +49,7 @@ object #90
     player.location:announce_all(player.name + " | " + verb[2..$] + " " + argstr);
   endverb
 
-  verb "@pasteto @paste-to" (any none none) owner: #36 flags: "rxd"
+  verb "@pasteto @paste-to" (any none none) owner: HACKER flags: "rxd"
     "Syntax: @paste-to <player>";
     "";
     "Which will then prompt you for the lines to privately send to <player>. The lines will be surrounded by a default footer and header.";

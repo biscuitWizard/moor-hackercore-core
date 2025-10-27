@@ -1,12 +1,12 @@
-object #51
+object MATCH_UTILS
   name: "matching utilities"
-  parent: #78
-  owner: #36
+  parent: GENERIC_UTILS
+  owner: HACKER
   readable: true
 
-  property matching_room (owner: #12, flags: "r") = #-1;
-  property ordinal_regexp (owner: #12, flags: "r") = "%<%(first%|second%|third%|fourth%|fifth%|sixth%|seventh%|eighth%|ninth%|tenth%|1st%|2nd%|3rd%|4th%|5th%|6th%|7th%|8th%|9th%|10th%)%>";
-  property ordn (owner: #12, flags: "r") = {
+  property matching_room (owner: GUEST_LOG, flags: "r") = NOTHING;
+  property ordinal_regexp (owner: GUEST_LOG, flags: "r") = "%<%(first%|second%|third%|fourth%|fifth%|sixth%|seventh%|eighth%|ninth%|tenth%|1st%|2nd%|3rd%|4th%|5th%|6th%|7th%|8th%|9th%|10th%)%>";
+  property ordn (owner: GUEST_LOG, flags: "r") = {
     "first",
     "second",
     "third",
@@ -18,7 +18,7 @@ object #51
     "ninth",
     "tenth"
   };
-  property ordw (owner: #12, flags: "r") = {"1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"};
+  property ordw (owner: GUEST_LOG, flags: "r") = {"1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"};
 
   override aliases = {"matching utilities"};
   override help_msg = {
@@ -35,7 +35,7 @@ object #51
     "For more documentation, see help $match_utils:<specific verb>."
   };
 
-  verb nmatch (this none this) owner: #36 flags: "rxd"
+  verb nmatch (this none this) owner: HACKER flags: "rxd"
     ":match(string, object-list)";
     "Return object in 'object-list' aliased to 'string'.";
     "Matches on a wide variety of syntax, including:";
@@ -76,7 +76,7 @@ object #51
     endif
   endverb
 
-  verb match_nth (this none this) owner: #36 flags: "rxd"
+  verb match_nth (this none this) owner: HACKER flags: "rxd"
     ":match_nth(string, objlist, n)";
     "Find the nth object in 'objlist' that matches 'string'.";
     {what, where, n} = args;
@@ -92,7 +92,7 @@ object #51
     return $failed_match;
   endverb
 
-  verb match_verb (this none this) owner: #36 flags: "rxd"
+  verb match_verb (this none this) owner: HACKER flags: "rxd"
     "$match_utils:match_verb(verbname, object) => Looks for a command-line style verb named <verbname> on <object> with current values of prepstr, dobjstr, dobj, iobjstr, and iobj.  If a match is made, the verb is called with @args[3] as arguments and 1 is returned.  Otherwise, 0 is returned.";
     {vrb, what, rest} = args;
     if (where = $object_utils:has_verb(what, vrb))
@@ -106,7 +106,7 @@ object #51
     endif
   endverb
 
-  verb match_list (this none this) owner: #36 flags: "rxd"
+  verb match_list (this none this) owner: HACKER flags: "rxd"
     ":match_list(string, object_list) -> List of all matches.";
     {what, where} = args;
     if (!what)
@@ -129,7 +129,7 @@ object #51
     "Hydros (#106189) - Sun Jul 3, 2005 - Changed listappend to a splice to save ticks. Old code commented above.";
   endverb
 
-  verb "parse_ordinal_reference parse_ordref" (this none this) owner: #36 flags: "rxd"
+  verb "parse_ordinal_reference parse_ordref" (this none this) owner: HACKER flags: "rxd"
     ":parse_ordref(string)";
     "Parses strings referring to an 'nth' object.";
     "=> {INT n, STR object} Where 'n' is the number the ordinal represents, and 'object' is the rest of the string.";
@@ -147,7 +147,7 @@ object #51
     endif
   endverb
 
-  verb parse_possessive_reference (this none this) owner: #36 flags: "rxd"
+  verb parse_possessive_reference (this none this) owner: HACKER flags: "rxd"
     ":parse_possessive_reference(string)";
     "Parses strings in a possessive format.";
     "=> {STR whose, STR object}  Where 'whose' is the possessor of 'object'.";
@@ -169,7 +169,7 @@ object #51
     "Profane (#30788) - Sun Jun 21, 1998 - changed first parenthetical match bit from %([^ ]+s?%) to %(.+s?%)";
   endverb
 
-  verb object_match_failed (this none this) owner: #36 flags: "rx"
+  verb object_match_failed (this none this) owner: HACKER flags: "rx"
     "Usage: object_match_failed(object, string[, ambigs])";
     "Prints a message if string does not match object.  Generally used after object is derived from a :match_object(string).";
     "ambigs is an optional list of the objects that were matched upon.  If given, the message printed will list the ambiguous among them as choices.";
@@ -206,7 +206,7 @@ object #51
     return 1;
   endverb
 
-  verb match_object_or_character (this none this) owner: #36 flags: "rxd"
+  verb match_object_or_character (this none this) owner: HACKER flags: "rxd"
     "this command will take either an obj# as a string or a character as a string and attempt to find the correct obj#";
     {object_string, ?suppress_messages = 0} = args;
     what = toobj(object_string) == $sysobj ? $nothing | toobj(object_string);
@@ -216,14 +216,14 @@ object #51
     return what;
   endverb
 
-  verb match_character (this none this) owner: #36 flags: "rxd"
+  verb match_character (this none this) owner: HACKER flags: "rxd"
     ":match_character(STR name) => OBJ character";
     "  Matches any character in the entire game.";
     {?character_name = ""} = args;
     return `player:matches(character_name, $ou:descendants($player))[1] ! ANY => $failed_match';
   endverb
 
-  verb match_map (this none this) owner: #36 flags: "rxd"
+  verb match_map (this none this) owner: HACKER flags: "rxd"
     ":match_map(STR search, MAP obj_map[, STR prop_name]) => STR key if match";
     "  special matcher like $su:match that works with maps";
     "  keys should be a string we want to return, and the values should be objects";

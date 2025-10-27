@@ -1,9 +1,9 @@
-object #71
+object BROADCAST
   name: "Channel Broadcaster Proxy"
-  parent: #17
-  owner: #36
+  parent: SINGLETON
+  owner: HACKER
 
-  property channels (owner: #36, flags: "r") = [
+  property channels (owner: HACKER, flags: "r") = [
     "build" -> #85,
     "build_alerts" -> #85,
     "code" -> #81,
@@ -12,7 +12,7 @@ object #71
     "staff_alerts" -> #80
   ];
 
-  verb "code build_alerts build prog prog_alerts staff_alerts" (this none this) owner: #36 flags: "rxd"
+  verb "code build_alerts build prog prog_alerts staff_alerts" (this none this) owner: HACKER flags: "rxd"
     return this.channels[verb]:transmit(tostr(@args));
   endverb
 endobject

@@ -1,4 +1,4 @@
-object #120
+object ANON
   name: "Generic Anonymous Not a Real Object"
-  owner: #-1
+  owner: ANON
 endobject

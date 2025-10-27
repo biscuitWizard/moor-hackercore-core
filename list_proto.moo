@@ -1,6 +1,6 @@
-object #115
+object LIST_PROTO
   name: "List Prototype"
-  parent: #114
+  parent: PROTO
   owner: #2
 
   verb "add remove" (this none this) owner: #2 flags: "rxd"

@@ -1,6 +1,6 @@
-object #15
+object LIMBO
   name: "Limbo"
-  parent: #1
+  parent: ROOT_CLASS
   owner: #2
   readable: true
 
@@ -34,11 +34,11 @@ object #15
     who.location:announce_all_but({who}, who.name, " has connected.");
   endverb
 
-  verb who_location_msg (this none this) owner: #36 flags: "rxd"
+  verb who_location_msg (this none this) owner: HACKER flags: "rxd"
     return $player_start:who_location_msg(@args);
   endverb
 
-  verb moveto (this none this) owner: #36 flags: "rxd"
+  verb moveto (this none this) owner: HACKER flags: "rxd"
     "Don't go anywhere.";
   endverb
 

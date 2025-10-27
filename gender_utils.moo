@@ -1,11 +1,11 @@
-object #41
+object GENDER_UTILS
   name: "Gender Utilities"
-  parent: #78
-  owner: #36
+  parent: GENERIC_UTILS
+  owner: HACKER
   readable: true
 
-  property be (owner: #36, flags: "rc") = {"is", "is", "is", "is", "is", "is", "are", "am", "are", "are", "are"};
-  property genders (owner: #36, flags: "rc") = {
+  property be (owner: HACKER, flags: "rc") = {"is", "is", "is", "is", "is", "is", "are", "am", "are", "are", "are"};
+  property genders (owner: HACKER, flags: "rc") = {
     "neuter",
     "male",
     "female",
@@ -17,7 +17,7 @@ object #41
     "royal",
     "2nd"
   };
-  property have (owner: #36, flags: "rc") = {
+  property have (owner: HACKER, flags: "rc") = {
     "has",
     "has",
     "has",
@@ -30,12 +30,12 @@ object #41
     "have",
     "have"
   };
-  property is_plural (owner: #36, flags: "rc") = {0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
-  property po (owner: #36, flags: "rc") = {"it", "him", "her", "him/her", "em", "h*", "them", "me", "us", "you"};
-  property poc (owner: #36, flags: "rc") = {"It", "Him", "Her", "Him/Her", "Em", "H*", "Them", "Me", "Us", "You"};
-  property pp (owner: #36, flags: "rc") = {"its", "his", "her", "his/her", "eir", "h*", "their", "my", "our", "your"};
-  property ppc (owner: #36, flags: "rc") = {"Its", "His", "Her", "His/Her", "Eir", "H*", "Their", "My", "Our", "Your"};
-  property pq (owner: #36, flags: "rc") = {
+  property is_plural (owner: HACKER, flags: "rc") = {0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
+  property po (owner: HACKER, flags: "rc") = {"it", "him", "her", "him/her", "em", "h*", "them", "me", "us", "you"};
+  property poc (owner: HACKER, flags: "rc") = {"It", "Him", "Her", "Him/Her", "Em", "H*", "Them", "Me", "Us", "You"};
+  property pp (owner: HACKER, flags: "rc") = {"its", "his", "her", "his/her", "eir", "h*", "their", "my", "our", "your"};
+  property ppc (owner: HACKER, flags: "rc") = {"Its", "His", "Her", "His/Her", "Eir", "H*", "Their", "My", "Our", "Your"};
+  property pq (owner: HACKER, flags: "rc") = {
     "its",
     "his",
     "hers",
@@ -47,7 +47,7 @@ object #41
     "ours",
     "yours"
   };
-  property pqc (owner: #36, flags: "rc") = {
+  property pqc (owner: HACKER, flags: "rc") = {
     "Its",
     "His",
     "Hers",
@@ -59,7 +59,7 @@ object #41
     "Ours",
     "Yours"
   };
-  property pr (owner: #36, flags: "rc") = {
+  property pr (owner: HACKER, flags: "rc") = {
     "itself",
     "himself",
     "herself",
@@ -71,7 +71,7 @@ object #41
     "ourselves",
     "yourself"
   };
-  property prc (owner: #36, flags: "rc") = {
+  property prc (owner: HACKER, flags: "rc") = {
     "Itself",
     "Himself",
     "Herself",
@@ -83,9 +83,9 @@ object #41
     "Ourselves",
     "Yourself"
   };
-  property pronouns (owner: #36, flags: "rc") = {"ps", "po", "pp", "pq", "pr", "psc", "poc", "ppc", "pqc", "prc"};
-  property ps (owner: #36, flags: "rc") = {"it", "he", "she", "s/he", "e", "*e", "they", "I", "we", "you"};
-  property psc (owner: #36, flags: "rc") = {"It", "He", "She", "S/He", "E", "*E", "They", "I", "We", "You"};
+  property pronouns (owner: HACKER, flags: "rc") = {"ps", "po", "pp", "pq", "pr", "psc", "poc", "ppc", "pqc", "prc"};
+  property ps (owner: HACKER, flags: "rc") = {"it", "he", "she", "s/he", "e", "*e", "they", "I", "we", "you"};
+  property psc (owner: HACKER, flags: "rc") = {"It", "He", "She", "S/He", "E", "*E", "They", "I", "We", "You"};
 
   override aliases = {"Gender Utilities"};
   override description = {
@@ -165,7 +165,7 @@ object #41
     endif
   endverb
 
-  verb get_pronoun (this none this) owner: #36 flags: "rxd"
+  verb get_pronoun (this none this) owner: HACKER flags: "rxd"
     "get_pronoun(key,object) => pronoun corresponding to object.";
     "key can be one of s,o,p,q,r,S,O,P,Q,R to refer to the pronoun properties relatively directly or it can be something of the form \"he/she\" or \"He/She\".";
     "Next the object is checked for the desired pronoun property.  If that doesn't exist, we look at object.gender and infer the pronoun from the corresponding $gender_utils property.  If .gender doesn't exist or the object itself is invalid, we use the corresponding property on $player.";
@@ -195,7 +195,7 @@ object #41
     endif
   endverb
 
-  verb "get_conj*ugation" (this none this) owner: #36 flags: "rxd"
+  verb "get_conj*ugation" (this none this) owner: HACKER flags: "rxd"
     "get_conj(verbspec,object) => verb conjugated according to object.";
     "verbspec can be one of \"singular/plural\", \"singular\", \"singular/\", or \"/plural\", e.g., \"is/are\", \"is\", \"is/\", or \"/are\".";
     "The object is checked to see whether it is singular or plural.  This is inferred from its .gender property.  If .gender doesn't exist or the object itself is invalid, we assume singular.";
@@ -220,7 +220,7 @@ object #41
     endif
   endverb
 
-  verb _verb_plural (this none this) owner: #36 flags: "rxd"
+  verb _verb_plural (this none this) owner: HACKER flags: "rxd"
     {st, idx} = args;
     if (typeof(st) != STR)
       return E_INVARG;
@@ -254,7 +254,7 @@ object #41
     endif
   endverb
 
-  verb _verb_singular (this none this) owner: #36 flags: "rxd"
+  verb _verb_singular (this none this) owner: HACKER flags: "rxd"
     {st, ?idx = 1} = args;
     if (typeof(st) != STR)
       return E_INVARG;
@@ -275,7 +275,7 @@ object #41
     endif
   endverb
 
-  verb _do (this none this) owner: #36 flags: "rxd"
+  verb _do (this none this) owner: HACKER flags: "rxd"
     "_do(cap,object,modifiers...)";
     {cap, object, modifiers} = args;
     if (!modifiers)

@@ -1,9 +1,9 @@
-object #117
+object MAP_PROTO
   name: "Map Prototype"
-  parent: #114
+  parent: PROTO
   owner: #2
 
-  verb "keys values delete" (this none this) owner: #36 flags: "rxd"
+  verb "keys values delete" (this none this) owner: HACKER flags: "rxd"
     "map:keys(), :values(), :delete(val)";
     return call_function("map" + verb, @args);
   endverb

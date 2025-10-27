@@ -1,6 +1,6 @@
-object #4
+object BUILDER
   name: "Generic Builder"
-  parent: #6
+  parent: PLAYER
   owner: #2
   readable: true
 
@@ -8,7 +8,7 @@ object #4
 
   override aliases = {"Generic Builder"};
   override description = "You see a player who should type '@describe me as ...'.";
-  override features = {#90, #89, #75, #9};
+  override features = {PASTING_FEATURE, #89, BUILDER_FEATURE, VCS};
 
   verb match (this none this) owner: #2 flags: "rxd"
     ":match(STR subject) => OBJ match";
@@ -207,7 +207,7 @@ object #4
     endif
   endverb
 
-  verb "@listedit @pedit" (any none none) owner: #36 flags: "rd"
+  verb "@listedit @pedit" (any none none) owner: HACKER flags: "rd"
     "@listedit|@pedit object.prop -- invokes the list editor.";
     "   if you are editing a list of strings, you're better off using @notedit.";
     $list_editor:invoke(dobjstr, verb);

@@ -1,13 +1,13 @@
-object #75
+object BUILDER_FEATURE
   name: "Builder Feature"
-  parent: #74
-  location: #83
-  owner: #36
+  parent: FEATURE
+  location: FEATURE_WAREHOUSE
+  owner: HACKER
   readable: true
 
   override aliases = {"Builder", "Feature", "Builder Feature"};
 
-  verb "@children @kids" (any none any) owner: #36 flags: "rxd"
+  verb "@children @kids" (any none any) owner: HACKER flags: "rxd"
     "Usage:  @tree <object> [-d] [search objects by name]";
     "Shows an object hierarchy beginning with the given object. All fertile children";
     "and children with children are included in the tree.  The output includes the";
@@ -36,7 +36,7 @@ object #75
     player:tell("----- End of @tree listing for ", $string_utils:nn(root), details ? " [kids, verbs and properties]" | "");
   endverb
 
-  verb "@tree" (any none any) owner: #36 flags: "rxd"
+  verb "@tree" (any none any) owner: HACKER flags: "rxd"
     "Usage:  @tree <object> [-d] [search objects by name]";
     "Shows an object hierarchy beginning with the given object. All fertile children";
     "and children with children are included in the tree.  The output includes the";
@@ -65,7 +65,7 @@ object #75
     player:tell("----- End of @tree listing for ", $string_utils:nn(root), details ? " [kids, verbs and properties]" | "");
   endverb
 
-  verb do_tree (this none this) owner: #36 flags: "rxd"
+  verb do_tree (this none this) owner: HACKER flags: "rxd"
     ":do_tree(OBJ root, INT indent, STR search_text, [INT details, BOOL require_fertile = 1, STR color = \"normal\"])";
     "traverse fertile kids of given root object";
     {root, indent, search_text, ?details = 0, ?require_fertile = 1, ?color = "normal"} = args;
@@ -231,7 +231,7 @@ object #75
     player:notify($string_utils:names_of({what, @$object_utils:locations(what)}));
   endverb
 
-  verb "@chparent" (any at any) owner: #36 flags: "rd"
+  verb "@chparent" (any at any) owner: HACKER flags: "rd"
     set_task_perms(player);
     if ($command_utils:object_match_failed(object = player:match(dobjstr), dobjstr))
       "...bogus object...";
@@ -267,7 +267,7 @@ object #75
     endif
   endverb
 
-  verb "@grep*all @egrep*all" (any any any) owner: #36 flags: "rd"
+  verb "@grep*all @egrep*all" (any any any) owner: HACKER flags: "rd"
     "Copied from Generic Agent (#58):@grep [verb author FishPot (#2)] at Thu Jan  5 08:47:14 2023 UTC";
     if (!this.programmer)
       return this:tell("This can only be used by programmers.");

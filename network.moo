@@ -1,6 +1,6 @@
-object #72
+object NETWORK
   name: "Network Utilities"
-  parent: #1
+  parent: ROOT_CLASS
   owner: #2
   readable: true
 
@@ -17,8 +17,8 @@ object #72
   property password_postmaster (owner: #2, flags: "rc") = "postmastername@yourhost";
   property port (owner: #2, flags: "rc") = 7777;
   property postmaster (owner: #2, flags: "rc") = "postmastername@yourhost";
-  property queued_mail (owner: #36, flags: "") = {};
-  property queued_mail_task (owner: #36, flags: "r") = 1076002766;
+  property queued_mail (owner: HACKER, flags: "") = {};
+  property queued_mail_task (owner: HACKER, flags: "r") = 1076002766;
   property site (owner: #2, flags: "r") = "yoursite";
   property suspicious_userids (owner: #2, flags: "rc") = {
     "",
@@ -35,7 +35,7 @@ object #72
     "sysop",
     "info"
   };
-  property trusts (owner: #2, flags: "r") = {#36};
+  property trusts (owner: #2, flags: "r") = {HACKER};
   property usual_postmaster (owner: #2, flags: "rc") = "postmastername@yourhost";
   property valid_email_regexp (owner: #2, flags: "rc") = "^[-a-z0-9_!.%+$'=/]*[-a-z0-9_!%+$'=]$";
   property valid_host_regexp (owner: #2, flags: "rc") = "^%([-_a-z0-9]+%.%)+%([-_a-z0-9]+%)$";
@@ -301,7 +301,7 @@ object #72
     return `read(@args) ! ANY';
   endverb
 
-  verb is_open (this none this) owner: #36 flags: "rxd"
+  verb is_open (this none this) owner: HACKER flags: "rxd"
     ":is_open(object)";
     "return true if the object is somehow connected, false otherwise.";
     return typeof(`idle_seconds(@args) ! ANY') == INT;
@@ -376,7 +376,7 @@ object #72
     endif
   endverb
 
-  verb help_msg (this none this) owner: #36 flags: "rxd"
+  verb help_msg (this none this) owner: HACKER flags: "rxd"
     "'cause this doesn't have a $_utils name";
     return this:description();
   endverb
@@ -394,7 +394,7 @@ object #72
     endif
   endverb
 
-  verb add_queued_mail (this none this) owner: #36 flags: "rxd"
+  verb add_queued_mail (this none this) owner: HACKER flags: "rxd"
     "$network:add_queued_mail( mail message )";
     "  -- where `mail message' is in the same format as passed to :raw_sendmail";
     if (caller == this)

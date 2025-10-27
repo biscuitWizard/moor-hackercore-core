@@ -1,10 +1,10 @@
-object #25
+object ANSI
   name: "ANSI Color System"
-  parent: #78
-  owner: #12
+  parent: GENERIC_UTILS
+  owner: GUEST_LOG
   readable: true
 
-  property 8bit_colors (owner: #12, flags: "r") = [
+  property 8bit_colors (owner: GUEST_LOG, flags: "r") = [
     "black" -> 0,
     "blue" -> 4,
     "brblack" -> 8,
@@ -22,7 +22,7 @@ object #25
     "white" -> 7,
     "yellow" -> 3
   ];
-  property 8bit_colors_reverse_map (owner: #12, flags: "r") = [
+  property 8bit_colors_reverse_map (owner: GUEST_LOG, flags: "r") = [
     0 -> "black",
     1 -> "red",
     2 -> "green",
@@ -40,27 +40,27 @@ object #25
     14 -> "brcyan",
     15 -> "brwhite"
   ];
-  property all_Regexp (owner: #12, flags: "r") = "`[fbxluon][0-9][0-9][0-9]]";
-  property bgblue (owner: #12, flags: "r") = "[44m";
-  property bgcyan (owner: #12, flags: "r") = "[46m";
-  property bggreen (owner: #12, flags: "r") = "[42m";
-  property bgred (owner: #12, flags: "r") = "[41m";
-  property bgyellow (owner: #12, flags: "r") = "[43m";
-  property black (owner: #12, flags: "r") = "[0;30m";
-  property blink (owner: #12, flags: "r") = "[5m";
-  property blue (owner: #12, flags: "r") = "[34m";
-  property bold (owner: #12, flags: "r") = "[1m";
-  property brblack (owner: #12, flags: "r") = "e[40m";
-  property brblue (owner: #12, flags: "r") = "[1m\x1B[34m";
-  property brcyan (owner: #12, flags: "r") = "[1m\x1B[36m";
-  property brgreen (owner: #12, flags: "r") = "[1m\x1B[32m";
-  property bright (owner: #12, flags: "r") = "[1m";
-  property brmagenta (owner: #12, flags: "r") = "[1m\x1B[35m";
-  property brred (owner: #12, flags: "r") = "[1m\x1B[31m";
-  property brwhite (owner: #12, flags: "r") = "[1m\x1B[37m";
-  property bryellow (owner: #12, flags: "r") = "[1m\x1B[33m";
-  property chameleon_colors (owner: #12, flags: "r") = {40, 41, 42, 43, 44, 45, 44, 43, 42, 41};
-  property clothing_table (owner: #12, flags: "r") = {
+  property all_Regexp (owner: GUEST_LOG, flags: "r") = "`[fbxluon][0-9][0-9][0-9]]";
+  property bgblue (owner: GUEST_LOG, flags: "r") = "[44m";
+  property bgcyan (owner: GUEST_LOG, flags: "r") = "[46m";
+  property bggreen (owner: GUEST_LOG, flags: "r") = "[42m";
+  property bgred (owner: GUEST_LOG, flags: "r") = "[41m";
+  property bgyellow (owner: GUEST_LOG, flags: "r") = "[43m";
+  property black (owner: GUEST_LOG, flags: "r") = "[0;30m";
+  property blink (owner: GUEST_LOG, flags: "r") = "[5m";
+  property blue (owner: GUEST_LOG, flags: "r") = "[34m";
+  property bold (owner: GUEST_LOG, flags: "r") = "[1m";
+  property brblack (owner: GUEST_LOG, flags: "r") = "e[40m";
+  property brblue (owner: GUEST_LOG, flags: "r") = "[1m\x1B[34m";
+  property brcyan (owner: GUEST_LOG, flags: "r") = "[1m\x1B[36m";
+  property brgreen (owner: GUEST_LOG, flags: "r") = "[1m\x1B[32m";
+  property bright (owner: GUEST_LOG, flags: "r") = "[1m";
+  property brmagenta (owner: GUEST_LOG, flags: "r") = "[1m\x1B[35m";
+  property brred (owner: GUEST_LOG, flags: "r") = "[1m\x1B[31m";
+  property brwhite (owner: GUEST_LOG, flags: "r") = "[1m\x1B[37m";
+  property bryellow (owner: GUEST_LOG, flags: "r") = "[1m\x1B[33m";
+  property chameleon_colors (owner: GUEST_LOG, flags: "r") = {40, 41, 42, 43, 44, 45, 44, 43, 42, 41};
+  property clothing_table (owner: GUEST_LOG, flags: "r") = {
     {"normal", "brown"},
     {"normal", "flat black"},
     {"normal", "matte black"},
@@ -114,16 +114,16 @@ object #25
     {"brwhite", "bright white"},
     {"white", "silver"}
   };
-  property coral_colors (owner: #12, flags: "r") = {177, 176, 175, 174, 173, 172, 173, 174, 175, 176};
-  property crimson_colors (owner: #12, flags: "r") = {160, 124, 1, 88, 52, 88, 1, 124};
-  property cyan (owner: #12, flags: "r") = "[36m";
-  property escape (owner: #12, flags: "r") = "\x1B";
-  property gold (owner: #12, flags: "r") = "[33m";
-  property golden_colors (owner: #12, flags: "r") = {220, 221, 222, 223, 224, 225, 224, 223, 222, 221};
-  property goth_colors (owner: #12, flags: "r") = {237, 238, 239, 240, 241, 242, 241, 240, 239, 238};
-  property green (owner: #12, flags: "r") = "[32m";
-  property grey (owner: #12, flags: "r") = "[1m\x1B[30m";
-  property haircolor_table (owner: #12, flags: "r") = {
+  property coral_colors (owner: GUEST_LOG, flags: "r") = {177, 176, 175, 174, 173, 172, 173, 174, 175, 176};
+  property crimson_colors (owner: GUEST_LOG, flags: "r") = {160, 124, 1, 88, 52, 88, 1, 124};
+  property cyan (owner: GUEST_LOG, flags: "r") = "[36m";
+  property escape (owner: GUEST_LOG, flags: "r") = "\x1B";
+  property gold (owner: GUEST_LOG, flags: "r") = "[33m";
+  property golden_colors (owner: GUEST_LOG, flags: "r") = {220, 221, 222, 223, 224, 225, 224, 223, 222, 221};
+  property goth_colors (owner: GUEST_LOG, flags: "r") = {237, 238, 239, 240, 241, 242, 241, 240, 239, 238};
+  property green (owner: GUEST_LOG, flags: "r") = "[32m";
+  property grey (owner: GUEST_LOG, flags: "r") = "[1m\x1B[30m";
+  property haircolor_table (owner: GUEST_LOG, flags: "r") = {
     {"normal", "jet black"},
     {"normal", "raven black"},
     {"normal", "midnight black"},
@@ -175,14 +175,14 @@ object #25
     {"brred", "bright red"},
     {"brwhite", "bright white"}
   };
-  property inverse (owner: #12, flags: "r") = "e[7m";
-  property italic (owner: #12, flags: "r") = "[3m";
-  property magenta (owner: #12, flags: "r") = "[35m";
-  property mood_colors (owner: #12, flags: "r") = {129, 128, 127, 126, 125, 124, 125, 126, 127, 128};
-  property normal (owner: #12, flags: "r") = "[0m";
-  property pearl_colors (owner: #12, flags: "r") = {212, 176, 140, 104, 68, 32, 68, 104, 140, 176};
-  property purple (owner: #12, flags: "r") = "[35m";
-  property rainbow_colors (owner: #12, flags: "r") = {
+  property inverse (owner: GUEST_LOG, flags: "r") = "e[7m";
+  property italic (owner: GUEST_LOG, flags: "r") = "[3m";
+  property magenta (owner: GUEST_LOG, flags: "r") = "[35m";
+  property mood_colors (owner: GUEST_LOG, flags: "r") = {129, 128, 127, 126, 125, 124, 125, 126, 127, 128};
+  property normal (owner: GUEST_LOG, flags: "r") = "[0m";
+  property pearl_colors (owner: GUEST_LOG, flags: "r") = {212, 176, 140, 104, 68, 32, 68, 104, 140, 176};
+  property purple (owner: GUEST_LOG, flags: "r") = "[35m";
+  property rainbow_colors (owner: GUEST_LOG, flags: "r") = {
     "red",
     "brred",
     "yellow",
@@ -194,14 +194,14 @@ object #25
     "magenta",
     "brmagenta"
   };
-  property red (owner: #12, flags: "r") = "[31m";
-  property sapphire_colors (owner: #12, flags: "r") = {20, 19, 18, 4, 17, 4, 18, 19};
-  property silvery_colors (owner: #12, flags: "r") = {244, 245, 246, 247, 248, 249, 248, 247, 246, 245};
-  property transhumanist_colors (owner: #12, flags: "r") = {219, 183, 147, 111, 75, 39, 75, 111, 147, 183};
-  property unbright (owner: #12, flags: "r") = "[22m";
-  property underline (owner: #12, flags: "r") = "[4m";
-  property white (owner: #12, flags: "r") = "[37m";
-  property xterm256_colors (owner: #12, flags: "r") = [
+  property red (owner: GUEST_LOG, flags: "r") = "[31m";
+  property sapphire_colors (owner: GUEST_LOG, flags: "r") = {20, 19, 18, 4, 17, 4, 18, 19};
+  property silvery_colors (owner: GUEST_LOG, flags: "r") = {244, 245, 246, 247, 248, 249, 248, 247, 246, 245};
+  property transhumanist_colors (owner: GUEST_LOG, flags: "r") = {219, 183, 147, 111, 75, 39, 75, 111, 147, 183};
+  property unbright (owner: GUEST_LOG, flags: "r") = "[22m";
+  property underline (owner: GUEST_LOG, flags: "r") = "[4m";
+  property white (owner: GUEST_LOG, flags: "r") = "[37m";
+  property xterm256_colors (owner: GUEST_LOG, flags: "r") = [
     "Black" -> 0,
     "BlackEbony" -> 234,
     "BlackFlat" -> 246,
@@ -459,7 +459,7 @@ object #25
     "YellowWheatLight" -> 230,
     "YellowWheatMedium" -> 106
   ];
-  property yellow (owner: #12, flags: "r") = "[33m";
+  property yellow (owner: GUEST_LOG, flags: "r") = "[33m";
 
   override aliases = {"ANSI", "Color", "System", "ANSI Color System"};
   override help_msg = {
@@ -486,7 +486,7 @@ object #25
     "  l, y, o, n will always have a ### of 0."
   };
 
-  verb "red brred blue brblue white brwhite green brgreen brblack yellow bryellow normal cyan brcyan magenta brmagenta underline bgnormal bgblue bgred bggreen bgcyan bgmagenta bgwhite bgyellow gold brgold bright none bgred bgblue bgyellow bgcyan bggreen black" (this none this) owner: #36 flags: "rxd"
+  verb "red brred blue brblue white brwhite green brgreen brblack yellow bryellow normal cyan brcyan magenta brmagenta underline bgnormal bgblue bgred bggreen bgcyan bgmagenta bgwhite bgyellow gold brgold bright none bgred bgblue bgyellow bgcyan bggreen black" (this none this) owner: HACKER flags: "rxd"
     "colorize a string, or set an escape code/color without closing the color";
     ":red blue ..etc(?STR text) => STR";
     codes = "";
@@ -496,7 +496,7 @@ object #25
     return this:terminate_normal(this:get_tag(verb), @args);
   endverb
 
-  verb strip_tags (this none this) owner: #36 flags: "rxd"
+  verb strip_tags (this none this) owner: HACKER flags: "rxd"
     ":strip_tags(STR line) => STR line without ANSI tags";
     {line} = args;
     if (!line)
@@ -505,7 +505,7 @@ object #25
     return pcre_replace(tostr(line), tostr("s/", this.all_regexp, "//gi"));
   endverb
 
-  verb get_tag (this none this) owner: #36 flags: "rxd"
+  verb get_tag (this none this) owner: HACKER flags: "rxd"
     ":get_tag(STR color[, BOOL xterm]) => STR tag";
     "  generates an ANSI color tag.";
     {color, ?xterm = $false} = args;
@@ -536,7 +536,7 @@ object #25
     return tostr("`", mode, color, "]");
   endverb
 
-  verb convert_tags_to_color (this none this) owner: #36 flags: "rxd"
+  verb convert_tags_to_color (this none this) owner: HACKER flags: "rxd"
     ":convert_tags_to_color(STR line) => STR of colorized text";
     {line, @more} = args;
     if (!line)
@@ -583,19 +583,19 @@ object #25
     return line;
   endverb
 
-  verb "BlackEbony BlackFlat BlackGrey BlackJet BlackLicorice BlackMatte BlackMidnight BlackOnyx BlackRaven BlueAquamarine BlueAquamarineLight BlueBright BlueBrilliant BlueBrilliantMedium BlueCadet BlueCadetLight BlueCornflower BlueCyanLight BlueCyanMedium BlueDark BlueDarkLight BlueDeepSkyDark BlueDeepSkyMedium BlueDodger BlueDodgerDark BlueDodgerMedium BlueLight BlueMediumDark BlueMostlyDark BlueNavy BluePaleTurqouise BluePeriwinkle BlueRoyal BlueSeaGreen BlueSeaGreenMedium BlueSilver BlueSky BlueSkyDark BlueSkyLightSilver BlueSkyLightSilverBright BlueSkyMedium BlueSkyPale BlueSkyPurple BlueSlate BlueSlateDark BlueSlateDeep BlueSlateGrey BlueSlateLight BlueSteel BlueSteelDark BlueSteelDeep BlueSteelLight BlueTurquoise BlueTurquoiseMedium Brown BrownBeige BrownChocolate BrownCyan BrownGrey BrownPink BrownRosy BrownSalmon BrownSeaGreen BrownSteelBlue BrownTan CyanBright CyanDark CyanLightGrey CyanTurqouise GreenAquamarine GreenAutumDark GreenBright GreenChartreuse GreenChartreuseBright GreenChartreuseDark GreenChartreuseDeep GreenChartreuseMedim GreenForestBright GreenForestCyan GreenForestDark GreenForestLight GreenForestMedium GreenForestMediumDark GreenForestMostlyDark GreenForstBlue GreenHoneyDew GreenJade GreenLight GreenLightMedium GreenLightSea GreenNeonMatte GreenOlive GreenOliveDark GreenOliveLight GreenOliveMatte GreenOliveMedium GreenPale GreenPaleLight GreenPaleMedium GreenSea GreenSeaDark GreenSeaDeep GreenSeaDeepDark GreenSeaLight GreenSeaMedium GreenSlate GreenSpringBright GreenSpringMatte GreenSpringMedium GreenTurquoisePale GreenYellow GreenYellowLight GreyAlmostBlack GreyCharcoal GreyDarkSlate GreyDeep GreyGreenSea GreyHeather GreyLight GreyLightAlt GreyLightSlate GreyPink GreyPurpleDeep GreySilver GreySilverAlt GreySilverLight GreySilverLighter GreySilverMatte GreySlate GreySlateAlt GreySlateBlue GreySlateDark GreySlateMedium GreySlightlyDarkSlate GreyVeryLight GreyWheat GreyWhite MagentaBright MagentaBrightLight MagentaBrightMedium MagentaDark MagentaDarkPink MagentaDarkPurple MagentaDarkViolet MagentaDeepPink MagentaHotPink MagentaMediumAlt MagentaOrchid MagentaOrchidBright MagentaOrchidDark MagentaOrchidDeep MagentaOrchidMedium MagentaPinkDeep MagentaPlum MagentaPlumBright MagentaPlumMedium MagentaPurple MagentaPurpleBlue MagentaPurpleBright MagentaPurpleDark MagentaPurpleLavendar MagentaPurpleLight MagentaPurpleMedium MagentaPurpleMediumMatte MagentaPurpleOrchidDark MagentaPurpleOrchidLight MagentaPurplePlum MagentaPurplePlumMedium MagentaPurplePosh MagentaPurpleSlate MagentaPurpleSlateLight MagentaRuby MagentaRubyBright MagentaRubyLight MagentaSteelBlue MagentaThistle MagentaThistleBright MagentaViolet MagentaVioletDark MagentaVioletLight MagentaVioletMedium OrangeBlood OrangeBloodLight OrangeBright OrangeBrown OrangeDark OrangeLightSalmon OrangeMedium OrangeTangerine RedBlood RedBloodBright RedBloodMatte RedBright RedCherry RedCoralLight RedDark RedDeepPink RedHotPink RedHotPinkBright RedIndian RedIndianMagenta RedIndianMedium RedIndianPink RedMistyRose RedMistyRoseLight RedOrange RedPinkDark RedPinkDeep RedPinkHot RedPinkHotDark RedPinkLight RedPinkMatte RedPinkMedium RedPinkWhite RedRuby RedSalmon RedSalmonMatte RedSector RedVioletPale WhiteBright WhiteSilver YellowBright YellowBrown YellowCanary YellowCanaryMedium YellowGold YellowGoldBright YellowGolden YellowGoldenBright YellowGoldenDark YellowGoldenLight YellowGoldenMedium YellowGoldenRodDark YellowGoldenVeryLight YellowGoldMatte YellowGreenLight YellowGreenSea YellowKhaki YellowKhakiDark YellowKhakiLight YellowLight YellowNavajoWhite YellowNavajoWhiteLight YellowWheat YellowWheatDark YellowWheatLight YellowWheatMedium Grey" (this none this) owner: #36 flags: "rxd"
+  verb "BlackEbony BlackFlat BlackGrey BlackJet BlackLicorice BlackMatte BlackMidnight BlackOnyx BlackRaven BlueAquamarine BlueAquamarineLight BlueBright BlueBrilliant BlueBrilliantMedium BlueCadet BlueCadetLight BlueCornflower BlueCyanLight BlueCyanMedium BlueDark BlueDarkLight BlueDeepSkyDark BlueDeepSkyMedium BlueDodger BlueDodgerDark BlueDodgerMedium BlueLight BlueMediumDark BlueMostlyDark BlueNavy BluePaleTurqouise BluePeriwinkle BlueRoyal BlueSeaGreen BlueSeaGreenMedium BlueSilver BlueSky BlueSkyDark BlueSkyLightSilver BlueSkyLightSilverBright BlueSkyMedium BlueSkyPale BlueSkyPurple BlueSlate BlueSlateDark BlueSlateDeep BlueSlateGrey BlueSlateLight BlueSteel BlueSteelDark BlueSteelDeep BlueSteelLight BlueTurquoise BlueTurquoiseMedium Brown BrownBeige BrownChocolate BrownCyan BrownGrey BrownPink BrownRosy BrownSalmon BrownSeaGreen BrownSteelBlue BrownTan CyanBright CyanDark CyanLightGrey CyanTurqouise GreenAquamarine GreenAutumDark GreenBright GreenChartreuse GreenChartreuseBright GreenChartreuseDark GreenChartreuseDeep GreenChartreuseMedim GreenForestBright GreenForestCyan GreenForestDark GreenForestLight GreenForestMedium GreenForestMediumDark GreenForestMostlyDark GreenForstBlue GreenHoneyDew GreenJade GreenLight GreenLightMedium GreenLightSea GreenNeonMatte GreenOlive GreenOliveDark GreenOliveLight GreenOliveMatte GreenOliveMedium GreenPale GreenPaleLight GreenPaleMedium GreenSea GreenSeaDark GreenSeaDeep GreenSeaDeepDark GreenSeaLight GreenSeaMedium GreenSlate GreenSpringBright GreenSpringMatte GreenSpringMedium GreenTurquoisePale GreenYellow GreenYellowLight GreyAlmostBlack GreyCharcoal GreyDarkSlate GreyDeep GreyGreenSea GreyHeather GreyLight GreyLightAlt GreyLightSlate GreyPink GreyPurpleDeep GreySilver GreySilverAlt GreySilverLight GreySilverLighter GreySilverMatte GreySlate GreySlateAlt GreySlateBlue GreySlateDark GreySlateMedium GreySlightlyDarkSlate GreyVeryLight GreyWheat GreyWhite MagentaBright MagentaBrightLight MagentaBrightMedium MagentaDark MagentaDarkPink MagentaDarkPurple MagentaDarkViolet MagentaDeepPink MagentaHotPink MagentaMediumAlt MagentaOrchid MagentaOrchidBright MagentaOrchidDark MagentaOrchidDeep MagentaOrchidMedium MagentaPinkDeep MagentaPlum MagentaPlumBright MagentaPlumMedium MagentaPurple MagentaPurpleBlue MagentaPurpleBright MagentaPurpleDark MagentaPurpleLavendar MagentaPurpleLight MagentaPurpleMedium MagentaPurpleMediumMatte MagentaPurpleOrchidDark MagentaPurpleOrchidLight MagentaPurplePlum MagentaPurplePlumMedium MagentaPurplePosh MagentaPurpleSlate MagentaPurpleSlateLight MagentaRuby MagentaRubyBright MagentaRubyLight MagentaSteelBlue MagentaThistle MagentaThistleBright MagentaViolet MagentaVioletDark MagentaVioletLight MagentaVioletMedium OrangeBlood OrangeBloodLight OrangeBright OrangeBrown OrangeDark OrangeLightSalmon OrangeMedium OrangeTangerine RedBlood RedBloodBright RedBloodMatte RedBright RedCherry RedCoralLight RedDark RedDeepPink RedHotPink RedHotPinkBright RedIndian RedIndianMagenta RedIndianMedium RedIndianPink RedMistyRose RedMistyRoseLight RedOrange RedPinkDark RedPinkDeep RedPinkHot RedPinkHotDark RedPinkLight RedPinkMatte RedPinkMedium RedPinkWhite RedRuby RedSalmon RedSalmonMatte RedSector RedVioletPale WhiteBright WhiteSilver YellowBright YellowBrown YellowCanary YellowCanaryMedium YellowGold YellowGoldBright YellowGolden YellowGoldenBright YellowGoldenDark YellowGoldenLight YellowGoldenMedium YellowGoldenRodDark YellowGoldenVeryLight YellowGoldMatte YellowGreenLight YellowGreenSea YellowKhaki YellowKhakiDark YellowKhakiLight YellowLight YellowNavajoWhite YellowNavajoWhiteLight YellowWheat YellowWheatDark YellowWheatLight YellowWheatMedium Grey" (this none this) owner: HACKER flags: "rxd"
     return this:terminate_normal(this:get_tag(verb, $true), @args);
   endverb
 
-  verb length (this none this) owner: #36 flags: "rxd"
+  verb length (this none this) owner: HACKER flags: "rxd"
     return length(this:strip_tags(@args));
   endverb
 
-  verb terminate_normal (this none this) owner: #36 flags: "rxd"
+  verb terminate_normal (this none this) owner: HACKER flags: "rxd"
     return tostr(@args, "`n000", "]");
   endverb
 
-  verb cutoff (this none this) owner: #36 flags: "rxd"
+  verb cutoff (this none this) owner: HACKER flags: "rxd"
     ":cutoff (STR string, NUM start, NUM end) => STR";
     "Acts like: string[start..end] but ignores $xterm256 tags.";
     {string, start, end, ?terminate = 0} = args;
@@ -617,7 +617,7 @@ object #25
     endtry
   endverb
 
-  verb _cutoff_locs (this none this) owner: #36 flags: "rxd"
+  verb _cutoff_locs (this none this) owner: HACKER flags: "rxd"
     ":cutoff_locs (STR string,NUM start,NUM end[,NUM extra][, NUM suspendok]) => {nstart, nend}";
     "Takes <start> and <end>, fixes them to compensate for the ANSI codes, and";
     "returns them.  If <extra> is provided and true, <nend> will include the";
@@ -654,7 +654,7 @@ object #25
     return end == i && begin ? {begin, l} | E_RANGE;
   endverb
 
-  verb "rainbow brrainbow pearl golden mood transhumanist" (this none this) owner: #36 flags: "rxd"
+  verb "rainbow brrainbow pearl golden mood transhumanist" (this none this) owner: HACKER flags: "rxd"
     {strg, ?colors = this.(tostr(verb[1..2] == "br" ? verb[3..$] | verb, "_colors"))} = args;
     for i in [1..length(colors)]
       colors[i] = typeof(colors[i]) == INT ? $xterm:get_name(colors[i]) | colors[i];
@@ -668,16 +668,16 @@ object #25
     return $su:from_list(chars, "");
   endverb
 
-  verb "christmas brchristmas" (this none this) owner: #36 flags: "rxd"
+  verb "christmas brchristmas" (this none this) owner: HACKER flags: "rxd"
     {strg} = args;
     return this:stripped(strg, "brred", "brgreen");
   endverb
 
-  verb blink (this none this) owner: #36 flags: "rxd"
+  verb blink (this none this) owner: HACKER flags: "rxd"
     return this:terminate_normal(this:get_tag(verb), @args);
   endverb
 
-  verb bold (this none this) owner: #12 flags: "rxd"
+  verb bold (this none this) owner: GUEST_LOG flags: "rxd"
     return this:terminate_normal(this:get_tag(verb), @args);
   endverb
 endobject

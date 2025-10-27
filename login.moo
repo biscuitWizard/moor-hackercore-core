@@ -1,6 +1,6 @@
-object #10
+object LOGIN
   name: "Login Commands"
-  parent: #1
+  parent: ROOT_CLASS
   owner: #2
   readable: true
 
@@ -9,11 +9,14 @@ object #10
   property blacklist (owner: #2, flags: "") = {{}, {}};
   property blank_command (owner: #2, flags: "r") = "welcome";
   property bogus_command (owner: #2, flags: "r") = "?";
-  property connection_limit_msg (owner: #36, flags: "r") = "*** The MOO is too busy! The current lag is %l; there are %n connected.  WAIT FIVE MINUTES BEFORE TRYING AGAIN.";
+  property connection_limit_msg (owner: HACKER, flags: "r") = "*** The MOO is too busy! The current lag is %l; there are %n connected.  WAIT FIVE MINUTES BEFORE TRYING AGAIN.";
   property create_enabled (owner: #2, flags: "rc") = 1;
   property current_lag (owner: #2, flags: "r") = 0;
-  property current_numcommands (owner: #2, flags: "rc") = [#-62 -> 2, #-61 -> 2, #-60 -> 2, #-59 -> 1, #-57 -> 2];
+  property current_numcommands (owner: #2, flags: "rc") = [#-6 -> 2];
   property downtimes (owner: #2, flags: "rc") = {
+    {1761539693, 0},
+    {1761464156, 0},
+    {1761464002, 0},
     {1760442474, 0},
     {1760349043, 0},
     {1760276139, 0},
@@ -34,7 +37,7 @@ object #10
   property lag_sample_interval (owner: #2, flags: "rc") = 15;
   property lag_samples (owner: #2, flags: "rc") = {0, 0, 0, 0, 0};
   property last_lag_sample (owner: #2, flags: "rc") = 0;
-  property max_connections (owner: #36, flags: "rc") = 99999;
+  property max_connections (owner: HACKER, flags: "rc") = 99999;
   property max_numcommands (owner: #2, flags: "rc") = 20;
   property max_player_name (owner: #2, flags: "rc") = 40;
   property name_lookup_players (owner: #2, flags: "rc") = {};
@@ -53,7 +56,7 @@ object #10
   property temporary_newts (owner: #2, flags: "c") = {};
   property temporary_redlist (owner: #2, flags: "") = {{}, {}};
   property temporary_spooflist (owner: #2, flags: "") = {{}, {}};
-  property top_players (owner: #36, flags: "r") = {4, 1760500845};
+  property top_players (owner: HACKER, flags: "r") = {4, 1760500845};
   property welcome_message (owner: #2, flags: "rc") = {
     "%g",
     "Welcome to the HackerCore database.",
@@ -162,7 +165,6 @@ object #10
       new.aliases = {name};
       new.programmer = $player_class.programmer;
       new.password = $login:encrypt_password(password, new);
-      new.last_password_time = time();
       new.last_connect_time = $maxint;
       "Last disconnect time is creation time, until they login.";
       new.last_disconnect_time = time();
@@ -357,7 +359,7 @@ object #10
     notify(player, $ansi_utils:delete(args[1]));
   endverb
 
-  verb tell (this none this) owner: #36 flags: "rxd"
+  verb tell (this none this) owner: HACKER flags: "rxd"
     "keeps bad things from happening if someone brings this object into a room and talks to it.";
     return 0;
   endverb
@@ -738,7 +740,7 @@ object #10
     return "Your character is unavailable for another " + $time_utils:english_time(args[1]) + ".";
   endverb
 
-  verb "do_out_of_band_command doobc" (this none this) owner: #36 flags: "rxd"
+  verb "do_out_of_band_command doobc" (this none this) owner: HACKER flags: "rxd"
     "This is where oob handlers need to be put to handle oob commands issued prior to assigning a connection to a player object.  Right now it simply returns.";
     return;
   endverb
@@ -837,7 +839,7 @@ object #10
     return argon2_verify(curpass, password);
   endverb
 
-  verb welcome_sub (this none this) owner: #36 flags: "rxd"
+  verb welcome_sub (this none this) owner: HACKER flags: "rxd"
     "$login:welcome_sub(LIST or STR welcome message)";
     "This verb runs various substitutions on either a string or the lines of a login mesage.";
     "%v: MOO version";
@@ -861,7 +863,7 @@ object #10
     return welcome;
   endverb
 
-  verb update_top_players (this none this) owner: #36 flags: "rxd"
+  verb update_top_players (this none this) owner: HACKER flags: "rxd"
     {top_player_count, timestamp} = this.top_players;
     player_count = length(connected_players());
     if (player_count > top_player_count)

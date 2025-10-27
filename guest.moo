@@ -1,18 +1,18 @@
-object #31
+object GUEST
   name: "Generic Guest"
-  parent: #6
-  owner: #36
+  parent: PLAYER
+  owner: HACKER
   readable: true
 
-  property default_description (owner: #36, flags: "r") = {"By definition, guests appear nondescript."};
-  property default_gender (owner: #36, flags: "r") = "neuter";
-  property extra_confunc_msg (owner: #36, flags: "rc") = "";
-  property free_to_use (owner: #36, flags: "r") = 1;
+  property default_description (owner: HACKER, flags: "r") = {"By definition, guests appear nondescript."};
+  property default_gender (owner: HACKER, flags: "r") = "neuter";
+  property extra_confunc_msg (owner: HACKER, flags: "rc") = "";
+  property free_to_use (owner: HACKER, flags: "r") = 1;
   property request (owner: #2, flags: "") = 0;
 
   override aliases = {"Generic Guest"};
   override description = {"By definition, guests appear nondescript."};
-  override features = {#90, #89};
+  override features = {PASTING_FEATURE, #89};
   override password = 0;
   override size_quota = {0, 0, 0, 0};
 
@@ -86,7 +86,7 @@ object #31
     return;
   endverb
 
-  verb create (any any any) owner: #36 flags: "rd"
+  verb create (any any any) owner: HACKER flags: "rd"
     if ($login:player_creation_enabled(player))
       player:tell("First @quit, then connect to the MOO again and, rather than doing `connect guest' do `create <name> <password>'");
     else
@@ -94,11 +94,11 @@ object #31
     endif
   endverb
 
-  verb eject (this none this) owner: #36 flags: "rxd"
+  verb eject (this none this) owner: HACKER flags: "rxd"
     return pass(@args);
   endverb
 
-  verb log (this none this) owner: #36 flags: "rxd"
+  verb log (this none this) owner: HACKER flags: "rxd"
     ":log(islogin,time,where) adds an entry to the connection log for this guest.";
     if (caller != this)
       return E_PERM;
@@ -142,7 +142,7 @@ object #31
     endif
   endverb
 
-  verb "@read @peek" (any any any) owner: #36 flags: "rd"
+  verb "@read @peek" (any any any) owner: HACKER flags: "rd"
     return pass(@args);
   endverb
 

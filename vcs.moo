@@ -1,8 +1,8 @@
-object #9
+object VCS
   name: "Version Management System Feature"
-  parent: #74
-  location: #83
-  owner: #36
+  parent: FEATURE
+  location: FEATURE_WAREHOUSE
+  owner: HACKER
   readable: true
 
   override aliases = {
@@ -133,7 +133,7 @@ object #9
     worker_request("vcs", {"object/rename", old_name, new_name});
   endverb
 
-  verb get_object_name (this none this) owner: #36 flags: "rxd"
+  verb get_object_name (this none this) owner: HACKER flags: "rxd"
     ":get_object_name(OBJ object) => STR";
     "  all objects in VCS get saved by a unique name";
     "  This defaults to the value in $sysobj; but if not defined it's just the obj id";
@@ -373,7 +373,7 @@ object #9
     return result;
   endverb
 
-  verb create_user (this none this) owner: #36 flags: "rxd"
+  verb create_user (this none this) owner: HACKER flags: "rxd"
     "create_user(OBJ user[, str email-address])";
     "Creates a user in moov. Does not assign permissions or API keys.";
     {user, ?email = E_NONE} = args;
@@ -428,7 +428,7 @@ object #9
     load_object(object_dump, ["target_object" -> object]);
   endverb
 
-  verb vcs_abandon (this none this) owner: #36 flags: "rxd"
+  verb vcs_abandon (this none this) owner: HACKER flags: "rxd"
     diff = this:abandon();
     this:apply_game_diff(diff);
   endverb

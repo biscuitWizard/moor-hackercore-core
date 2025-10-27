@@ -1,10 +1,10 @@
-object #91
+object MATRIX_UTILS
   name: "Vector And Matrix Utils"
-  parent: #78
-  owner: #36
+  parent: GENERIC_UTILS
+  owner: HACKER
   readable: true
 
-  property note (owner: #36, flags: "rc") = "Please contact Uther@LambdaMOO if you make changes to this object, so he can make the changes on Lambda and elsewhere.";
+  property note (owner: HACKER, flags: "rc") = "Please contact Uther@LambdaMOO if you make changes to this object, so he can make the changes on Lambda and elsewhere.";
 
   override aliases = {"Vector And Matrix Utils"};
   override description = "This is a utilities package for dealing with lists as representations of vectors and matrices. Type `help $matrix_utils' for more details.";
@@ -73,7 +73,7 @@ object #91
     "                            relation."
   };
 
-  verb "vector_add vector_sub vector_mul vector_div" (this none this) owner: #36 flags: "rxd"
+  verb "vector_add vector_sub vector_mul vector_div" (this none this) owner: HACKER flags: "rxd"
     ":vector_add(V1 [,V2 ...]) => VN such that VN[n] = V1[n] + V2[n]...";
     ":vector_sub(V1 [,V2 ...]) => VN such that VN[n] = V1[n] - V2[n]...";
     ":vector_mul(V1 [,V2 ...]) => VN such that VN[n] = V1[n] * V2[n]...";
@@ -133,7 +133,7 @@ object #91
     return results;
   endverb
 
-  verb "matrix_add matrix_sub" (this none this) owner: #36 flags: "rxd"
+  verb "matrix_add matrix_sub" (this none this) owner: HACKER flags: "rxd"
     ":matrix_add(M1 [, M2 ...]) => MN such that MN[m][n] = M1[m][n] + M2[m][n]...";
     ":matrix_sub(M1 [, M2 ...]) => MN such that MN[m][n] = M1[m][n] - M2[m][n]...";
     "Matrices should all be of the same size.";
@@ -153,7 +153,7 @@ object #91
     return results;
   endverb
 
-  verb transpose (this none this) owner: #36 flags: "rxd"
+  verb transpose (this none this) owner: HACKER flags: "rxd"
     ":transpose(Mmn) => Mnm";
     "Transpose an m by n matrix into an n by m matrix by making the rows in the original the columns in the output.";
     {mat} = args;
@@ -168,7 +168,7 @@ object #91
     return result;
   endverb
 
-  verb determinant (this none this) owner: #36 flags: "rxd"
+  verb determinant (this none this) owner: HACKER flags: "rxd"
     ":determinant(M) => NUM the determinant of the matrix.";
     "";
     "There are several properties of a matrix's determinant. Adding or subtracting a row or column from another row or colum of a matrix does not hange the value of its determinant. Multiplying a row or column of a matrix by a single scalar value has the effect of multiplying the matrix's determinant by the same scalar.";
@@ -213,7 +213,7 @@ object #91
     "Originated by Uther. Modified by Link (#122143) on 16-Nov-2005.";
   endverb
 
-  verb inverse (this none this) owner: #36 flags: "rxd"
+  verb inverse (this none this) owner: HACKER flags: "rxd"
     ":inverse(M) => MN such that M * MN = I";
     "";
     "The inverse of a matrix is very similar to the reciprocal of a scalar number. If two numbers, A and B, equal 1 (the scalar identity number) when multiplied together (AB=1), then B is said the be the reciprocal of A, and A is the reciprocal of B. If A and B are matrices, and the result of multiplying them togeter is the Identity Matrix, then B is the inverse of A, and A is the inverse of B.";
@@ -236,7 +236,7 @@ object #91
     return result;
   endverb
 
-  verb identity (this none this) owner: #36 flags: "rxd"
+  verb identity (this none this) owner: HACKER flags: "rxd"
     ":identity(INT <size>) => Identity matrix (I) of dimensions <size> by <size>.";
     "All elements of I are 0, except for the diagonal elements which are 1.";
     "";
@@ -250,7 +250,7 @@ object #91
     return result;
   endverb
 
-  verb null (this none this) owner: #36 flags: "rxd"
+  verb null (this none this) owner: HACKER flags: "rxd"
     ":null(INT <size>) => Null matrix (O) of dimensions <size> by <size>.";
     "All elements of O are 0.";
     "";
@@ -267,13 +267,13 @@ object #91
     return result;
   endverb
 
-  verb is_square (this none this) owner: #36 flags: "rxd"
+  verb is_square (this none this) owner: HACKER flags: "rxd"
     ":is_square(M) => 1 iff dimensions of M are equal to each other.";
     {m} = args;
     return this:is_matrix(m) && this:order(m) == 2 && (dim = this:dimensions(m))[1] == dim[2];
   endverb
 
-  verb is_null (this none this) owner: #36 flags: "rxd"
+  verb is_null (this none this) owner: HACKER flags: "rxd"
     ":is_null(M) => 1 iff M is O.";
     m = length(mat = args[1]);
     if (!this:is_square(mat))
@@ -289,7 +289,7 @@ object #91
     return 1;
   endverb
 
-  verb is_identity (this none this) owner: #36 flags: "rxd"
+  verb is_identity (this none this) owner: HACKER flags: "rxd"
     ":is_identity(M) => 1 iff M is I.";
     m = length(mat = args[1]);
     if (!this:is_square(mat))
@@ -305,7 +305,7 @@ object #91
     return 1;
   endverb
 
-  verb "cross_prod outer_prod vector_prod" (this none this) owner: #36 flags: "rxd"
+  verb "cross_prod outer_prod vector_prod" (this none this) owner: HACKER flags: "rxd"
     ":cross_prod(V1, V2) => VN, the vector perpendicular to both V1 and V2 with length equal to the area of the parallelogram spanned by V1 and V2, and direction governed by the rule of thumb.";
     "";
     "If A = a1i + a2j + a3k, represented as a list as {a1, a2, a3}";
@@ -339,7 +339,7 @@ object #91
     return result;
   endverb
 
-  verb "norm length" (this none this) owner: #36 flags: "rxd"
+  verb "norm length" (this none this) owner: HACKER flags: "rxd"
     ":norm(V) => FLOAT";
     ":length(V) => FLOAT";
     "The norm is the length of a vector, the square root of the sum of the squares of its elements.";
@@ -350,7 +350,7 @@ object #91
     return this:is_vector(v) ? sqrt(tofloat(this:dot_prod(v, v))) | E_TYPE;
   endverb
 
-  verb submatrix (this none this) owner: #36 flags: "rxd"
+  verb submatrix (this none this) owner: HACKER flags: "rxd"
     ":submatrix(i, j, M1) => M2, the matrix formed from deleting the ith row and jth column from M1.";
     {i, j, mat} = args;
     {k, l} = this:dimensions(mat);
@@ -369,7 +369,7 @@ object #91
     return result;
   endverb
 
-  verb "dot_prod inner_prod scalar_prod" (this none this) owner: #36 flags: "rxd"
+  verb "dot_prod inner_prod scalar_prod" (this none this) owner: HACKER flags: "rxd"
     ":dot_prod(V1, V2) => NUM";
     ":inner_prod(V1, V2) => NUM";
     "The dot, or inner, product of two vectors is the sum of the products of the corresponding elements of the vectors.";
@@ -391,7 +391,7 @@ object #91
     return result;
   endverb
 
-  verb "dimension*s" (this none this) owner: #36 flags: "rxd"
+  verb "dimension*s" (this none this) owner: HACKER flags: "rxd"
     ":dimensions(M) => LIST of dimensional sizes.";
     l = {length(m = args[1])};
     if (typeof(m[1]) == LIST)
@@ -400,12 +400,12 @@ object #91
     return l;
   endverb
 
-  verb order (this none this) owner: #36 flags: "rxd"
+  verb order (this none this) owner: HACKER flags: "rxd"
     ":order(M) => INT how many dimensions does this matrix have? 1 means vector";
     return length(this:dimensions(args[1]));
   endverb
 
-  verb "scalar_vector_add scalar_vector_sub scalar_vector_mul scalar_vector_div" (this none this) owner: #36 flags: "rxd"
+  verb "scalar_vector_add scalar_vector_sub scalar_vector_mul scalar_vector_div" (this none this) owner: HACKER flags: "rxd"
     ":scalar_vector_add(S, V) => VN such that VN[n] = V[n] + S...";
     ":scalar_vector_sub(S, V) => VN such that VN[n] = V[n] - S...";
     ":scalar_vector_mul(S, V) => VN such that VN[n] = V[n] * S...";
@@ -439,7 +439,7 @@ object #91
     return vval;
   endverb
 
-  verb subtended_angle (this none this) owner: #36 flags: "rxd"
+  verb subtended_angle (this none this) owner: HACKER flags: "rxd"
     ":subtended_angle(V1, V2) => FLOAT smallest angle defined by V1, V2 in radians";
     "";
     "Any two vectors define two angles, one less than or equal to 180 degrees, the other 180 degrees or more. The larger can be determined from the smaller, since their sum must be 360 degrees.";
@@ -453,7 +453,7 @@ object #91
     return acos(tofloat(this:dot_prod(v1, v2)) / (this:norm(v1) * this:norm(v2)));
   endverb
 
-  verb column (this none this) owner: #36 flags: "rxd"
+  verb column (this none this) owner: HACKER flags: "rxd"
     ":column(M, INT <n>) => LIST the nth column of M.";
     {mat, i} = args;
     j = this:dimensions(mat)[1];
@@ -464,7 +464,7 @@ object #91
     return result;
   endverb
 
-  verb matrix_mul (this none this) owner: #36 flags: "rxd"
+  verb matrix_mul (this none this) owner: HACKER flags: "rxd"
     ":matrix_mul(M1, M2) => MN such that MN[m][n] = the dot product of the mth row of M1 and the transpose of thenth column of M2.";
     "";
     "Matrix multiplication is the most common and complex operation performed on two matrices. First, matrices can only be multiplied if they are of compatible sizes. An i by j matrix can only be multiplied by a j by k matrix, and the results of this multiplication will be a matrix of size i by k. Each element in the resulting matrix is the dot product of a row from the first matrix and a column from the second matrix. (See 'help $matrix_utils:dot_prod'.)";
@@ -486,7 +486,7 @@ object #91
     return result;
   endverb
 
-  verb "scalar_matrix_mul scalar_matrix_div" (this none this) owner: #36 flags: "rxd"
+  verb "scalar_matrix_mul scalar_matrix_div" (this none this) owner: HACKER flags: "rxd"
     ":scalar_matrix_add(S, M) => MN such that MN[m][n] = MN[m][n] + S...";
     ":scalar_matrix_sub(S, M) => MN such that MN[m][n] = MN[m][n] - S...";
     ":scalar_matrix_mul(S, M) => MN such that MN[m][n] = MN[m][n] * S...";
@@ -515,7 +515,7 @@ object #91
     return results;
   endverb
 
-  verb is_matrix (this none this) owner: #36 flags: "rxd"
+  verb is_matrix (this none this) owner: HACKER flags: "rxd"
     "A matrix is defined as a list of vectors, each having the smae number of elements.";
     {m} = args;
     if (typeof(m) != LIST || typeof(m[1]) != LIST)
@@ -530,7 +530,7 @@ object #91
     return 1;
   endverb
 
-  verb is_vector (this none this) owner: #36 flags: "rxd"
+  verb is_vector (this none this) owner: HACKER flags: "rxd"
     "A vector shall be defined as a list of INTs or FLOATs. (I'm not gonna worry about them all being the same type.)";
     flag = 1;
     {v} = args;
@@ -546,7 +546,7 @@ object #91
     return flag;
   endverb
 
-  verb "is_reflexive is_areflexive" (this none this) owner: #36 flags: "rxd"
+  verb "is_reflexive is_areflexive" (this none this) owner: HACKER flags: "rxd"
     ":is_reflexive   (M) => 1 if M is a reflexive relation, -1 if areflexive,";
     "                       0 otherwise.";
     ":is_areflexive does the same, but with 1 and -1 reversed.";
@@ -565,7 +565,7 @@ object #91
     return this:_relation_result(good, bad, verb[4] == "a");
   endverb
 
-  verb "is_symmetric is_asymmetric" (this none this) owner: #36 flags: "rxd"
+  verb "is_symmetric is_asymmetric" (this none this) owner: HACKER flags: "rxd"
     ":is_symmetric   (M) => 1 if M is a symmetric relation, -1 if asymmetric,";
     "                       0 otherwise.";
     ":is_asymmetric does the same, but with 1 and -1 reversed.";
@@ -586,7 +586,7 @@ object #91
     return this:_relation_result(good, bad, verb[4] == "a");
   endverb
 
-  verb "is_transitive is_atransitive" (this none this) owner: #36 flags: "rxd"
+  verb "is_transitive is_atransitive" (this none this) owner: HACKER flags: "rxd"
     ":is_transitive  (M) => 1 if M is a transitive relation, -1 if atransitive,";
     "                       0 otherwise.";
     ":is_atransitive does the same, but with 1 and -1 reversed.";
@@ -613,7 +613,7 @@ object #91
     return this:_relation_result(good, bad, verb[4] == "a");
   endverb
 
-  verb _relation_result (this none this) owner: #36 flags: "rxd"
+  verb _relation_result (this none this) owner: HACKER flags: "rxd"
     "Common code for is_reflexive, is_symmetric, and is_transitive.";
     {good, bad, flag} = args;
     if (good && !bad)
@@ -626,7 +626,7 @@ object #91
     return flag * result;
   endverb
 
-  verb is_partial_ordering (this none this) owner: #36 flags: "rxd"
+  verb is_partial_ordering (this none this) owner: HACKER flags: "rxd"
     ":is_partial_ordering(M) => 1 iff M is a reflexive, asymmetric, transitive relation.";
     {mat} = args;
     return this:is_asymmetric(mat) == this:is_reflexive(mat) == this:is_transitive(mat) == 1;

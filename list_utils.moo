@@ -1,7 +1,7 @@
-object #55
+object LIST_UTILS
   name: "List Utilities"
-  parent: #78
-  owner: #36
+  parent: GENERIC_UTILS
+  owner: HACKER
   readable: true
 
   override aliases = {"List Utilities"};
@@ -56,7 +56,7 @@ object #55
     "reverse_suspended       randomly_permute_suspended"
   };
 
-  verb make (this none this) owner: #36 flags: "rxd"
+  verb make (this none this) owner: HACKER flags: "rxd"
     ":make(n[,elt]) => a list of n elements, each of which == elt. elt defaults to 0.";
     {n, ?elt = 0} = args;
     if (n < 0)
@@ -76,7 +76,7 @@ object #55
     endwhile
   endverb
 
-  verb range (this none this) owner: #36 flags: "rxd"
+  verb range (this none this) owner: HACKER flags: "rxd"
     ":range([m,]n) => {m,m+1,...,n}";
     {?m = 1, n} = args;
     ret = {};
@@ -148,7 +148,7 @@ object #55
     return strs;
   endverb
 
-  verb find_insert (this none this) owner: #36 flags: "rxd"
+  verb find_insert (this none this) owner: HACKER flags: "rxd"
     "find_insert(sortedlist,key) => index of first element in sortedlist > key";
     "  sortedlist is assumed to be sorted in increasing order and the number returned is anywhere from 1 to length(sortedlist)+1, inclusive.";
     {lst, key} = args;
@@ -172,7 +172,7 @@ object #55
     endif
   endverb
 
-  verb remove_duplicates (this none this) owner: #36 flags: "rxd"
+  verb remove_duplicates (this none this) owner: HACKER flags: "rxd"
     "remove_duplicates(list) => list as a set, i.e., all repeated elements removed.";
     out = {};
     for x in (args[1])
@@ -181,7 +181,7 @@ object #55
     return out;
   endverb
 
-  verb arrayset (this none this) owner: #36 flags: "rxd"
+  verb arrayset (this none this) owner: HACKER flags: "rxd"
     "arrayset(list,value,pos1,...,posn) -- returns list modified such that";
     "  list[pos1][pos2][...][posn] == value";
     if (length(args) > 3)
@@ -192,7 +192,7 @@ object #55
     endif
   endverb
 
-  verb setremove_all (this none this) owner: #36 flags: "rxd"
+  verb setremove_all (this none this) owner: HACKER flags: "rxd"
     ":setremove_all(set,elt) => set with *all* occurences of elt removed";
     {set, what} = args;
     while (w = what in set)
@@ -201,7 +201,7 @@ object #55
     return set;
   endverb
 
-  verb append (this none this) owner: #36 flags: "rxd"
+  verb append (this none this) owner: HACKER flags: "rxd"
     "append({a,b,c},{d,e},{},{f,g,h},...) =>  {a,b,c,d,e,f,g,h}";
     if (length(args) > 50)
       return {@this:append(@args[1..$ / 2]), @this:append(@args[$ / 2 + 1..$])};
@@ -213,12 +213,12 @@ object #55
     return l;
   endverb
 
-  verb reverse (this none this) owner: #36 flags: "rxd"
+  verb reverse (this none this) owner: HACKER flags: "rxd"
     "reverse(list) => reversed list";
     return this:_reverse(@args[1]);
   endverb
 
-  verb _reverse (this none this) owner: #36 flags: "rxd"
+  verb _reverse (this none this) owner: HACKER flags: "rxd"
     ":_reverse(@list) => reversed list";
     if (length(args) > 50)
       return {@this:_reverse(@args[$ / 2 + 1..$]), @this:_reverse(@args[1..$ / 2])};
@@ -230,7 +230,7 @@ object #55
     return l;
   endverb
 
-  verb compress (this none this) owner: #36 flags: "rxd"
+  verb compress (this none this) owner: HACKER flags: "rxd"
     "compress(list) => list with consecutive repeated elements removed, e.g.,";
     "compress({a,b,b,c,b,b,b,d,d,e}) => {a,b,c,b,d,e}";
     if (l = args[1])
@@ -247,13 +247,13 @@ object #55
     endif
   endverb
 
-  verb sort (this none this) owner: #36 flags: "rxd"
+  verb sort (this none this) owner: HACKER flags: "rxd"
     "sort(list[,keys]) => sorts keys (assumed to be all numbers or strings) and returns list with the corresponding permutation applied to it.  keys defaults to the list itself.";
     "sort({x1,x3,x2},{1,3,2}) => {x1,x2,x3}";
     return sort(@args);
   endverb
 
-  verb slice (this none this) owner: #36 flags: "rxd"
+  verb slice (this none this) owner: HACKER flags: "rxd"
     "slice(alist[,index]) returns a list of the index-th elements of the elements of alist, e.g., ";
     "    slice({{\"z\",1},{\"y\",2},{\"x\",5}},2) => {1,2,5}.";
     "index defaults to 1 and may also be a nonempty list, e.g., ";
@@ -261,7 +261,7 @@ object #55
     return slice(args[1], args[2]);
   endverb
 
-  verb assoc (this none this) owner: #36 flags: "rxd"
+  verb assoc (this none this) owner: HACKER flags: "rxd"
     "assoc(target,list[,index]) returns the first element of `list' whose own index-th element is target.  Index defaults to 1.";
     "returns {} if no such element is found";
     {target, thelist, ?indx = 1} = args;
@@ -273,7 +273,7 @@ object #55
     return {};
   endverb
 
-  verb iassoc (this none this) owner: #36 flags: "rxd"
+  verb iassoc (this none this) owner: HACKER flags: "rxd"
     "Copied from Moo_tilities (#332):iassoc by Mooshie (#106469) Wed Mar 18 19:27:51 1998 PST";
     "Usage: iassoc(ANY target, LIST list [, INT index ]) => Returns the index of the first element of `list' whose own index-th element is target.  Index defaults to 1.";
     "Returns 0 if no such element is found.";
@@ -288,7 +288,7 @@ object #55
     return 0;
   endverb
 
-  verb assoc_prefix (this none this) owner: #36 flags: "rxd"
+  verb assoc_prefix (this none this) owner: HACKER flags: "rxd"
     "assoc_prefix(target,list[,index]) returns the first element of `list' whose own index-th element has target as a prefix.  Index defaults to 1.";
     {target, thelist, ?indx = 1} = args;
     for t in (thelist)
@@ -299,7 +299,7 @@ object #55
     return {};
   endverb
 
-  verb iassoc_prefix (this none this) owner: #36 flags: "rxd"
+  verb iassoc_prefix (this none this) owner: HACKER flags: "rxd"
     "iassoc_prefix(target,list[,index]) returns the index of the first element of `list' whose own index-th element has target as a prefix.  Index defaults to 1.";
     {target, lst, ?indx = 1} = args;
     for i in [1..length(lst)]
@@ -310,7 +310,7 @@ object #55
     return 0;
   endverb
 
-  verb iassoc_sorted (this none this) owner: #36 flags: "rxd"
+  verb iassoc_sorted (this none this) owner: HACKER flags: "rxd"
     "iassoc_sorted(target,sortedlist[,i]) => index of last element in sortedlist whose own i-th element is <= target.  i defaults to 1.";
     "  sortedlist is assumed to be sorted in increasing order and the number returned is anywhere from 0 to length(sortedlist), inclusive.";
     {target, lst, ?indx = 1} = args;
@@ -335,7 +335,7 @@ object #55
     endif
   endverb
 
-  verb sort_alist (this none this) owner: #36 flags: "rxd"
+  verb sort_alist (this none this) owner: HACKER flags: "rxd"
     ":sort_alist(alist[,n]) sorts a list of tuples by n-th (1st) element.";
     {alist, ?sort_on = 1} = args;
     if ((alist_length = length(alist)) < 25)
@@ -395,7 +395,7 @@ object #55
     return {@right_sublist[1..right_index], left_sublist[1], @merged_list};
   endverb
 
-  verb randomly_permute (this none this) owner: #36 flags: "rxd"
+  verb randomly_permute (this none this) owner: HACKER flags: "rxd"
     ":randomly_permute(list) => list with its elements randomly permuted";
     "  each of the length(list)! possible permutations is equally likely";
     plist = {};
@@ -420,7 +420,7 @@ object #55
     return counter;
   endverb
 
-  verb flatten (this none this) owner: #36 flags: "rxd"
+  verb flatten (this none this) owner: HACKER flags: "rxd"
     "Copied from $quinn_utils (#34283):unroll by Quinn (#19845) Mon Mar  8 09:29:03 1993 PST";
     ":flatten(LIST list_of_lists) => LIST of all lists in given list `flattened'";
     newlist = {};
@@ -434,7 +434,7 @@ object #55
     return newlist;
   endverb
 
-  verb "longest shortest" (this none this) owner: #36 flags: "rxd"
+  verb "longest shortest" (this none this) owner: HACKER flags: "rxd"
     "Copied from APHiD (#33119):longest Sun May  9 21:00:18 1993 PDT";
     "$list_utils:longest(<list>)";
     "$list_utils:shortest(<list>)";
@@ -456,7 +456,7 @@ object #55
     return result;
   endverb
 
-  verb swap_elements (this none this) owner: #36 flags: "rxd"
+  verb swap_elements (this none this) owner: HACKER flags: "rxd"
     "swap_elements -- exchange two elements in a list";
     "Usage:  $list_utils:swap_elements(<list/LIST>,<index/INT>,<index/INT>)";
     "        $list_utils:swap_elements({\"a\",\"b\"},1,2);";
@@ -476,7 +476,7 @@ object #55
     endif
   endverb
 
-  verb "random_item random_element" (this none this) owner: #36 flags: "rxd"
+  verb "random_item random_element" (this none this) owner: HACKER flags: "rxd"
     "random_item -- returns a random element of the input list.";
     if (length(args) == 1)
       if (typeof(l = args[1]) == LIST)
@@ -493,7 +493,7 @@ object #55
     endif
   endverb
 
-  verb amerge (this none this) owner: #36 flags: "rxd"
+  verb amerge (this none this) owner: HACKER flags: "rxd"
     "Copied from Uther's_Ghost (#93141):amerge Tue May 27 20:28:18 1997 PDT";
     "amerge(list[,tindex[,dindex]]) returns an associated list such that all the tuples in the original list with the same tindex-th element are merged. Useful for merging alists ( amerge({@alist1, @alist2, ...}) ) and for ensuring that each tuple has a unique index. Tindex defaults to 1. Dindex defaults to 1 and refers to the position in the tuple where the tindex-th element will land in the new tuple.";
     {alist, ?tidx = 1, ?didx = 1} = args;
@@ -517,7 +517,7 @@ object #55
     return alist;
   endverb
 
-  verb passoc (this none this) owner: #36 flags: "rx"
+  verb passoc (this none this) owner: HACKER flags: "rx"
     "passoc(key,list1,list2)";
     "passoc() behaves rather similarly to assoc, with the exception that it's intended for";
     "parallel lists.  given a key from list1, it returns a list containing the key and the";
@@ -531,7 +531,7 @@ object #55
     endif
   endverb
 
-  verb setmove (this none this) owner: #36 flags: "rxd"
+  verb setmove (this none this) owner: HACKER flags: "rxd"
     "Copied from Moo_tilities (#332):setmove by Mooshie (#106469) Mon Sep 22 21:07:25 1997 PDT";
     "Usage: setmove(LIST elements, INT from, INT to)";
     "Moves element in list from one position in list to another.";
@@ -544,7 +544,7 @@ object #55
     "  Written by Mooshie (#106469) @ Lambda - Mon Sep 22 21:03:26 1997 PDT -  ";
   endverb
 
-  verb iassoc_new (this none this) owner: #36 flags: "rxd"
+  verb iassoc_new (this none this) owner: HACKER flags: "rxd"
     "Copied from Moo_tilities (#332):iassoc_new by Mooshie (#106469) Wed Mar 18 19:27:52 1998 PST";
     "Usage: iassoc_new(ANY target, LIST list [, INT index ]) => Returns the index of the first element of `list' whose own index-th element is target.  Index defaults to 1.";
     "Returns 0 if no such element is found.";
@@ -564,7 +564,7 @@ object #55
     return 0;
   endverb
 
-  verb build_alist (this none this) owner: #36 flags: "rxd"
+  verb build_alist (this none this) owner: HACKER flags: "rxd"
     "Syntax:  build_alist(list, N) =>";
     "{list[1..N], list[N+1..N*2], list[N*2+1..N*3], ..., list[N*(N-1)+1..N*N]}";
     "";
@@ -611,7 +611,7 @@ object #55
     return alist;
   endverb
 
-  verb "is_assoc*iated_list" (this none this) owner: #36 flags: "rxd"
+  verb "is_assoc*iated_list" (this none this) owner: HACKER flags: "rxd"
     ":is_assoc(lists) => TRUE/FALSE";
     "  Returns true if the provided list is an associated list";
     {lists} = args;
@@ -631,26 +631,26 @@ object #55
     return $true;
   endverb
 
-  verb pick_one (this none this) owner: #36 flags: "rxd"
+  verb pick_one (this none this) owner: HACKER flags: "rxd"
     ":pick_one(LIST elements[, ANY default]) => ANY element";
     "  randomly picks one element";
     {elements, ?default = ""} = args;
     return `elements[$mu:random_between(1, $)] ! ANY => default';
   endverb
 
-  verb pop (this none this) owner: #36 flags: "rxd"
+  verb pop (this none this) owner: HACKER flags: "rxd"
     {elements} = args;
     return {elements[$], elements[1..$ - 1]};
   endverb
 
-  verb dequeue (this none this) owner: #36 flags: "rxd"
+  verb dequeue (this none this) owner: HACKER flags: "rxd"
     ":dequeue(LIST elements) => {first element, remaining}";
     "  dequeues an element from a stack";
     {elements} = args;
     return {elements[1], elements[2..$]};
   endverb
 
-  verb map_prepend (this none this) owner: #36 flags: "rxd"
+  verb map_prepend (this none this) owner: HACKER flags: "rxd"
     ":map_prepend(LIST elements, STR prepend) => LIST";
     "  prepends string to each element of list.";
     {elements, prepend} = args;
@@ -672,7 +672,7 @@ object #55
     return values;
   endverb
 
-  verb join (this none this) owner: #36 flags: "rxd"
+  verb join (this none this) owner: HACKER flags: "rxd"
     {_list, ?sep = " ", ?omit_empty = false} = args;
     res = "";
     for i in (_list)
@@ -685,7 +685,7 @@ object #55
     return res;
   endverb
 
-  verb as_list (this none this) owner: #36 flags: "rxd"
+  verb as_list (this none this) owner: HACKER flags: "rxd"
     "$list_utils:as_list(variable)";
     "If the variable is not already a list, make it into one, otherwise return the original value.";
     v = args[1];
@@ -695,7 +695,7 @@ object #55
     return {v};
   endverb
 
-  verb weighted_random (this none this) owner: #36 flags: "rxd"
+  verb weighted_random (this none this) owner: HACKER flags: "rxd"
     "Last modified 11/02/22 3:54 p.m. by Sinistral@ChatMUD (#2)";
     ":weighted_random( {INT weight, ANY result}, {INT weight2, ANY result2}, ... ) => ANY chosen result, based on weights.";
     choices = args;
@@ -711,7 +711,7 @@ object #55
     return choices[idx][2];
   endverb
 
-  verb tuple_to_map (this none this) owner: #36 flags: "rxd"
+  verb tuple_to_map (this none this) owner: HACKER flags: "rxd"
     "$list_utils:tuple_to_map(list[, recurse])";
     "Takes a list with values of the form {key, value}, and returns a map.";
     "Optionally recursing into subtuples, as long as they are a list with 2 items.";
@@ -731,7 +731,7 @@ object #55
     return res;
   endverb
 
-  verb check_type (this none this) owner: #36 flags: "rxd"
+  verb check_type (this none this) owner: HACKER flags: "rxd"
     "check_type(list, type)";
     "Make sure all elements of <list> are of a given <type>.";
     "<type> can be either one of LIST, STR, OBJ, NUM, ERR, or a list of same.";
@@ -745,7 +745,7 @@ object #55
     return 1;
   endverb
 
-  verb choose_n (this none this) owner: #36 flags: "rxd"
+  verb choose_n (this none this) owner: HACKER flags: "rxd"
     "$list_utils:choose_n(LIST, INT count)";
     "Given a list and a (n)umber, choose n items from that list if there are that many, otherwise randomly permute and return";
     "Makes sure not to return the same item more than once.";

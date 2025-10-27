@@ -1,10 +1,10 @@
 object #18
   name: "Verb Help DB"
-  parent: #1
-  owner: #36
+  parent: ROOT_CLASS
+  owner: HACKER
   readable: true
 
-  property help_msg (owner: #36, flags: "rc") = {
+  property help_msg (owner: HACKER, flags: "rc") = {
     "This is not a help database in the same way that children of $generic_help are. This object does the work when someone calls help in this way:",
     "",
     "    help <object>:<verb>",
@@ -33,7 +33,7 @@ object #18
   override aliases = {"verbhelp", "vh"};
   override description = "A `help database' that knows about all of the documented verbs.";
 
-  verb find_topics (this none this) owner: #36 flags: "rxd"
+  verb find_topics (this none this) owner: HACKER flags: "rxd"
     if ($code_utils:parse_verbref(what = args[1]))
       "... hey wow, I found it!...";
       return {what};

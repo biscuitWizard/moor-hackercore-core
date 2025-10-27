@@ -1,6 +1,6 @@
-object #12
+object GUEST_LOG
   name: "Guest Log"
-  parent: #1
+  parent: ROOT_CLASS
   owner: #2
   readable: true
 

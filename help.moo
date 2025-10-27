@@ -1,13 +1,13 @@
-object #97
+object HELP
   name: "Help Datastore"
-  parent: #38
-  location: #84
-  owner: #36
+  parent: NO_ONE
+  location: SINGLETON_WAREHOUSE
+  owner: HACKER
   readable: true
 
-  property help_categories (owner: #36, flags: "r") = {"general", "admin", "prog", "builder"};
+  property help_categories (owner: HACKER, flags: "r") = {"general", "admin", "prog", "builder"};
 
-  verb permitted_categories (this none this) owner: #36 flags: "rxd"
+  verb permitted_categories (this none this) owner: HACKER flags: "rxd"
     ":permitted_categories(OBJ dude) => LIST categories dude can see";
     {dude} = args;
     cats = {"general"};
@@ -23,7 +23,7 @@ object #97
     return cats;
   endverb
 
-  verb find (this none this) owner: #12 flags: "rxd"
+  verb find (this none this) owner: GUEST_LOG flags: "rxd"
     ":find(STR keyword[, LIST categories]) => LIST of results";
     {keyword, ?categories = {"general"}} = args;
     query = "SELECT hf.category, hf.content, i.keyword FROM help_file_index AS i LEFT JOIN help_file AS hf ON hf.id=i.help_file_id WHERE i.keyword LIKE $1 AND is_deleted = 0 AND hf.category in (";

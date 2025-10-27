@@ -1,6 +1,6 @@
-object #42
+object PERM_UTILS
   name: "Permissions Utilities"
-  parent: #78
+  parent: GENERIC_UTILS
   owner: #2
   readable: true
 
@@ -34,7 +34,7 @@ object #42
     return valid(who) && valid(what) && (who.wizard || who == what.owner);
   endverb
 
-  verb apply (this none this) owner: #36 flags: "rxd"
+  verb apply (this none this) owner: HACKER flags: "rxd"
     ":apply(permstring,mods) => new permstring.";
     "permstring is a permissions string, mods is a concatenation of strings of the form +<letters>, !<letters>, or -<letters>, where <letters> is a string of letters as might appear in a permissions string (`+' adds the specified permissions, `-' or `!' removes them; `-' and `!' are entirely equivalent).";
     {perms, mods} = args;

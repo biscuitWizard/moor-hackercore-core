@@ -1,6 +1,6 @@
-object #11
+object LAST_HUH
   name: "Player Last_huh Verbs"
-  parent: #1
+  parent: ROOT_CLASS
   owner: #2
   readable: true
 

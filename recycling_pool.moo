@@ -1,7 +1,7 @@
-object #48
+object RECYCLING_POOL
   name: "Generic Recycling Pool"
-  parent: #1
-  owner: #36
+  parent: ROOT_CLASS
+  owner: HACKER
   readable: true
 
   property allocation_range (owner: #2, flags: "r") = {0, 0};
@@ -35,5 +35,16 @@ object #48
       $error:log(e);
     endtry
     return new_obj;
+  endverb
+
+  verb init_for_core (this none this) owner: #2 flags: "rxd"
+    "Resets this object for a new core";
+    caller_perms().wizard || raise(E_PERM);
+    if (parent(this) == #1)
+      this.allocation_range = {0, 0};
+      this.max_object_id = 0;
+    endif
+    this.orphans = {};
+    return 1;
   endverb
 endobject

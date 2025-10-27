@@ -1,55 +1,55 @@
-object #37
+object DATASTORE
   name: "Generic Columnar Datastore"
-  parent: #17
-  location: #84
-  owner: #36
+  parent: SINGLETON
+  location: SINGLETON_WAREHOUSE
+  owner: HACKER
   readable: true
 
-  property columns (owner: #36, flags: "r") = {};
+  property columns (owner: HACKER, flags: "r") = {};
 
-  verb save (this none this) owner: #36 flags: "rxd"
+  verb save (this none this) owner: HACKER flags: "rxd"
     ":save(OBJ/STR/INT/FLOAT key, LIST values) => NONE";
     "  Adds or updates a value in the datastore";
     $raise_not_implemented();
   endverb
 
-  verb save_at (this none this) owner: #36 flags: "rxd"
+  verb save_at (this none this) owner: HACKER flags: "rxd"
     ":save_at(OBJ/STR/INT/FLOAT key, INT column_index, ANY value) => ROW LIST values";
     "  Saves a value at a specific cell.";
     "  column index is 1-based, not 0-based.";
     $raise_not_implemented();
   endverb
 
-  verb retrieve (this none this) owner: #36 flags: "rxd"
+  verb retrieve (this none this) owner: HACKER flags: "rxd"
     ":retrieve(OBJ/STR/INT/FLOAT key) => ROW LIST values";
     "  Retrieves a row stored at key";
     $raise_not_implemented();
   endverb
 
-  verb retrieve_at (this none this) owner: #36 flags: "rxd"
+  verb retrieve_at (this none this) owner: HACKER flags: "rxd"
     ":retrieve(OBJ/STR/INT/FLOAT key, INT column_index) => CELL ANY value";
     "  Retrieves a cell of row stored at key";
     $raise_not_implemented();
   endverb
 
-  verb keys (this none this) owner: #36 flags: "rxd"
+  verb keys (this none this) owner: HACKER flags: "rxd"
     ":keys() => LIST of all keys present on datastore";
     $raise_not_implemented();
   endverb
 
-  verb delete (this none this) owner: #36 flags: "rxd"
+  verb delete (this none this) owner: HACKER flags: "rxd"
     ":delete(OBJ/STR/FLOAT/INT key) => NONE";
     "  Deletes a key, will not throw if the key does not exist";
     $raise_not_implemented();
   endverb
 
-  verb has_key (this none this) owner: #36 flags: "rxd"
+  verb has_key (this none this) owner: HACKER flags: "rxd"
     ":has(OBJ/STR/FLOAT/INT key) => BOOL if key exits";
     "  retrieves data located at key";
     $raise_not_implemented();
   endverb
 
-  verb validate_row (this none this) owner: #36 flags: "rxd"
+  verb validate_row (this none this) owner: HACKER flags: "rxd"
     ":validate_row(LIST data) => NONE";
     "  will throw loudly if the data isn't in a good format";
     {data} = args;
@@ -70,7 +70,7 @@ object #37
     endif
   endverb
 
-  verb column_count (this none this) owner: #36 flags: "rxd"
+  verb column_count (this none this) owner: HACKER flags: "rxd"
     ":column_count() => INT number of columns";
     return length(this.columns);
   endverb

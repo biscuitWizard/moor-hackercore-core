@@ -1,7 +1,7 @@
 object #81
   name: "Prog-Alerts"
-  parent: #70
-  owner: #36
+  parent: CHANNEL
+  owner: HACKER
 
   override aliases = {"PROG-ALERTS"};
   override color = "BlueRoyal";

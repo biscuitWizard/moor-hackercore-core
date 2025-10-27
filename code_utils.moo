@@ -1,10 +1,10 @@
-object #59
+object CODE_UTILS
   name: "Code Utilities"
-  parent: #78
-  owner: #36
+  parent: GENERIC_UTILS
+  owner: HACKER
   readable: true
 
-  property _all_preps (owner: #36, flags: "rc") = {
+  property _all_preps (owner: HACKER, flags: "rc") = {
     "with",
     "using",
     "at",
@@ -34,8 +34,8 @@ object #59
     "off",
     "off of"
   };
-  property _multi_preps (owner: #36, flags: "rc") = {"off", "from", "out", "on", "on top", "in", "in front"};
-  property _other_preps (owner: #36, flags: "rc") = {
+  property _multi_preps (owner: HACKER, flags: "rc") = {"off", "from", "out", "on", "on top", "in", "in front"};
+  property _other_preps (owner: HACKER, flags: "rc") = {
     "using",
     "at",
     "inside",
@@ -50,8 +50,8 @@ object #59
     "about",
     "off of"
   };
-  property _other_preps_n (owner: #36, flags: "rc") = {1, 2, 4, 4, 5, 5, 5, 6, 6, 9, 9, 12, 15};
-  property _short_preps (owner: #36, flags: "rc") = {
+  property _other_preps_n (owner: HACKER, flags: "rc") = {1, 2, 4, 4, 5, 5, 5, 6, 6, 9, 9, 12, 15};
+  property _short_preps (owner: HACKER, flags: "rc") = {
     "with",
     "to",
     "in front of",
@@ -68,7 +68,7 @@ object #59
     "as",
     "off"
   };
-  property _version (owner: #36, flags: "rc") = "0.9.0-alpha+";
+  property _version (owner: HACKER, flags: "rc") = "0.9.0-alpha+f458dcf";
   property builtin_props (owner: #2, flags: "r") = {
     "name",
     "r",
@@ -82,7 +82,7 @@ object #59
     "last_move",
     "a"
   };
-  property error_list (owner: #36, flags: "rc") = {
+  property error_list (owner: HACKER, flags: "rc") = {
     E_NONE,
     E_TYPE,
     E_DIV,
@@ -102,8 +102,10 @@ object #59
     E_FILE,
     E_EXEC,
     E_INTRPT
+  
+  
   };
-  property error_names (owner: #36, flags: "rc") = {
+  property error_names (owner: HACKER, flags: "rc") = {
     "E_NONE",
     "E_TYPE",
     "E_DIV",
@@ -124,7 +126,7 @@ object #59
     "E_EXEC",
     "E_INTRPT"
   };
-  property prepositions (owner: #36, flags: "rc") = {
+  property prepositions (owner: HACKER, flags: "rc") = {
     "with/using",
     "at/to",
     "in front of",
@@ -239,14 +241,14 @@ object #59
     endif
   endverb
 
-  verb "toint tonum" (this none this) owner: #36 flags: "rxd"
+  verb "toint tonum" (this none this) owner: HACKER flags: "rxd"
     ":toint(STR)";
     "=> toint(s) if STR is numeric";
     "=> E_TYPE if it isn't";
     return match(s = args[1], "^ *[-+]?[0-9]+ *$") ? toint(s) | E_TYPE;
   endverb
 
-  verb toobj (this none this) owner: #36 flags: "rxd"
+  verb toobj (this none this) owner: HACKER flags: "rxd"
     ":toobj(objectid as string) => objectid";
     {obj_id} = args;
     if (obj_id == "#0")
@@ -255,7 +257,7 @@ object #59
     return (object = toobj(obj_id)) == $sysobj ? $failed_match | object;
   endverb
 
-  verb toerr (this none this) owner: #36 flags: "rxd"
+  verb toerr (this none this) owner: HACKER flags: "rxd"
     "toerr(n), toerr(\"E_FOO\"), toerr(\"FOO\") => E_FOO.";
     if (typeof(s = args[1]) != STR)
       n = toint(s) + 1;
@@ -268,7 +270,7 @@ object #59
     return this.error_list[n];
   endverb
 
-  verb error_name (this none this) owner: #36 flags: "rxd"
+  verb error_name (this none this) owner: HACKER flags: "rxd"
     "error_name(E_FOO) => \"E_FOO\"";
     return toliteral(@args);
     return this.error_names[toint(args[1]) + 1];
@@ -405,7 +407,7 @@ object #59
     return caller_perms();
   endverb
 
-  verb "verb_loc*ation" (this none this) owner: #36 flags: "rxd"
+  verb "verb_loc*ation" (this none this) owner: HACKER flags: "rxd"
     "returns the object where the current verb is defined.";
     return callers()[1][4];
   endverb
@@ -520,7 +522,7 @@ object #59
     endif
   endverb
 
-  verb parse_argspec (this none this) owner: #36 flags: "rxd"
+  verb parse_argspec (this none this) owner: HACKER flags: "rxd"
     ":parse_arg_spec(@args)";
     "  attempts to parse the given sequence of args into a verb_arg specification";
     "returns {verb_args,remaining_args} if successful.";
@@ -549,14 +551,14 @@ object #59
     return {verbargs, rest};
   endverb
 
-  verb prepositions (this none this) owner: #36 flags: "rxd"
+  verb prepositions (this none this) owner: HACKER flags: "rxd"
     if (server_version() != this._version)
       this:_fix_preps();
     endif
     return this.prepositions;
   endverb
 
-  verb short_prep (this none this) owner: #36 flags: "rxd"
+  verb short_prep (this none this) owner: HACKER flags: "rxd"
     ":short_prep(p) => shortest preposition equivalent to p";
     "p may be a single word or one of the strings returned by verb_args().";
     if (server_version() != this._version)
@@ -573,7 +575,7 @@ object #59
     endif
   endverb
 
-  verb full_prep (this none this) owner: #36 flags: "rxd"
+  verb full_prep (this none this) owner: HACKER flags: "rxd"
     if (server_version() != this._version)
       this:_fix_preps();
     endif
@@ -587,7 +589,7 @@ object #59
     endif
   endverb
 
-  verb get_prep (this none this) owner: #36 flags: "rxd"
+  verb get_prep (this none this) owner: HACKER flags: "rxd"
     ":get_prep(@args) extracts the prepositional phrase from the front of args, returning a list consisting of the preposition (or \"\", if none) followed by the unused args.";
     ":get_prep(\"in\",\"front\",\"of\",...) => {\"in front of\",...}";
     ":get_prep(\"inside\",...)          => {\"inside\",...}";
@@ -608,7 +610,7 @@ object #59
     return {prep, @args[rest..$]};
   endverb
 
-  verb _fix_preps (this at this) owner: #36 flags: "rxd"
+  verb _fix_preps (this at this) owner: HACKER flags: "rxd"
     ":_fix_preps() updates the properties on this having to do with prepositions.";
     "_fix_preps should be called whenever we detect that a new server version has been installed.";
     orig_args = verb_args(this, verb);
@@ -798,7 +800,7 @@ object #59
     return 0;
   endverb
 
-  verb _parse_audit_args (this none this) owner: #36 flags: "rxd"
+  verb _parse_audit_args (this none this) owner: HACKER flags: "rxd"
     "Parse [from <start>] [to <end>] [for <name>].";
     "Takes a series of strings, most likely @args with dobjstr removed.";
     "Returns a list {INT start, INT end, STR name}, or {} if there is an error.";
@@ -959,7 +961,7 @@ object #59
     endif
   endverb
 
-  verb verbname_match (this none this) owner: #36 flags: "rxd"
+  verb verbname_match (this none this) owner: HACKER flags: "rxd"
     ":verbname_match(fullverbname,name) => TRUE iff `name' is a valid name for a verb with the given `fullname'";
     verblist = " " + args[1] + " ";
     if (index(verblist, " " + (name = args[2]) + " ") && !(index(name, "*") || index(name, " ")))
@@ -979,7 +981,7 @@ object #59
     return 0;
   endverb
 
-  verb substitute (this none this) owner: #36 flags: "rxd"
+  verb substitute (this none this) owner: HACKER flags: "rxd"
     "$code_utils:substitute(string,subs) => new line";
     "Subs are a list of lists, {{\"target\",\"sub\"},{...}...}";
     "Substitutes targets for subs in a delimited string fashion, avoiding substituting anything inside quotes, e.g. player:tell(\"don't sub here!\")";
@@ -1074,12 +1076,12 @@ object #59
     endif
   endverb
 
-  verb verb_frame (this none this) owner: #36 flags: "rxd"
+  verb verb_frame (this none this) owner: HACKER flags: "rxd"
     "returns the callers() frame for the current verb.";
     return callers()[1];
   endverb
 
-  verb verb_all_frames (this none this) owner: #36 flags: "rxd"
+  verb verb_all_frames (this none this) owner: HACKER flags: "rxd"
     "returns {this:verb_frame(), @callers()}.";
     return callers();
   endverb
@@ -1239,7 +1241,7 @@ object #59
     return length(c = callers()) >= 2 ? `index(verb_info(c[2][4], c[2][2])[2], "d") && 1 ! E_INVARG => 1' | 1;
   endverb
 
-  verb type_str (this none this) owner: #36 flags: "rxd"
+  verb type_str (this none this) owner: HACKER flags: "rxd"
     "type_str -- returns a string describing the type of args[1]";
     x = args[1];
     type_data = {1, 3.14, "", #0, E_NONE, {}};

@@ -1,6 +1,6 @@
-object #5
+object THING
   name: "Generic Thing"
-  parent: #1
+  parent: ROOT_CLASS
   owner: #2
   readable: true
 
